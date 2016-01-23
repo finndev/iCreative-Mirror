@@ -60,7 +60,7 @@ namespace KoreanAIO.Model
         private bool _monstersCanBeCalculated;
 
         private string _name;
-        private Dictionary<Obj_AI_Base, float> _predictedMinionHealths = new Dictionary<Obj_AI_Base, float>();
+        private List<Obj_AI_Base> _killableMinions = new List<Obj_AI_Base>();
         private readonly Dictionary<int, Dictionary<int, Dictionary<int, bool>>> _cachedIsOnSegment = new Dictionary<int, Dictionary<int, Dictionary<int, bool>>>();
         private readonly Dictionary<int, Dictionary<int, bool>> _cachedObjectsInRange = new Dictionary<int, Dictionary<int, bool>>();
         private int _speed;
@@ -115,7 +115,7 @@ namespace KoreanAIO.Model
                 if (FpsBooster.CanBeExecuted(0, 2, 4))
                 {
                 }
-                _predictedMinionHealths.Clear();
+                _killableMinions.Clear();
                 if (FpsBooster.CanBeExecuted(CalculationType.IsValidTarget))
                 {
                 }
@@ -276,9 +276,9 @@ namespace KoreanAIO.Model
             {
                 if (Slider != null)
                 {
-                    return Slider.CurrentValue + (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass) ? 5f : 0f);
+                    return Slider.CurrentValue + (ModeManager.Harass ? 5f : 0f);
                 }
-                return MinHitChancePercent;
+                return MinHitChancePercent + (ModeManager.Harass ? 5f : 0f);
             }
         }
 
@@ -639,38 +639,35 @@ namespace KoreanAIO.Model
             return null;
         }
 
-        public Dictionary<Obj_AI_Base, float> LastHit(LastHitType? t, bool useCast = true)
+        public List<Obj_AI_Base> LastHit(LastHitType? t, bool useCast = true)
         {
             var type = t ?? LastHitType.Smart;
             if (IsReady && type > LastHitType.None)
             {
-                if (_predictedMinionHealths.Count == 0)
+                if (_killableMinions.Count == 0)
                 {
                     if (type == LastHitType.Smart)
                     {
                         if (LaneClearMinions.Count > 0)
                         {
-                            _predictedMinionHealths = Prediction.Health.GetPrediction(LaneClearMinions.ToDictionary(minion => minion, GetArrivalTime)).Where(tuple => tuple.Value > 0 && GetDamage(tuple.Key) >= tuple.Value && tuple.Key.Health < tuple.Value).OrderByDescending(pair => pair.Key.MaxHealth).ThenBy(pair => pair.Value).ToDictionary(tuple => tuple.Key, tuple => tuple.Value);
+                            _killableMinions.AddRange(Prediction.Health.GetPrediction(LaneClearMinions.ToDictionary(minion => minion, GetArrivalTime)).Where(tuple => tuple.Value > 0 && GetDamage(tuple.Key) >= tuple.Value && tuple.Key.Health < tuple.Value).OrderByDescending(pair => pair.Key.MaxHealth).ThenBy(pair => pair.Value).ToDictionary(tuple => tuple.Key, tuple => tuple.Value).Keys);
                         }
                     }
                     else if (type == LastHitType.Always)
                     {
                         if (EnemyMinions.Count > 0)
                         {
-                            _predictedMinionHealths = Prediction.Health.GetPrediction(EnemyMinions.ToDictionary(minion => minion, GetArrivalTime)).Where(tuple => tuple.Value > 0 && GetDamage(tuple.Key) >= tuple.Value).OrderByDescending(pair => pair.Key.MaxHealth).ThenBy(pair => pair.Value).ToDictionary(tuple => tuple.Key, tuple => tuple.Value);
+                            _killableMinions.AddRange(Prediction.Health.GetPrediction(EnemyMinions.ToDictionary(minion => minion, GetArrivalTime)).Where(tuple => tuple.Value > 0 && GetDamage(tuple.Key) >= tuple.Value).OrderByDescending(pair => pair.Key.MaxHealth).ThenBy(pair => pair.Value).ToDictionary(tuple => tuple.Key, tuple => tuple.Value).Keys);
                         }
                     }
                 }
-                if (_predictedMinionHealths.Any())
+                var first = _killableMinions.FirstOrDefault();
+                if (useCast && first != null)
                 {
-                    var first = _predictedMinionHealths.FirstOrDefault().Key;
-                    if (useCast && first != null)
-                    {
-                        Cast(first);
-                    }
+                    Cast(first);
                 }
             }
-            return _predictedMinionHealths;
+            return _killableMinions;
         }
 
         public bool IsOnSegment(Obj_AI_Base point, GameObject startPoint, Obj_AI_Base endPoint)
@@ -686,6 +683,14 @@ namespace KoreanAIO.Model
             if (!_cachedIsOnSegment[point.NetworkId][startPoint.NetworkId].ContainsKey(endPoint.NetworkId))
             {
                 _cachedIsOnSegment[point.NetworkId][startPoint.NetworkId].Add(endPoint.NetworkId, GetPrediction(point).HitChancePercent >= HitChancePercent / 2 && GetPrediction(point).CastPosition.To2D().Distance(startPoint.Position.To2D(), GetPrediction(endPoint).CastPosition.To2D(), true, true) <= (Width + point.BoundingRadius).Pow());
+            }
+            if (!_cachedIsOnSegment[point.NetworkId].ContainsKey(endPoint.NetworkId))
+            {
+                _cachedIsOnSegment[point.NetworkId].Add(endPoint.NetworkId, new Dictionary<int, bool>());
+            }
+            if (!_cachedIsOnSegment[point.NetworkId][endPoint.NetworkId].ContainsKey(startPoint.NetworkId))
+            {
+                _cachedIsOnSegment[point.NetworkId][endPoint.NetworkId].Add(startPoint.NetworkId, _cachedIsOnSegment[point.NetworkId][startPoint.NetworkId][endPoint.NetworkId]);
             }
             return _cachedIsOnSegment[point.NetworkId][startPoint.NetworkId][endPoint.NetworkId];
         }

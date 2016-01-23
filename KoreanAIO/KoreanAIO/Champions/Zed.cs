@@ -26,7 +26,7 @@ namespace KoreanAIO.Champions
         public Text IsDeadText;
 
         public Obj_AI_Minion RShadow;
-        
+
         public Obj_AI_Minion WShadow;
 
         public Zed()
@@ -72,22 +72,26 @@ namespace KoreanAIO.Champions
             Obj_AI_Base.OnPlayAnimation += delegate (Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
             {
                 var minion = sender as Obj_AI_Minion;
-                if (minion != null && minion.IsAlly && minion.BaseSkinName == ShadowSkinName &&
-                    args.Animation == "Death")
+                if (minion != null && minion.IsAlly && minion.BaseSkinName == ShadowSkinName)
                 {
-                    if (WShadow.IdEquals(minion))
+                    switch (args.Animation)
                     {
-                        WShadow = null;
-                    }
-                    else if (RShadow.IdEquals(minion))
-                    {
-                        RShadow = null;
+                        case "Death":
+                            if (WShadow.IdEquals(minion))
+                            {
+                                WShadow = null;
+                            }
+                            else if (RShadow.IdEquals(minion))
+                            {
+                                RShadow = null;
+                            }
+                            break;
                     }
                 }
             };
             GameObject.OnCreate += delegate (GameObject sender, EventArgs args)
             {
-                if (sender.Name == IsDeadName && sender.IsAlly)
+                if (sender.Name == IsDeadName)
                 {
                     IsDeadObject = sender;
                 }
@@ -293,7 +297,7 @@ namespace KoreanAIO.Champions
                 DrawingsMenu.Add("IsDead", new CheckBox("Draw text if target will die"));
                 DrawingsMenu.Add("Passive", new CheckBox("Draw text when passive is ready"));
             }
-            
+
         }
 
         public bool RShadowIsValid
@@ -318,7 +322,7 @@ namespace KoreanAIO.Champions
 
         private bool IsWaitingShadow
         {
-            get { return WShadow == null && W.LastCastTime > 0 && Core.GameTickCount - W.LastCastTime <= W.GetArrivalTime(W.LastEndPosition) + Game.Ping / 2 - Q.CastDelay; }
+            get { return WShadow == null && W.LastCastTime > 0 && Core.GameTickCount - W.LastCastTime <= W.GetArrivalTime(W.LastEndPosition) + Game.Ping / 2 - Q.CastDelay - 80; }
         }
 
         private bool IsCombo2
@@ -329,6 +333,11 @@ namespace KoreanAIO.Champions
         private bool IsHarass2
         {
             get { return KeysMenu.KeyBind("Harass2"); }
+        }
+
+        private Obj_AI_Base RTarget
+        {
+            get { return UnitManager.ValidEnemyHeroes.FirstOrDefault(TargetHaveR); }
         }
 
         public override void OnEndScene()
@@ -383,7 +392,9 @@ namespace KoreanAIO.Champions
             {
                 Range = (Q.Range + WRange);
             }
-            UnitManager.ValidEnemyHeroesInRange = UnitManager.ValidEnemyHeroesInRange.Where(h => !IsDead(h)).ToList();
+            var currentList = UnitManager.ValidEnemyHeroesInRange.ToList();
+            UnitManager.ValidEnemyHeroesInRange.Clear();
+            UnitManager.ValidEnemyHeroesInRange.AddRange(currentList.Where(h => !IsDead(h)));
             Target = TargetSelector.GetTarget(UnitManager.ValidEnemyHeroesInRange, DamageType.Physical);
             var target = UnitManager.ValidEnemyHeroes.FirstOrDefault(TargetHaveR);
             if (target != null)
@@ -437,8 +448,7 @@ namespace KoreanAIO.Champions
                 var distanceSqr = MyHero.GetDistanceSqr(Target);
                 var health = Target.TotalShieldHealth();
                 var result = GetBestCombo(Target);
-                if (IsDeadObject != null &&
-                    (AutomaticMenu.CheckBox("SwapDead") || (ComboMenu.CheckBox("SwapDead") && ModeManager.Combo)))
+                if (IsDeadObject != null && RTarget != null && (AutomaticMenu.CheckBox("SwapDead") || (ComboMenu.CheckBox("SwapDead") && ModeManager.Combo)))
                 {
                     SwapByCountingEnemies();
                 }
@@ -654,23 +664,29 @@ namespace KoreanAIO.Champions
             if (Q.IsReady && target != null && !IsWaitingShadow)
             {
                 var heroDistance = MyHero.GetDistanceSqr(target);
-                var wShadowDistance = WShadow != null ? target.GetDistanceSqr(WShadow) : 16000000f;
-                var rShadowDistance = RShadow != null ? target.GetDistanceSqr(RShadow) : 16000000f;
+                var wShadowDistance = WShadowIsValid ? target.GetDistanceSqr(WShadow) : 16000000f;
+                var rShadowDistance = RShadowIsValid ? target.GetDistanceSqr(RShadow) : 16000000f;
                 var min = Math.Min(Math.Min(rShadowDistance, wShadowDistance), heroDistance);
                 if (Math.Abs(min - wShadowDistance) < float.Epsilon && heroDistance > QReducedSqr)
                 {
-                    if (WShadow != null) Q.SourceObject = WShadow;
+                    Q.SourceObject = WShadow;
                 }
                 else if (Math.Abs(min - rShadowDistance) < float.Epsilon && heroDistance > QReducedSqr)
                 {
-                    if (RShadow != null) Q.SourceObject = RShadow;
+                    Q.SourceObject = RShadow;
                 }
                 else
                 {
                     Q.SourceObject = MyHero;
                 }
                 Q.RangeCheckSourceObject = Q.Source;
+                var qRange = Q.Range;
+                if (W.LastCastTime > 0 && !WShadowIsValid && Core.GameTickCount - W.LastCastTime <= W.GetArrivalTime(W.LastEndPosition))
+                {
+                    Q.Range = Q.Range + (int)W.LastEndPosition.Distance(Q.Source);
+                }
                 Q.Cast(target);
+                Q.Range = qRange;
             }
         }
 
@@ -761,7 +777,7 @@ namespace KoreanAIO.Champions
 
         public bool IsDead(AIHeroClient target)
         {
-            return IsDeadObject != null && TargetHaveR(target);
+            return IsDeadObject != null && TargetHaveR(target) && IsDeadObject.IsInRange(target, 200);
         }
 
         private float GetPassiveDamage(Obj_AI_Base target, float health = 0)
@@ -784,7 +800,7 @@ namespace KoreanAIO.Champions
 
         public bool TargetHaveR(AIHeroClient target)
         {
-            return target.TargetHaveBuff("zedrdeathmark");
+            return target.TargetHaveBuff("zedrtargetmark");
         }
 
         protected override float GetComboDamage(Obj_AI_Base target, IEnumerable<SpellBase> list)

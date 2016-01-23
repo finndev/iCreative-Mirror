@@ -331,7 +331,7 @@ namespace KoreanAIO.Champions
         {
             if (ClearMenu.Slider("LastHit.E") > 0)
             {
-                var minion = E.LastHit(LastHitType.Always, false).FirstOrDefault().Key;
+                var minion = E.LastHit(LastHitType.Always, false).FirstOrDefault();
                 if (minion != null)
                 {
                     switch (ClearMenu.Slider("LastHit.E"))

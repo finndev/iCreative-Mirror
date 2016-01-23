@@ -513,7 +513,7 @@ namespace KoreanAIO.Champions
             if (MyHero.ManaPercent >= ClearMenu.Slider("LastHit.ManaPercent"))
             {
                 var tuples = Q.LastHit((LastHitType)ClearMenu.Slider("LastHit.Q"), false);
-                var minion = tuples.FirstOrDefault().Key;
+                var minion = tuples.FirstOrDefault();
                 if (minion != null)
                 {
                     CastQ(minion);
