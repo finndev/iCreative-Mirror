@@ -60,7 +60,7 @@ namespace KoreanAIO.Model
         private bool _monstersCanBeCalculated;
 
         private string _name;
-        private List<Obj_AI_Base> _killableMinions = new List<Obj_AI_Base>();
+        private readonly List<Obj_AI_Base> _killableMinions = new List<Obj_AI_Base>();
         private readonly Dictionary<int, Dictionary<int, Dictionary<int, bool>>> _cachedIsOnSegment = new Dictionary<int, Dictionary<int, Dictionary<int, bool>>>();
         private readonly Dictionary<int, Dictionary<int, bool>> _cachedObjectsInRange = new Dictionary<int, Dictionary<int, bool>>();
         private int _speed;
@@ -112,10 +112,10 @@ namespace KoreanAIO.Model
                 {
                     _cachedDamage.Clear();
                 }
-                if (FpsBooster.CanBeExecuted(0, 2, 4))
+                if (FpsBooster.CanBeExecuted(CalculationType.HealthPrediction))
                 {
+                    _killableMinions.Clear();
                 }
-                _killableMinions.Clear();
                 if (FpsBooster.CanBeExecuted(CalculationType.IsValidTarget))
                 {
                 }
@@ -158,7 +158,7 @@ namespace KoreanAIO.Model
                 {
                     _laneClearMinionsCanBeCalculated = false;
                     _laneClearMinions.Clear();
-                    _laneClearMinions.AddRange(Orbwalker.LaneClearMinionsList.Concat(Orbwalker.UnKillableMinionsList).Where(InRange));
+                    _laneClearMinions.AddRange((Orbwalker.LaneClearMinionsList.Concat(Orbwalker.UnKillableMinionsList)).Distinct().Where(InRange));
                 }
                 return _laneClearMinions;
             }
@@ -319,19 +319,19 @@ namespace KoreanAIO.Model
 
         public SpellBase SetSourceFunction(Func<GameObject> func)
         {
-            Game.OnUpdate += delegate { SourceObject = func(); };
+            Game.OnTick += delegate { SourceObject = func(); };
             return this;
         }
 
         public SpellBase SetRangeCheckSourceFunction(Func<GameObject> func)
         {
-            Game.OnUpdate += delegate { RangeCheckSourceObject = func(); };
+            Game.OnTick += delegate { RangeCheckSourceObject = func(); };
             return this;
         }
 
         public SpellBase SetRangeFunction(Func<int> func)
         {
-            Game.OnUpdate += delegate { Range = func(); };
+            Game.OnTick += delegate { Range = func(); };
             return this;
         }
 
@@ -385,12 +385,12 @@ namespace KoreanAIO.Model
                 case SpellType.Targeted:
                     return RangeCheckSource.IsInRange(pred.CastPosition, Range + AIO.MyHero.BoundingRadius + target.BoundingRadius - 65);
                 case SpellType.Circular:
-                    return source.IsInRange(pred.CastPosition, Range + Radius + target.BoundingRadius);
+                    return source.IsInRange(pred.CastPosition, Range + Radius);
                 case SpellType.Linear:
-                    return source.IsInRange(pred.CastPosition, Range + Width + target.BoundingRadius);
+                    return source.IsInRange(pred.CastPosition, Range + Width);
             }
             //Self
-            return source.IsInRange(pred.CastPosition, Range + target.BoundingRadius);
+            return source.IsInRange(pred.CastPosition, Range);
         }
 
         public PredictionResult GetPrediction(Obj_AI_Base target, CustomSettings custom = null)
@@ -650,7 +650,7 @@ namespace KoreanAIO.Model
                     {
                         if (LaneClearMinions.Count > 0)
                         {
-                            _killableMinions.AddRange(Prediction.Health.GetPrediction(LaneClearMinions.ToDictionary(minion => minion, GetArrivalTime)).Where(tuple => tuple.Value > 0 && GetDamage(tuple.Key) >= tuple.Value && tuple.Key.Health < tuple.Value).OrderByDescending(pair => pair.Key.MaxHealth).ThenBy(pair => pair.Value).ToDictionary(tuple => tuple.Key, tuple => tuple.Value).Keys);
+                            _killableMinions.AddRange(Prediction.Health.GetPrediction(LaneClearMinions.ToDictionary(minion => minion, GetArrivalTime)).Where(tuple => tuple.Value > 0 && GetDamage(tuple.Key) >= tuple.Value && tuple.Key.Health > tuple.Value).OrderByDescending(pair => pair.Key.MaxHealth).ThenBy(pair => pair.Value).ToDictionary(tuple => tuple.Key, tuple => tuple.Value).Keys);
                         }
                     }
                     else if (type == LastHitType.Always)
