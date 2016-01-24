@@ -403,6 +403,14 @@ namespace KoreanAIO.Champions
             {
                 IsDeadObject = null;
             }
+            if (WShadow != null && !WShadowIsValid)
+            {
+                WShadow = null;
+            }
+            if (RShadow != null && !RShadowIsValid)
+            {
+                RShadow = null;
+            }
             if (ModeManager.Harass && HarassMenu.CheckBox("Collision"))
             {
                 Q.AllowedCollisionCount = 0;
@@ -446,7 +454,7 @@ namespace KoreanAIO.Champions
                 var distanceSqr = MyHero.GetDistanceSqr(Target);
                 var health = Target.TotalShieldHealth();
                 var result = GetBestCombo(Target);
-                if (IsDeadObject != null && RTarget != null && (AutomaticMenu.CheckBox("SwapDead") || (ComboMenu.CheckBox("SwapDead") && ModeManager.Combo)))
+                if (IsDeadObject != null && (AutomaticMenu.CheckBox("SwapDead") || (ComboMenu.CheckBox("SwapDead") && ModeManager.Combo)))
                 {
                     SwapByCountingEnemies();
                 }
@@ -705,7 +713,7 @@ namespace KoreanAIO.Champions
                 if (r.HitChancePercent >= Q.HitChancePercent / 2 && Core.GameTickCount - W.LastSentTime > 175)
                 {
                     Vector3 wPos;
-                    if (RShadow != null)
+                    if (RShadowIsValid)
                     {
                         switch (ComboMenu.Slider("Mode"))
                         {
@@ -742,16 +750,16 @@ namespace KoreanAIO.Champions
             if (E.IsReady && target != null && !IsWaitingShadow)
             {
                 var heroDistance = MyHero.GetDistanceSqr(target);
-                var wShadowDistance = WShadow != null ? target.GetDistanceSqr(WShadow) : 16000000f;
-                var rShadowDistance = RShadow != null ? target.GetDistanceSqr(RShadow) : 16000000f;
+                var wShadowDistance = WShadowIsValid ? target.GetDistanceSqr(WShadow) : 16000000f;
+                var rShadowDistance = RShadowIsValid ? target.GetDistanceSqr(RShadow) : 16000000f;
                 var min = Math.Min(Math.Min(rShadowDistance, wShadowDistance), heroDistance);
                 if (Math.Abs(min - wShadowDistance) < float.Epsilon)
                 {
-                    if (WShadow != null) E.SourceObject = WShadow;
+                    E.SourceObject = WShadow;
                 }
                 else if (Math.Abs(min - rShadowDistance) < float.Epsilon)
                 {
-                    if (RShadow != null) E.SourceObject = RShadow;
+                    E.SourceObject = RShadow;
                 }
                 else
                 {

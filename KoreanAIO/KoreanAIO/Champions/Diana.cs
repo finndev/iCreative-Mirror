@@ -115,6 +115,7 @@ namespace KoreanAIO.Champions
                 ComboMenu.Add("Ignite", new CheckBox("Use Ignite if killable", false));
                 ComboMenu.AddStringList("E", "Use E", new[] { "Never", "Smart", "Always" }, 1);
                 ComboMenu.AddStringList("R", "Use R", new[] { "Never", "Smart", "Always" }, 1);
+                ComboMenu.Add("2ndR", new CheckBox("Use always second r", false));
             }
 
             MenuManager.AddSubMenu("Harass");
@@ -409,6 +410,10 @@ namespace KoreanAIO.Champions
                         {
                             return;
                         }
+                    }
+                    else if (ComboMenu.CheckBox("2ndR"))
+                    {
+                        //Chat.Print("Use always second r");
                     }
                     else if (!bestCombo.IsKillable)
                     {
