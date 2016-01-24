@@ -158,7 +158,7 @@ namespace KoreanAIO.Model
                 {
                     _laneClearMinionsCanBeCalculated = false;
                     _laneClearMinions.Clear();
-                    _laneClearMinions.AddRange((Orbwalker.LaneClearMinionsList.Concat(Orbwalker.UnKillableMinionsList)).Distinct().Where(InRange));
+                    _laneClearMinions.AddRange((Orbwalker.LaneClearMinionsList.Concat(Orbwalker.UnKillableMinionsList)).Where(InRange));
                 }
                 return _laneClearMinions;
             }
@@ -421,7 +421,7 @@ namespace KoreanAIO.Model
                         result = Prediction.Position.PredictCircularMissile(target, range, width, castDelay, speed, source.Position);
                         break;
                     default:
-                        result = Prediction.Position.PredictLinearMissile(target, range, width * 2, castDelay, speed, allowedCollisionCount, source.Position);
+                        result = Prediction.Position.PredictLinearMissile(target, range, 2 * width, castDelay, speed, allowedCollisionCount, source.Position);
                         break;
                 }
                 CachedPredictions[source.NetworkId].Add(target.NetworkId, result);

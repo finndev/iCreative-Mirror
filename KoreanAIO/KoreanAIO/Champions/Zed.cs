@@ -423,8 +423,8 @@ namespace KoreanAIO.Champions
 
         protected void SwapByCountingEnemies()
         {
-            var wCount = (WShadowIsValid && W.IsReady) ? WShadow.CountEnemiesInRange(400) : 100;
-            var rCount = (RShadowIsValid && R.IsReady) ? RShadow.CountEnemiesInRange(400) : 100;
+            var wCount = (WShadowIsValid && W.IsReady && !WShadow.IsUnderEnemyturret()) ? WShadow.CountEnemiesInRange(400) : 100;
+            var rCount = (RShadowIsValid && R.IsReady && !RShadow.IsUnderEnemyturret()) ? RShadow.CountEnemiesInRange(400) : 100;
             var min = Math.Min(rCount, wCount);
             if (MyHero.CountEnemiesInRange(400) > min)
             {
@@ -461,10 +461,10 @@ namespace KoreanAIO.Champions
                     }
                     else if (ComboMenu.CheckBox("SwapGapclose") && distanceSqr >= (E.Range * 1.3f).Pow())
                     {
-                        var wShadowDistance = (WShadowIsValid && W.IsReady)
+                        var wShadowDistance = (WShadowIsValid && W.IsReady && !WShadow.IsUnderEnemyturret())
                             ? Target.GetDistanceSqr(WShadow)
                             : 16000000f;
-                        var rShadowDistance = (RShadowIsValid && R.IsReady)
+                        var rShadowDistance = (RShadowIsValid && R.IsReady && !RShadow.IsUnderEnemyturret())
                             ? Target.GetDistanceSqr(RShadow)
                             : 16000000f;
                         var min = Math.Min(Math.Min(wShadowDistance, rShadowDistance), distanceSqr);
