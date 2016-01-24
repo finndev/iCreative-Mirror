@@ -97,6 +97,10 @@ namespace MaddeningJinx
                 {
                     return;
                 }
+                if (Util.MyHero.CountEnemiesInRange(400) != 0)
+                {
+                    return;
+                }
                 var pred = W.GetPrediction(target);
                 if (pred.HitChancePercent >= MenuManager.Menu.GetSliderValue("Prediction.W"))
                 {
@@ -219,7 +223,7 @@ namespace MaddeningJinx
                         firstHit.Distance(target, true) <= (225 + target.BoundingRadius).Pow())
                     {
                         if ((MenuManager.Menu.GetCheckBoxValue("R.KillSteal") && target.WillBeHittedByR() &&
-                             !MyTargetSelector.PowPowTarget.IdEquals(target)) || MenuManager.TapKeyPressed)
+                             !MyTargetSelector.PowPowTarget.IdEquals(target) && target.CountAlliesInRange(500) == 0) || MenuManager.TapKeyPressed)
                         {
                             KillSteal.RHittableBases.Add(pred.CastPosition);
                         }

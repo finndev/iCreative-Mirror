@@ -40,9 +40,9 @@ namespace MaddeningJinx
             if (isValidTarget)
             {
                 CanUseQ = Util.MyHero.Mana >= SpellSlot.W.Mana() + (SpellSlot.E.IsLearned() ? SpellSlot.E.Mana() : 0f) + (SpellSlot.R.IsLearned() ? SpellSlot.R.Mana() : 0f);
-                CanUseW = Util.MyHero.Mana >= SpellSlot.W.Mana() + (SpellSlot.R.IsLearned() ? SpellSlot.R.Mana() : 0f);
+                CanUseW = Util.MyHero.Mana >= (SpellSlot.W.Mana() + (SpellSlot.R.IsLearned() ? SpellSlot.R.Mana() : 0f) + 20);
                 CanUseE = Util.MyHero.Mana >= SpellSlot.E.Mana() + (SpellSlot.R.IsLearned() ? SpellSlot.R.Mana() : 0f);
-                if (!MyTargetSelector.Target.IdEquals(MyTargetSelector.PowPowTarget) && CanUseW)
+                if (MyTargetSelector.PowPowTarget == null && CanUseW)
                 {
                     SpellManager.CastW(MyTargetSelector.Target);
                 }
