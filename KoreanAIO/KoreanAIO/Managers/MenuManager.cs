@@ -34,12 +34,12 @@ namespace KoreanAIO.Managers
         public static void Initialize()
         {
             Menu = MainMenu.AddMenu("Korean AIO", "KoreanAIO Build: 6.1.0, Champion: " + AIO.MyHero.ChampionName);
-            var displayNames = new[] { "English", "Spanish", "Korean", "Chinese", "French", "German", "Italian", "Portuguese" };
+            var displayNames = Enum.GetValues(typeof(Language)).Cast<Language>().ToArray();
             var slider = Menu.Add("Language", new Slider("Language: English", 0, 0, displayNames.Length - 1));
-            slider.DisplayName = LanguageTranslator.GetTranslationFromId(((Language)slider.CurrentValue), "Language") + ": " + LanguageTranslator.GetTranslationFromId(((Language)slider.CurrentValue), displayNames[slider.CurrentValue]);
+            slider.DisplayName = LanguageTranslator.GetTranslationFromId(((Language)slider.CurrentValue), "Language") + ": " + LanguageTranslator.GetTranslationFromId(((Language)slider.CurrentValue), displayNames[slider.CurrentValue].ToString());
             slider.OnValueChange += delegate (ValueBase<int> sender, ValueBase<int>.ValueChangeArgs args)
             {
-                sender.DisplayName = LanguageTranslator.GetTranslationFromId(((Language)slider.CurrentValue), "Language") + ": " + LanguageTranslator.GetTranslationFromId(((Language)args.NewValue), displayNames[args.NewValue]);
+                sender.DisplayName = LanguageTranslator.GetTranslationFromId(((Language)slider.CurrentValue), "Language") + ": " + LanguageTranslator.GetTranslationFromId(((Language)args.NewValue), displayNames[args.NewValue].ToString());
                 Translate(((Language)args.OldValue), ((Language)args.NewValue));
             };
         }

@@ -13,7 +13,8 @@ namespace KoreanAIO.Utilities
         French,
         German,
         Italian,
-        Portuguese
+        Portuguese,
+        Polish
     }
 
     public static class LanguageTranslator
@@ -126,11 +127,11 @@ namespace KoreanAIO.Utilities
                 {"Draw.R", "Draw R range"},
                 { "Draw.Toggles", "Draw toggles status"},
                 /* Prediction*/
-                {"Q.HitChancePercent", "Q HitChancePercent"},
-                {"W.HitChancePercent", "W HitChancePercent"},
-                {"E.HitChancePercent", "E HitChancePercent"},
-                {"QE.HitChancePercent", "QE HitChancePercent"},
-                {"R.HitChancePercent", "R HitChancePercent"},
+                {"Q.HitChancePercent", "Q: HitChancePercent"},
+                {"W.HitChancePercent", "W: HitChancePercent"},
+                {"E.HitChancePercent", "E: HitChancePercent"},
+                {"QE.HitChancePercent", "QE: HitChancePercent"},
+                {"R.HitChancePercent", "R: HitChancePercent"},
             };
             Translations[Language.Spanish] = new Dictionary<string, string>
             {
