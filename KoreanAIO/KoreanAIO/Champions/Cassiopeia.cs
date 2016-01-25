@@ -123,12 +123,12 @@ namespace KoreanAIO.Champions
                 {
                     ClearMenu.AddValue("LaneClear.Q", new Slider("Use Q if hit is greater than {0}", 2, 0, 10));
                     ClearMenu.AddValue("LaneClear.W", new Slider("Use W if hit is greater than {0}", 3, 0, 10));
-                    ClearMenu.AddStringList("LaneClear.E", "Use E", new[] { "Never", "On Poisoned", "Always" }, 1);
+                    ClearMenu.AddStringList("LaneClear.E", "Use E", new[] { "Never", "If Poisoned", "Always" }, 1);
                     ClearMenu.AddValue("LaneClear.ManaPercent", new Slider("Minimum Mana Percent", 50));
                 }
                 ClearMenu.AddValue("LastHit", new GroupLabel("LastHit"));
                 {
-                    ClearMenu.AddStringList("LastHit.E", "Use E", new[] { "Never", "On Poisoned", "Always" }, 1);
+                    ClearMenu.AddStringList("LastHit.E", "Use E", new[] { "Never", "If Poisoned", "Always" }, 1);
                     ClearMenu.AddValue("LastHit.ManaPercent", new Slider("Minimum Mana Percent", 50));
                 }
                 ClearMenu.AddValue("JungleClear", new GroupLabel("JungleClear"));

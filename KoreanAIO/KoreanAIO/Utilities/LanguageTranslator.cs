@@ -27,6 +27,8 @@ namespace KoreanAIO.Utilities
             {
                 {"Language", "Language"},
                 {"English", "English" /* Spanish = Espanol (for ex)*/},
+                {"Enabled", "Enabled"},
+                {"Disabled", "Disabled"},
                 /* Keys */
                 {"Combo.WithoutR", "Combo without R"},
                 {"Harass.QWE", "Harass QWE"},
@@ -53,6 +55,9 @@ namespace KoreanAIO.Utilities
                 {"Smartly", "Smartly"},
                 {"Always", "Always"},
                 /* Checkbox, sliders and others */
+                {"DisableUnderEnemyTurret", "Disable under enemy turret"},
+                {"IfKillable", "If killable"},
+                {"IfNeeded", "If needed"},
                 {"UseIgnite", "Use Ignite"},
                 {"UseIgnite.Killable", "Use Ignite if target is killable"},
                 {"UseSmite", "Use Smite"},
@@ -74,7 +79,8 @@ namespace KoreanAIO.Utilities
                 {"UseR.Gapcloser", "Use R on hero gapclosing / dashing"},
                 {"UseR.Interrupter", "Use R on channeling spells"},
                 {"R.BlackList", "Don't use R on:"},
-                {"Items", "Use Items"},
+                {"Items", "Use offensive items"},
+                {"Zhonyas", "Use Zhonyas if my % of health is less than {0}"},
                 /* Zed */
                 {"R.Prevent", "Don't use spells before R"},
                 {"R.Combo.Mode", "R Combo Mode"},
@@ -118,6 +124,7 @@ namespace KoreanAIO.Utilities
                 {"Draw.W", "Draw W range"},
                 {"Draw.E", "Draw E range"},
                 {"Draw.R", "Draw R range"},
+                { "Draw.Toggles", "Draw toggles status"},
                 /* Prediction*/
                 {"Q.HitChancePercent", "Q HitChancePercent"},
                 {"W.HitChancePercent", "W HitChancePercent"},
@@ -129,12 +136,14 @@ namespace KoreanAIO.Utilities
             {
                 {"Language", "Idioma"},
                 {"Spanish", "Español"},
+                {"Enabled", "Activado"},
+                {"Disabled", "Desactivado"},
                 /* Keys */
                 {"Combo.WithoutR", "Combate sin R"},
                 {"Harass.QWE", "Acoso QWE"},
                 /* Toggles */
-                {"LastHit.Toggle", "LastHit Toggle"},
-                {"Harass.Toggle", "Harass Toggle"},
+                {"LastHit.Toggle", "Interruptor último golpe"},
+                {"Harass.Toggle", "Interruptor acoso"},
                 /* Submenus */
                 {"Keys", "Teclas"},
                 {"Prediction", "Predicción"},
@@ -155,6 +164,9 @@ namespace KoreanAIO.Utilities
                 {"Smartly", "Inteligentemente"},
                 {"Always", "Siempre"},
                 /* Checkbox, sliders and others */
+                {"DisableUnderEnemyTurret", "Desactivar bajo torre enemiga"},
+                {"IfKillable", "Si es matable"},
+                {"IfNeeded", "Si se requiere"},
                 {"UseIgnite", "Usar Ignición"},
                 {"UseIgnite.Killable", "Usar Ignición si el target es matable"},
                 {"UseSmite", "Usar Castigo"},
@@ -176,7 +188,8 @@ namespace KoreanAIO.Utilities
                 {"UseR.Gapcloser", "Usar R en campeones que estén corriendo"},
                 {"UseR.Interrupter", "Usar R en campeones canalizando"},
                 {"R.BlackList", "No usar la R contra:"},
-                {"Items", "Usar Items"},
+                {"Items", "Use items ofensivos"},
+                {"Zhonyas", "Usar Zhonyas si mi % de vida es menor a {0}"},
                 /* Zed */
                 {"R.Prevent", "No usar habilidades antes de la R"},
                 {"R.Combo.Mode", "Modo de combate con la R"},
@@ -220,6 +233,7 @@ namespace KoreanAIO.Utilities
                 {"Draw.W", "Dibujar el rango de la W"},
                 {"Draw.E", "Dibujar el rango de la E"},
                 {"Draw.R", "Dibujar el rango de la R"},
+                { "Draw.Toggles", "Dibujar el estado de los interruptores"},
                 /* Prediction*/
                 {"Q.HitChancePercent", "Q: Porcentaje de probabilidad de golpe"},
                 {"W.HitChancePercent", "W: Porcentaje de probabilidad de golpe"},

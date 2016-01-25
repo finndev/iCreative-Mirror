@@ -195,7 +195,7 @@ namespace KoreanAIO.Champions
                 ComboMenu.AddValue("W", new CheckBox("Use W"));
                 ComboMenu.AddValue("E", new CheckBox("Use E"));
                 ComboMenu.AddValue("R", new CheckBox("Use R"));
-                ComboMenu.AddValue("Items", new CheckBox("Use Items"));
+                ComboMenu.AddValue("Items", new CheckBox("Use offensive items"));
                 ComboMenu.AddValue("SwapDead", new CheckBox("Use W2/R2 if target will die"));
                 ComboMenu.AddValue("SwapGapclose", new CheckBox("Use W2/R2 to get close to target"));
                 ComboMenu.AddValue("SwapHP", new Slider("Use W2/R2 if my % of health is less than {0}", 15));

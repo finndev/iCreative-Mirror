@@ -5,6 +5,7 @@ using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
+using KoreanAIO.Utilities;
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -41,7 +42,7 @@ namespace KoreanAIO.Managers
                 {
                     var value = pair.Key.CurrentValue;
                     pair.Value.Color = value ? EnabledColor : DisabledColor;
-                    pair.Value.TextValue = pair.Key.DisplayName + ": " + (value ? "Enabled" : "Disabled");
+                    pair.Value.TextValue = pair.Key.DisplayName + ": " + (value ? LanguageTranslator.GetTranslationFromId(LanguageTranslator.CurrentLanguage, "Enabled") : LanguageTranslator.GetTranslationFromId(LanguageTranslator.CurrentLanguage, "Disabled"));
                     pair.Value.Position = AIO.MyHero.Position.WorldToScreen() + new Vector2(-pair.Value.Bounding.Width / 2f, 45f + (pair.Value.Bounding.Height + 5f) * count);
                     pair.Value.Draw();
                     count++;
