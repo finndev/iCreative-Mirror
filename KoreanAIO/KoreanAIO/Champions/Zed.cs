@@ -182,7 +182,7 @@ namespace KoreanAIO.Champions
                     KeysMenu.AddValue("Combo2", new KeyBind("Combo without R", false, KeyBind.BindTypes.HoldActive, 'A')),
                     Orbwalker.ActiveModes.Combo);
                 Orbwalker.RegisterKeyBind(
-                    KeysMenu.AddValue("Harass2", new KeyBind("Harass 2", false, KeyBind.BindTypes.HoldActive, 'S')),
+                    KeysMenu.AddValue("Harass2", new KeyBind("Harass WEQ", false, KeyBind.BindTypes.HoldActive, 'S')),
                     Orbwalker.ActiveModes.Harass);
             }
 
@@ -190,7 +190,7 @@ namespace KoreanAIO.Champions
 
             MenuManager.AddSubMenu("Combo");
             {
-                ComboMenu.AddStringList("Mode", "R Mode", new[] { "Line", "Triangle", "MousePos" });
+                ComboMenu.AddStringList("Mode", "R Combo Mode", new[] { "Line", "Triangle", "MousePos" });
                 ComboMenu.AddValue("Q", new CheckBox("Use Q"));
                 ComboMenu.AddValue("W", new CheckBox("Use W"));
                 ComboMenu.AddValue("E", new CheckBox("Use E"));
@@ -198,7 +198,7 @@ namespace KoreanAIO.Champions
                 ComboMenu.AddValue("Items", new CheckBox("Use Items"));
                 ComboMenu.AddValue("SwapDead", new CheckBox("Use W2/R2 if target will die"));
                 ComboMenu.AddValue("SwapGapclose", new CheckBox("Use W2/R2 to get close to target"));
-                ComboMenu.AddValue("SwapHP", new Slider("Use W2/R2 if the % of Health is less than {0}", 15));
+                ComboMenu.AddValue("SwapHP", new Slider("Use W2/R2 if my % of health is less than {0}", 15));
                 ComboMenu.AddValue("Prevent", new CheckBox("Don't use spells before R"));
                 if (EntityManager.Heroes.Enemies.Count > 0)
                 {

@@ -105,15 +105,15 @@ namespace KoreanAIO.Champions
             {
                 ComboMenu.AddValue("Q", new CheckBox("Use Q"));
                 ComboMenu.AddValue("W", new CheckBox("Use W"));
-                ComboMenu.AddStringList("E", "Use E", new[] { "Never", "On Poisoned", "Always" }, 1);
-                ComboMenu.AddValue("R", new Slider("Use R if enemies inside >= {0}", 3, 0, 5));
+                ComboMenu.AddStringList("E", "Use E", new[] { "Never", "If Poisoned", "Always" }, 1);
+                ComboMenu.AddValue("R", new Slider("Use R if hit is greater than {0}", 3, 0, 5));
             }
 
             MenuManager.AddSubMenu("Harass");
             {
                 HarassMenu.AddValue("Q", new CheckBox("Use Q"));
                 HarassMenu.AddValue("W", new CheckBox("Use W"));
-                HarassMenu.AddStringList("E", "Use E", new[] { "Never", "On Poisoned", "Always" }, 1);
+                HarassMenu.AddStringList("E", "Use E", new[] { "Never", "If Poisoned", "Always" }, 1);
                 HarassMenu.AddValue("ManaPercent", new Slider("Minimum Mana Percent", 25));
             }
 
@@ -148,7 +148,7 @@ namespace KoreanAIO.Champions
             }
             MenuManager.AddSubMenu("Automatic");
             {
-                AutomaticMenu.AddValue("R", new CheckBox("Use R to interrupt enemy spells"));
+                AutomaticMenu.AddValue("R", new CheckBox("Use R on channeling spells"));
             }
             MenuManager.AddDrawingsMenu();
             {

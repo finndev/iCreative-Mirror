@@ -112,7 +112,7 @@ namespace KoreanAIO.Champions
                 ComboMenu.AddValue("Q", new CheckBox("Use Q"));
                 ComboMenu.AddValue("W", new CheckBox("Use W"));
                 ComboMenu.AddValue("QR", new CheckBox("Use QR on minion to gapclose"));
-                ComboMenu.AddValue("Ignite", new CheckBox("Use Ignite if killable", false));
+                ComboMenu.AddValue("Ignite", new CheckBox("Use Ignite if target is killable", false));
                 ComboMenu.AddStringList("E", "Use E", new[] { "Never", "Smartly", "Always" }, 1);
                 ComboMenu.AddStringList("R", "Use R", new[] { "Never", "Smartly", "Always" }, 1);
                 ComboMenu.AddValue("2ndR", new CheckBox("Use always second r", false));
@@ -157,8 +157,8 @@ namespace KoreanAIO.Champions
 
             MenuManager.AddSubMenu("Automatic");
             {
-                AutomaticMenu.AddValue("Gapcloser", new CheckBox("Use E on enemy dashing"));
-                AutomaticMenu.AddValue("Interrupter", new CheckBox("Use E to interrupt enemy spell"));
+                AutomaticMenu.AddValue("Gapcloser", new CheckBox("Use E on hero gapclosing / dashing"));
+                AutomaticMenu.AddValue("Interrupter", new CheckBox("Use E on channeling spells"));
             }
             MenuManager.AddDrawingsMenu();
             {

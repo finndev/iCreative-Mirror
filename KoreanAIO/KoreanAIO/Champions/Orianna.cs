@@ -187,15 +187,15 @@ namespace KoreanAIO.Champions
 
                 MenuManager.AddSubMenu("Combo");
                 {
-                    ComboMenu.AddValue("TeamFight", new Slider("Use TeamFight logic if enemies near >= {0}", 3, 1, 5));
+                    ComboMenu.AddValue("TeamFight", new Slider("Use TeamFight logic if enemies near is greater than {0}", 3, 1, 5));
                     ComboMenu.AddValue("Common", new GroupLabel("Common logic"));
-                    ComboMenu.AddValue("Q", new CheckBox("Use Q on target"));
-                    ComboMenu.AddValue("W", new CheckBox("Use W on target"));
+                    ComboMenu.AddValue("Q", new CheckBox("Use Q"));
+                    ComboMenu.AddValue("W", new CheckBox("Use W"));
                     ComboMenu.AddValue("E.Shield", new CheckBox("Use E on enemy spells"));
-                    ComboMenu.AddValue("E.HealthPercent", new Slider("Use E if HealthPercent <= {0}", 40));
+                    ComboMenu.AddValue("E.HealthPercent", new Slider("Use E if my % of health is less than {0}", 40));
                     ComboMenu.AddValue("1vs1", new GroupLabel("1 vs 1 logic"));
-                    ComboMenu.AddValue("R.Killable", new CheckBox("Use R on target if killable"));
-                    ComboMenu.AddValue("TeamFightLogic", new GroupLabel("TeamFight Logic"));
+                    ComboMenu.AddValue("R.Killable", new CheckBox("Use R if target is killable"));
+                    ComboMenu.AddValue("TeamFightLogic", new GroupLabel("TeamFight logic"));
                     ComboMenu.AddValue("Q.Hit", new Slider("Use Q if hit is greater than {0}", 2, 1, 5));
                     ComboMenu.AddValue("W.Hit", new Slider("Use W if hit is greater than {0}", 2, 1, 5));
                     ComboMenu.AddValue("R.Hit", new Slider("Use R if hit is greater than {0}", 3, 1, 5));
@@ -206,7 +206,7 @@ namespace KoreanAIO.Champions
                     HarassMenu.AddValue("Q", new CheckBox("Use Q"));
                     HarassMenu.AddValue("W", new CheckBox("Use W"));
                     HarassMenu.AddValue("E.Shield", new CheckBox("Use E on enemy spells"));
-                    HarassMenu.AddValue("E.HealthPercent", new Slider("Use E if HealthPercent <= {0}", 40));
+                    HarassMenu.AddValue("E.HealthPercent", new Slider("Use E if my % of health is less than {0}", 40));
                     HarassMenu.AddValue("ManaPercent", new Slider("Minimum Mana Percent", 25));
                 }
 
@@ -243,11 +243,11 @@ namespace KoreanAIO.Champions
 
                 MenuManager.AddSubMenu("Automatic");
                 {
-                    AutomaticMenu.AddValue("Gapcloser", new CheckBox("Use E on ally gapclosing"));
-                    AutomaticMenu.AddValue("Interrupter", new CheckBox("Use R to interrupt enemy spell"));
+                    AutomaticMenu.AddValue("Gapcloser", new CheckBox("Use E on hero gapclosing / dashing"));
+                    AutomaticMenu.AddValue("Interrupter", new CheckBox("Use R on channeling spells"));
                     AutomaticMenu.AddValue("E.Shield", new CheckBox("Use E on enemy spells"));
-                    AutomaticMenu.AddValue("W.Hit", new Slider("Use W if hit >= {0}", 2, 1, 5));
-                    AutomaticMenu.AddValue("R.Hit", new Slider("Use R if hit >= {0}", 3, 1, 5));
+                    AutomaticMenu.AddValue("W.Hit", new Slider("Use W if hit is greater than {0}", 2, 1, 5));
+                    AutomaticMenu.AddValue("R.Hit", new Slider("Use R if hit is greater than {0}", 3, 1, 5));
                 }
 
                 MenuManager.AddDrawingsMenu();

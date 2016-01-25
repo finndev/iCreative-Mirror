@@ -93,8 +93,8 @@ namespace KoreanAIO.Managers
         public static void AddKillStealMenu()
         {
             var menu = AddSubMenu("KillSteal");
-            menu.AddValue("Ignite", new CheckBox("Use ignite"));
-            menu.AddValue("Smite", new CheckBox("Use smite"));
+            menu.AddValue("Ignite", new CheckBox("Use Ignite"));
+            menu.AddValue("Smite", new CheckBox("Use Smite"));
             menu.AddSeparator();
         }
         public static void AddDrawingsMenu()
