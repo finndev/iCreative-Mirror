@@ -48,7 +48,7 @@ namespace KoreanAIO.Champions
             E.SetSourceFunction(() => MyHero);
             E.SetRangeCheckSourceFunction(() => MyHero);
             R = new SpellBase(SpellSlot.R, SpellType.Targeted, 625);
-            IsDeadText = new Text("Is Dead", new Font("Arial", 30F, FontStyle.Bold))
+            IsDeadText = new Text("", new Font("Arial", 30F, FontStyle.Bold))
             {
                 Color = System.Drawing.Color.Red,
                 Position = new Vector2(100, 50)
@@ -285,7 +285,7 @@ namespace KoreanAIO.Champions
                     () => RShadow)
                 { Width = 1 });
                 DrawingsMenu.AddValue("IsDead", new CheckBox("Draw text if target will die"));
-                DrawingsMenu.AddValue("Passive", new CheckBox("Draw text when passive is ready"));
+                DrawingsMenu.AddValue("Passive", new CheckBox("Draw text when passive is available"));
             }
 
         }
@@ -339,7 +339,7 @@ namespace KoreanAIO.Champions
                     var enemyDead = UnitManager.ValidEnemyHeroes.FirstOrDefault(IsDead);
                     if (enemyDead != null)
                     {
-                        IsDeadText.TextValue = enemyDead.ChampionName + " is dead";
+                        IsDeadText.TextValue = enemyDead.ChampionName + " " + "IsDead".GetTranslationFromId().ToLower();
                         IsDeadText.Draw();
                     }
                 }
@@ -356,7 +356,7 @@ namespace KoreanAIO.Champions
                         UnitManager.ValidEnemyHeroes.Where(
                             h => h.HealthPercent <= 50f && h.VisibleOnScreen && !h.TargetHaveBuff("zedpassivecd")))
                 {
-                    Drawing.DrawText(enemy.ServerPosition.WorldToScreen(), System.Drawing.Color.White, "Passive Ready",
+                    Drawing.DrawText(enemy.ServerPosition.WorldToScreen(), System.Drawing.Color.White, "Passive".GetTranslationFromId() + " " + "Available".GetTranslationFromId().ToLower(),
                         6);
                 }
             }

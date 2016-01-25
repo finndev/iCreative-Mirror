@@ -30,6 +30,7 @@ namespace KoreanAIO.Utilities
                 {"English", "English" /* Spanish = Espanol (for ex)*/},
                 {"Enabled", "Enabled"},
                 {"Disabled", "Disabled"},
+                {"Available", "Available"},
                 /* Keys */
                 {"Combo.WithoutR", "Combo without R"},
                 {"Harass.QWE", "Harass QWE"},
@@ -98,10 +99,12 @@ namespace KoreanAIO.Utilities
                 {"Line", "Line"},
                 {"Triangle", "Triangle"},
                 {"MousePos", "MousePos"},
+                {"IsDead", "Is Dead"},
+                {"Passive", "Passive"},
                 {"Draw.WShadow", "Draw W shadow circle"},
                 {"Draw.RShadow", "Draw R shadow circle"},
                 {"Draw.TargetIsDead", "Draw text if target will die"},
-                {"Draw.PassiveIsReady", "Draw text when passive is ready"},
+                {"Draw.PassiveIsReady", "Draw text when passive is available"},
                 /* Cassiopeia */
                 {"Poisoned", "If Poisoned"},
                 {"AssistedUltimate", "Assisted Ultimate"},
@@ -139,6 +142,7 @@ namespace KoreanAIO.Utilities
                 {"Spanish", "Español"},
                 {"Enabled", "Activado"},
                 {"Disabled", "Desactivado"},
+                {"Available", "Disponible"},
                 /* Keys */
                 {"Combo.WithoutR", "Combate sin R"},
                 {"Harass.QWE", "Acoso QWE"},
@@ -169,7 +173,7 @@ namespace KoreanAIO.Utilities
                 {"IfKillable", "Si es matable"},
                 {"IfNeeded", "Si se requiere"},
                 {"UseIgnite", "Usar Ignición"},
-                {"UseIgnite.Killable", "Usar Ignición si el target es matable"},
+                {"UseIgnite.Killable", "Usar Ignición si el objetivo es matable"},
                 {"UseSmite", "Usar Castigo"},
                 {"UseQ", "Usar Q"},
                 {"UseQ.Hit", "Usar Q si golpea a más de {0}"},
@@ -184,7 +188,7 @@ namespace KoreanAIO.Utilities
                 {"UseE.Gapcloser", "Usar E en campeones que estén corriendo"},
                 {"UseE.Interrupter", "Usar E en campeones canalizando"},
                 {"UseR", "Usar R"},
-                {"UseR.Killable", "Usar R si el target es matable"},
+                {"UseR.Killable", "Usar R si el objetivo es matable"},
                 {"UseR.Hit", "Usar R si golpea a más de {0}"},
                 {"UseR.Gapcloser", "Usar R en campeones que estén corriendo"},
                 {"UseR.Interrupter", "Usar R en campeones canalizando"},
@@ -199,18 +203,20 @@ namespace KoreanAIO.Utilities
                 {"UseW2", "Usar W2"},
                 {"UseR1", "Usar R1"},
                 {"UseR2", "Usar R2"},
-                {"SwapDead", "Usar W2/R2 si el target va a morir"},
-                {"SwapGapclose", "Usar W2/R2 para acercarse al target"},
-                {"SwapKillable", "Usar W2 si el target es matable"},
+                {"SwapDead", "Usar W2/R2 si el objetivo va a morir"},
+                {"SwapGapclose", "Usar W2/R2 para acercarse al objetivo"},
+                {"SwapKillable", "Usar W2 si el objetivo es matable"},
                 {"SwapHP", "Usar W2/R2 si mi % de vida es menor a {0}"},
                 {"MinimumManaPercent", "Mínimo porcentaje de mana"},
                 {"Line", "Línea"},
                 {"Triangle", "Triángulo"},
                 {"MousePos", "Posición del mouse"},
+                {"IsDead", "Está muerto"},
+                {"Passive", "Pasiva"},
                 {"Draw.WShadow", "Dibujar un circulo sobre la sombra de la W"},
                 {"Draw.RShadow", "Dibujar un circulo sobre la sombra de la R"},
-                {"Draw.TargetIsDead", "Dibujar texto is el target va a morir"},
-                {"Draw.PassiveIsReady", "Dibujar texto si la pasiva está lista"},
+                {"Draw.TargetIsDead", "Dibujar texto is el objetivo va a morir"},
+                {"Draw.PassiveIsReady", "Dibujar texto si la pasiva está disponible"},
                 /* Cassiopeia */
                 {"Poisoned", "Si está envenenado"},
                 {"AssistedUltimate", "R asistida"},
@@ -229,7 +235,7 @@ namespace KoreanAIO.Utilities
                 /* Drawings */
                 {"Draw.Disable", "Desactivar todos los dibujos"},
                 {"Draw.DamageIndicator", "Dibujar indicador de daño"},
-                {"Draw.Target", "Dibujar circulo sobre el target"},
+                {"Draw.Target", "Dibujar circulo sobre el objetivo"},
                 {"Draw.Q", "Dibujar el rango de la Q"},
                 {"Draw.W", "Dibujar el rango de la W"},
                 {"Draw.E", "Dibujar el rango de la E"},
@@ -241,6 +247,118 @@ namespace KoreanAIO.Utilities
                 {"E.HitChancePercent", "E: Porcentaje de probabilidad de golpe"},
                 {"QE.HitChancePercent", "QE: Porcentaje de probabilidad de golpe"},
                 {"R.HitChancePercent", "R: Porcentaje de probabilidad de golpe"},
+            };
+            Translations[Language.German] = new Dictionary<string, string>
+            {
+                {"Language", "Sprache"},
+                {"German", "Deutsch"},
+                {"Enabled", "Enabled"},
+                {"Disabled", "Disabled"},
+                {"Available", "Available"},
+                /* Keys */
+                {"Combo.WithoutR", "Combo without R"},
+                {"Harass.QWE", "Harass QWE"},
+                /* Toggles */
+                {"LastHit.Toggle", "LastHit Toggle"},
+                {"Harass.Toggle", "Harass Toggle"},
+                /* Submenus */
+                {"Keys", "Keys"},
+                {"Prediction", "Prediction"},
+                {"Combo", "Combo"},
+                {"Harass", "Harass"},
+                {"Clear", "Clear"},
+                {"LaneClear", "LaneClear"},
+                {"LastHit", "LastHit"},
+                {"JungleClear", "JungleClear"},
+                {"KillSteal", "KillSteal"},
+                {"Automatic", "Automatic"},
+                {"Evader", "Evader"},
+                {"Drawings", "Drawings"},
+                {"Flee", "Flee"},
+                {"Misc", "Misc"},
+                /* LastHit */
+                {"Never", "Never"},
+                {"Smartly", "Smartly"},
+                {"Always", "Always"},
+                /* Checkbox, sliders and others */
+                {"DisableUnderEnemyTurret", "Disable under enemy turret"},
+                {"IfKillable", "If killable"},
+                {"IfNeeded", "If needed"},
+                {"UseIgnite", "Use Ignite"},
+                {"UseIgnite.Killable", "Use Ignite if target is killable"},
+                {"UseSmite", "Use Smite"},
+                {"UseQ", "Use Q"},
+                {"UseQ.Hit", "Use Q if hit is greater than {0}"},
+                {"UseQ.Gapcloser", "Use Q on hero gapclosing / dashing"},
+                {"UseQ.Interrupter", "Use Q on channeling spells"},
+                {"UseW", "Use W"},
+                {"UseW.Hit", "Use W if hit is greater than {0}"},
+                {"UseW.Gapcloser", "Use W on hero gapclosing / dashing"},
+                {"UseW.Interrupter", "Use W on channeling spells"},
+                {"UseE", "Use E"},
+                {"UseE.Hit", "Use E if hit is greater than {0}"},
+                {"UseE.Gapcloser", "Use E on hero gapclosing / dashing"},
+                {"UseE.Interrupter", "Use E on channeling spells"},
+                {"UseR", "Use R"},
+                {"UseR.Killable", "Use R if target is killable"},
+                {"UseR.Hit", "Use R if hit is greater than {0}"},
+                {"UseR.Gapcloser", "Use R on hero gapclosing / dashing"},
+                {"UseR.Interrupter", "Use R on channeling spells"},
+                {"R.BlackList", "Don't use R on:"},
+                {"Items", "Use offensive items"},
+                {"Zhonyas", "Use Zhonyas if my % of health is less than {0}"},
+                /* Zed */
+                {"R.Prevent", "Don't use spells before R"},
+                {"R.Combo.Mode", "R Combo Mode"},
+                {"UseQ.Collision", "Check collision when casting Q (more damage)"},
+                {"UseW1", "Use W1"},
+                {"UseW2", "Use W2"},
+                {"UseR1", "Use R1"},
+                {"UseR2", "Use R2"},
+                {"SwapDead", "Use W2/R2 if target will die"},
+                {"SwapGapclose", "Use W2/R2 to get close to target"},
+                {"SwapKillable", "Use W2 if target is killable"},
+                {"SwapHP", "Use W2/R2 if my % of health is less than {0}"},
+                {"MinimumManaPercent", "Minimum Mana Percent"},
+                {"Line", "Line"},
+                {"Triangle", "Triangle"},
+                {"MousePos", "MousePos"},
+                {"IsDead", "Is Dead"},
+                {"Passive", "Passive"},
+                {"Draw.WShadow", "Draw W shadow circle"},
+                {"Draw.RShadow", "Draw R shadow circle"},
+                {"Draw.TargetIsDead", "Draw text if target will die"},
+                {"Draw.PassiveIsReady", "Draw text when passive is available"},
+                /* Cassiopeia */
+                {"Poisoned", "If Poisoned"},
+                {"AssistedUltimate", "Assisted Ultimate"},
+                /* Diana */
+                {"UseQR", "Use QR on minion to gapclose"},
+                {"R.2nd", "Use always second r"},
+                /* Orianna */
+                {"TeamFight.Count", "Use TeamFight logic if enemies near is greater than {0}"},
+                {"Common.Logic", "Common logic"},
+                {"1vs1.Logic", "1 vs 1 logic"},
+                {"TeamFight.Logic", "TeamFight logic"},
+                {"UseE.HealthPercent", "Use E if my % of health is less than {0}"},
+                {"UseE.Spells", "Use E on enemy spells"},
+                {"Draw.Ball", "Draw ball position"},
+                {"R.Block", "Block R if will not hit"},
+                /* Drawings */
+                {"Draw.Disable", "Disable all drawings"},
+                {"Draw.DamageIndicator", "Draw damage indicator"},
+                {"Draw.Target", "Draw circle on target"},
+                {"Draw.Q", "Draw Q range"},
+                {"Draw.W", "Draw W range"},
+                {"Draw.E", "Draw E range"},
+                {"Draw.R", "Draw R range"},
+                { "Draw.Toggles", "Draw toggles status"},
+                /* Prediction*/
+                {"Q.HitChancePercent", "Q: HitChancePercent"},
+                {"W.HitChancePercent", "W: HitChancePercent"},
+                {"E.HitChancePercent", "E: HitChancePercent"},
+                {"QE.HitChancePercent", "QE: HitChancePercent"},
+                {"R.HitChancePercent", "R: HitChancePercent"},
             };
         }
 
@@ -254,11 +372,11 @@ namespace KoreanAIO.Utilities
             MenuManager.Translate(Language.English, (Language) MenuManager.Menu["Language"].Cast<Slider>().CurrentValue);
         }
 
-        public static string GetTranslationFromId(Language language, string name)
+        public static string GetTranslationFromId(this string name)
         {
-            if (Translations.ContainsKey(language) && Translations[language].ContainsKey(name))
+            if (Translations.ContainsKey(CurrentLanguage) && Translations[CurrentLanguage].ContainsKey(name))
             {
-                return Translations[language][name];
+                return Translations[CurrentLanguage][name];
             }
             if (Translations.ContainsKey(Language.English))
             {
