@@ -146,7 +146,7 @@ namespace KoreanAIO.Utilities
                         {
                             if (!SpellsAddedToMenu.Contains(enemy.Hero.ToString() + slot))
                             {
-                                Menu.Add(enemy.Hero.ToString() + slot, new CheckBox(slot.ToString(), false));
+                                Menu.AddValue(enemy.Hero.ToString() + slot, new CheckBox(slot.ToString(), false));
                                 SpellsAddedToMenu.Add(enemy.Hero.ToString() + slot);
                             }
                         }

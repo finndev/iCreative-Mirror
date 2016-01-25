@@ -179,10 +179,10 @@ namespace KoreanAIO.Champions
             MenuManager.AddSubMenu("Keys");
             {
                 Orbwalker.RegisterKeyBind(
-                    KeysMenu.Add("Combo2", new KeyBind("Combo without R", false, KeyBind.BindTypes.HoldActive, 'A')),
+                    KeysMenu.AddValue("Combo2", new KeyBind("Combo without R", false, KeyBind.BindTypes.HoldActive, 'A')),
                     Orbwalker.ActiveModes.Combo);
                 Orbwalker.RegisterKeyBind(
-                    KeysMenu.Add("Harass2", new KeyBind("Harass 2", false, KeyBind.BindTypes.HoldActive, 'S')),
+                    KeysMenu.AddValue("Harass2", new KeyBind("Harass 2", false, KeyBind.BindTypes.HoldActive, 'S')),
                     Orbwalker.ActiveModes.Harass);
             }
 
@@ -191,24 +191,24 @@ namespace KoreanAIO.Champions
             MenuManager.AddSubMenu("Combo");
             {
                 ComboMenu.AddStringList("Mode", "R Mode", new[] { "Line", "Triangle", "MousePos" });
-                ComboMenu.Add("Q", new CheckBox("Use Q"));
-                ComboMenu.Add("W", new CheckBox("Use W"));
-                ComboMenu.Add("E", new CheckBox("Use E"));
-                ComboMenu.Add("R", new CheckBox("Use R"));
-                ComboMenu.Add("Items", new CheckBox("Use Items"));
-                ComboMenu.Add("SwapDead", new CheckBox("Use W2/R2 if target will die"));
-                ComboMenu.Add("SwapGapclose", new CheckBox("Use W2/R2 to get close to target"));
-                ComboMenu.Add("SwapHP", new Slider("Use W2/R2 if my HealthPercent is <= {0}", 15));
-                ComboMenu.Add("Prevent", new CheckBox("Don't use spells before R"));
+                ComboMenu.AddValue("Q", new CheckBox("Use Q"));
+                ComboMenu.AddValue("W", new CheckBox("Use W"));
+                ComboMenu.AddValue("E", new CheckBox("Use E"));
+                ComboMenu.AddValue("R", new CheckBox("Use R"));
+                ComboMenu.AddValue("Items", new CheckBox("Use Items"));
+                ComboMenu.AddValue("SwapDead", new CheckBox("Use W2/R2 if target will die"));
+                ComboMenu.AddValue("SwapGapclose", new CheckBox("Use W2/R2 to get close to target"));
+                ComboMenu.AddValue("SwapHP", new Slider("Use W2/R2 if the % of Health is less than {0}", 15));
+                ComboMenu.AddValue("Prevent", new CheckBox("Don't use spells before R"));
                 if (EntityManager.Heroes.Enemies.Count > 0)
                 {
-                    ComboMenu.AddGroupLabel("Don't use R on");
+                    ComboMenu.AddValue("BlackList.R", new GroupLabel("Don't use R on:"));
                     var enemiesAdded = new HashSet<string>();
                     foreach (var enemy in EntityManager.Heroes.Enemies)
                     {
                         if (!enemiesAdded.Contains(enemy.ChampionName))
                         {
-                            ComboMenu.Add("BlackList." + enemy.ChampionName, new CheckBox(enemy.ChampionName, false));
+                            ComboMenu.AddValue("BlackList." + enemy.ChampionName, new CheckBox(enemy.ChampionName, false));
                             enemiesAdded.Add(enemy.ChampionName);
                         }
                     }
@@ -216,61 +216,53 @@ namespace KoreanAIO.Champions
             }
             MenuManager.AddSubMenu("Harass");
             {
-                HarassMenu.Add("Collision", new CheckBox("Add collision check for Q (more damage)", false));
-                HarassMenu.Add("SwapGapclose", new CheckBox("Use W2 if target is killable"));
-                HarassMenu.AddGroupLabel("Harass 1");
-                HarassMenu.Add("Harass1.Q", new CheckBox("Use Q"));
-                HarassMenu.Add("Harass1.W", new CheckBox("Use W", false));
-                HarassMenu.Add("Harass1.E", new CheckBox("Use E"));
-                HarassMenu.Add("Harass1.ManaPercent", new Slider("Min. Energy Percent:", 20));
-                HarassMenu.AddGroupLabel("Harass 2");
-                HarassMenu.Add("Harass2.Q", new CheckBox("Use Q"));
-                HarassMenu.Add("Harass2.W", new CheckBox("Use W"));
-                HarassMenu.Add("Harass2.E", new CheckBox("Use E"));
+                HarassMenu.AddValue("Collision", new CheckBox("Add collision check for Q (more damage)", false));
+                HarassMenu.AddValue("SwapGapclose", new CheckBox("Use W2 if target is killable"));
+                HarassMenu.AddValue("ManaPercent", new Slider("Minimum Mana Percent", 20));
             }
 
             MenuManager.AddSubMenu("Clear");
             {
-                ClearMenu.AddGroupLabel("LaneClear");
+                ClearMenu.AddValue("LaneClear", new GroupLabel("LaneClear"));
                 {
-                    ClearMenu.Add("LaneClear.Q", new Slider("Use Q if hit >= {0}", 3, 0, 10));
-                    ClearMenu.Add("LaneClear.W", new Slider("Use W if hit >= {0}", 4, 0, 10));
-                    ClearMenu.Add("LaneClear.E", new Slider("Use E if hit >= {0}", 3, 0, 10));
-                    ClearMenu.Add("LaneClear.ManaPercent", new Slider("Min. ManaPercent", 50));
+                    ClearMenu.AddValue("LaneClear.Q", new Slider("Use Q if hit is greater than {0}", 3, 0, 10));
+                    ClearMenu.AddValue("LaneClear.W", new Slider("Use W if hit is greater than {0}", 4, 0, 10));
+                    ClearMenu.AddValue("LaneClear.E", new Slider("Use E if hit is greater than {0}", 3, 0, 10));
+                    ClearMenu.AddValue("LaneClear.ManaPercent", new Slider("Minimum Mana Percent", 50));
                 }
-                ClearMenu.AddGroupLabel("LastHit");
+                ClearMenu.AddValue("LastHit", new GroupLabel("LastHit"));
                 {
-                    ClearMenu.AddStringList("LastHit.Q", "Use Q", new[] { "None", "Smart", "Always" }, 1);
-                    ClearMenu.AddStringList("LastHit.E", "Use E", new[] { "None", "Smart", "Always" }, 1);
-                    ClearMenu.Add("LastHit.ManaPercent", new Slider("Min. ManaPercent", 50));
+                    ClearMenu.AddStringList("LastHit.Q", "Use Q", new[] { "Never", "Smartly", "Always" }, 1);
+                    ClearMenu.AddStringList("LastHit.E", "Use E", new[] { "Never", "Smartly", "Always" }, 1);
+                    ClearMenu.AddValue("LastHit.ManaPercent", new Slider("Minimum Mana Percent", 50));
                 }
-                ClearMenu.AddGroupLabel("JungleClear");
+                ClearMenu.AddValue("JungleClear", new GroupLabel("JungleClear"));
                 {
-                    ClearMenu.Add("JungleClear.Q", new CheckBox("Use Q"));
-                    ClearMenu.Add("JungleClear.W", new CheckBox("Use W"));
-                    ClearMenu.Add("JungleClear.E", new CheckBox("Use W"));
-                    ClearMenu.Add("JungleClear.ManaPercent", new Slider("Min. ManaPercent", 20));
+                    ClearMenu.AddValue("JungleClear.Q", new CheckBox("Use Q"));
+                    ClearMenu.AddValue("JungleClear.W", new CheckBox("Use W"));
+                    ClearMenu.AddValue("JungleClear.E", new CheckBox("Use E"));
+                    ClearMenu.AddValue("JungleClear.ManaPercent", new Slider("Minimum Mana Percent", 20));
                 }
             }
 
             MenuManager.AddKillStealMenu();
             {
-                KillStealMenu.Add("Q", new CheckBox("Use Q"));
-                KillStealMenu.Add("W", new CheckBox("Use W"));
-                KillStealMenu.Add("E", new CheckBox("Use E"));
+                KillStealMenu.AddValue("Q", new CheckBox("Use Q"));
+                KillStealMenu.AddValue("W", new CheckBox("Use W"));
+                KillStealMenu.AddValue("E", new CheckBox("Use E"));
             }
 
             MenuManager.AddSubMenu("Automatic");
             {
-                AutomaticMenu.Add("E", new CheckBox("Use auto E", false));
-                AutomaticMenu.Add("SwapDead", new CheckBox("Use W2/R2 if target will die", false));
+                AutomaticMenu.AddValue("E", new CheckBox("Use E", false));
+                AutomaticMenu.AddValue("SwapDead", new CheckBox("Use W2/R2 if target will die", false));
             }
             MenuManager.AddSubMenu("Evader");
             {
-                EvaderMenu.Add("Evader.W1", new CheckBox("Use W1", false));
-                EvaderMenu.Add("Evader.W2", new CheckBox("Use W2"));
-                EvaderMenu.Add("Evader.R1", new CheckBox("Use R1"));
-                EvaderMenu.Add("Evader.R2", new CheckBox("Use R2"));
+                EvaderMenu.AddValue("Evader.W1", new CheckBox("Use W1", false));
+                EvaderMenu.AddValue("Evader.W2", new CheckBox("Use W2"));
+                EvaderMenu.AddValue("Evader.R1", new CheckBox("Use R1"));
+                EvaderMenu.AddValue("Evader.R2", new CheckBox("Use R2"));
             }
             Evader.Initialize();
             Evader.AddCrowdControlSpells();
@@ -282,18 +274,18 @@ namespace KoreanAIO.Champions
                 E.AddDrawings(false);
                 R.AddDrawings();
                 CircleManager.Circles.Add(new Circle(
-                    DrawingsMenu.Add("W.Shadow", new CheckBox("Draw W shadow circle")), SharpDX.Color.Blue,
+                    DrawingsMenu.AddValue("W.Shadow", new CheckBox("Draw W shadow circle")), SharpDX.Color.Blue,
                     () => 100, () => WShadowIsValid,
                     () => WShadow)
                 { Width = 1 });
 
                 CircleManager.Circles.Add(new Circle(
-                    DrawingsMenu.Add("R.Shadow", new CheckBox("Draw R shadow circle")), SharpDX.Color.Orange,
+                    DrawingsMenu.AddValue("R.Shadow", new CheckBox("Draw R shadow circle")), SharpDX.Color.Orange,
                     () => 100, () => RShadowIsValid,
                     () => RShadow)
                 { Width = 1 });
-                DrawingsMenu.Add("IsDead", new CheckBox("Draw text if target will die"));
-                DrawingsMenu.Add("Passive", new CheckBox("Draw text when passive is ready"));
+                DrawingsMenu.AddValue("IsDead", new CheckBox("Draw text if target will die"));
+                DrawingsMenu.AddValue("Passive", new CheckBox("Draw text when passive is ready"));
             }
 
         }
@@ -586,39 +578,21 @@ namespace KoreanAIO.Champions
             {
                 if (IsHarass2)
                 {
-                    if (HarassMenu.CheckBox("Harass2.W"))
+                    if (ShouldWaitMana)
                     {
-                        if (ShouldWaitMana)
-                        {
-                            return;
-                        }
-                        CastW(Target);
+                        return;
                     }
-                    if (HarassMenu.CheckBox("Harass2.E"))
-                    {
-                        CastE(Target);
-                    }
-                    if (HarassMenu.CheckBox("Harass2.Q"))
-                    {
-                        CastQ(Target);
-                    }
+                    CastW(Target);
+                    CastE(Target);
+                    CastQ(Target);
                 }
                 else
                 {
-                    if (MyHero.ManaPercent >= HarassMenu.Slider("Harass1.ManaPercent"))
+                    if (MyHero.ManaPercent >= HarassMenu.Slider("ManaPercent"))
                     {
-                        if (HarassMenu.CheckBox("Harass1.W"))
-                        {
-                            CastW(Target);
-                        }
-                        if (HarassMenu.CheckBox("Harass1.E"))
-                        {
-                            CastE(Target);
-                        }
-                        if (HarassMenu.CheckBox("Harass1.Q"))
-                        {
-                            CastQ(Target);
-                        }
+                        CastW(Target);
+                        CastE(Target);
+                        CastQ(Target);
                     }
                 }
             }
@@ -709,7 +683,7 @@ namespace KoreanAIO.Champions
             if (W.IsReady && IsW1 && target != null)
             {
                 W.LastCastTime = Core.GameTickCount;
-                var r = Q.GetPrediction(target, new CustomSettings { Range = Q.Range + W.Range});
+                var r = Q.GetPrediction(target, new CustomSettings { Range = Q.Range + W.Range });
                 if (r.HitChancePercent >= Q.HitChancePercent / 2 && Core.GameTickCount - W.LastSentTime > 175)
                 {
                     Vector3 wPos;

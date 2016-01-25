@@ -82,6 +82,7 @@
     <Compile Include="Utilities\DamageIndicator.cs" />
     <Compile Include="Utilities\Evader.cs" />
     <Compile Include="Utilities\FpsBooster.cs" />
+    <Compile Include="Utilities\LanguageTranslator.cs" />
     <Compile Include="Utilities\Utilities.cs" />
   </ItemGroup>
   <ItemGroup>

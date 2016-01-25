@@ -75,10 +75,10 @@ namespace KoreanAIO.Champions
 
             MenuManager.AddSubMenu("Keys");
             {
-                KeysMenu.Add("AssistedUltimate",
+                KeysMenu.AddValue("AssistedUltimate",
                     new KeyBind("Assisted Ultimate", false, KeyBind.BindTypes.HoldActive, 'T'));
                 ToggleManager.RegisterToggle(
-                    KeysMenu.Add("HarassToggle", new KeyBind("Harass Toggle", false, KeyBind.BindTypes.PressToggle, 'K')),
+                    KeysMenu.AddValue("HarassToggle", new KeyBind("Harass Toggle", false, KeyBind.BindTypes.PressToggle, 'K')),
                     delegate
                     {
                         if (!ModeManager.Combo)
@@ -87,7 +87,7 @@ namespace KoreanAIO.Champions
                         }
                     });
                 ToggleManager.RegisterToggle(
-                    KeysMenu.Add("LastHitToggle",
+                    KeysMenu.AddValue("LastHitToggle",
                         new KeyBind("LastHit Toggle", false, KeyBind.BindTypes.PressToggle, 'L')),
                     delegate
                     {
@@ -103,52 +103,52 @@ namespace KoreanAIO.Champions
 
             MenuManager.AddSubMenu("Combo");
             {
-                ComboMenu.Add("Q", new CheckBox("Use Q"));
-                ComboMenu.Add("W", new CheckBox("Use W"));
+                ComboMenu.AddValue("Q", new CheckBox("Use Q"));
+                ComboMenu.AddValue("W", new CheckBox("Use W"));
                 ComboMenu.AddStringList("E", "Use E", new[] { "Never", "On Poisoned", "Always" }, 1);
-                ComboMenu.Add("R", new Slider("Use R if enemies inside >= {0}", 3, 0, 5));
+                ComboMenu.AddValue("R", new Slider("Use R if enemies inside >= {0}", 3, 0, 5));
             }
 
             MenuManager.AddSubMenu("Harass");
             {
-                HarassMenu.Add("Q", new CheckBox("Use Q"));
-                HarassMenu.Add("W", new CheckBox("Use W"));
+                HarassMenu.AddValue("Q", new CheckBox("Use Q"));
+                HarassMenu.AddValue("W", new CheckBox("Use W"));
                 HarassMenu.AddStringList("E", "Use E", new[] { "Never", "On Poisoned", "Always" }, 1);
-                HarassMenu.Add("ManaPercent", new Slider("Min. ManaPercent", 25));
+                HarassMenu.AddValue("ManaPercent", new Slider("Minimum Mana Percent", 25));
             }
 
             MenuManager.AddSubMenu("Clear");
             {
-                ClearMenu.AddGroupLabel("LaneClear");
+                ClearMenu.AddValue("LaneClear", new GroupLabel("LaneClear"));
                 {
-                    ClearMenu.Add("LaneClear.Q", new Slider("Use Q if hit >= {0}", 2, 0, 10));
-                    ClearMenu.Add("LaneClear.W", new Slider("Use W if hit >= {0}", 3, 0, 10));
+                    ClearMenu.AddValue("LaneClear.Q", new Slider("Use Q if hit is greater than {0}", 2, 0, 10));
+                    ClearMenu.AddValue("LaneClear.W", new Slider("Use W if hit is greater than {0}", 3, 0, 10));
                     ClearMenu.AddStringList("LaneClear.E", "Use E", new[] { "Never", "On Poisoned", "Always" }, 1);
-                    ClearMenu.Add("LaneClear.ManaPercent", new Slider("Min. ManaPercent", 50));
+                    ClearMenu.AddValue("LaneClear.ManaPercent", new Slider("Minimum Mana Percent", 50));
                 }
-                ClearMenu.AddGroupLabel("LastHit");
+                ClearMenu.AddValue("LastHit", new GroupLabel("LastHit"));
                 {
                     ClearMenu.AddStringList("LastHit.E", "Use E", new[] { "Never", "On Poisoned", "Always" }, 1);
-                    ClearMenu.Add("LastHit.ManaPercent", new Slider("Min. ManaPercent", 50));
+                    ClearMenu.AddValue("LastHit.ManaPercent", new Slider("Minimum Mana Percent", 50));
                 }
-                ClearMenu.AddGroupLabel("JungleClear");
+                ClearMenu.AddValue("JungleClear", new GroupLabel("JungleClear"));
                 {
-                    ClearMenu.Add("JungleClear.Q", new CheckBox("Use Q"));
-                    ClearMenu.Add("JungleClear.W", new CheckBox("Use W"));
-                    ClearMenu.Add("JungleClear.E", new CheckBox("Use E"));
-                    ClearMenu.Add("JungleClear.ManaPercent", new Slider("Min. ManaPercent", 20));
+                    ClearMenu.AddValue("JungleClear.Q", new CheckBox("Use Q"));
+                    ClearMenu.AddValue("JungleClear.W", new CheckBox("Use W"));
+                    ClearMenu.AddValue("JungleClear.E", new CheckBox("Use E"));
+                    ClearMenu.AddValue("JungleClear.ManaPercent", new Slider("Minimum Mana Percent", 20));
                 }
             }
             MenuManager.AddKillStealMenu();
             {
-                KillStealMenu.Add("Q", new CheckBox("Use Q"));
-                KillStealMenu.Add("W", new CheckBox("Use W"));
-                KillStealMenu.Add("E", new CheckBox("Use E"));
-                KillStealMenu.Add("R", new CheckBox("Use R", false));
+                KillStealMenu.AddValue("Q", new CheckBox("Use Q"));
+                KillStealMenu.AddValue("W", new CheckBox("Use W"));
+                KillStealMenu.AddValue("E", new CheckBox("Use E"));
+                KillStealMenu.AddValue("R", new CheckBox("Use R", false));
             }
             MenuManager.AddSubMenu("Automatic");
             {
-                AutomaticMenu.Add("R", new CheckBox("Use R to interrupt enemy spells"));
+                AutomaticMenu.AddValue("R", new CheckBox("Use R to interrupt enemy spells"));
             }
             MenuManager.AddDrawingsMenu();
             {
@@ -156,7 +156,7 @@ namespace KoreanAIO.Champions
                 W.AddDrawings(false);
                 E.AddDrawings();
                 R.AddDrawings();
-                DrawingsMenu.Add("Toggles", new CheckBox("Draw toggles status"));
+                DrawingsMenu.AddValue("Toggles", new CheckBox("Draw toggles status"));
             }
         }
 

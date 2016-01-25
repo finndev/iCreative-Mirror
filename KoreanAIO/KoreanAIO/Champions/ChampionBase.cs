@@ -28,7 +28,10 @@ namespace KoreanAIO.Champions
 
         protected Menu Menu
         {
-            get { return MenuManager.Menu; }
+            get
+            {
+                return MenuManager.Menu;
+            }
         }
         public Menu ComboMenu
         {

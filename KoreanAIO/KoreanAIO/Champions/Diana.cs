@@ -19,7 +19,7 @@ namespace KoreanAIO.Champions
         public Vector3 LastMissileVector = Vector3.Zero;
         public Vector3 QEndPosition = Vector3.Zero;
         public int LastMissileVectorTime;
-        
+
         public Diana()
         {
             Q = new SpellBase(SpellSlot.Q, SpellType.Circular, 825)
@@ -109,56 +109,56 @@ namespace KoreanAIO.Champions
             Q.AddConfigurableHitChancePercent();
             MenuManager.AddSubMenu("Combo");
             {
-                ComboMenu.Add("Q", new CheckBox("Use Q"));
-                ComboMenu.Add("W", new CheckBox("Use W"));
-                ComboMenu.Add("QR", new CheckBox("Use QR on minion to gapclose"));
-                ComboMenu.Add("Ignite", new CheckBox("Use Ignite if killable", false));
-                ComboMenu.AddStringList("E", "Use E", new[] { "Never", "Smart", "Always" }, 1);
-                ComboMenu.AddStringList("R", "Use R", new[] { "Never", "Smart", "Always" }, 1);
-                ComboMenu.Add("2ndR", new CheckBox("Use always second r", false));
+                ComboMenu.AddValue("Q", new CheckBox("Use Q"));
+                ComboMenu.AddValue("W", new CheckBox("Use W"));
+                ComboMenu.AddValue("QR", new CheckBox("Use QR on minion to gapclose"));
+                ComboMenu.AddValue("Ignite", new CheckBox("Use Ignite if killable", false));
+                ComboMenu.AddStringList("E", "Use E", new[] { "Never", "Smartly", "Always" }, 1);
+                ComboMenu.AddStringList("R", "Use R", new[] { "Never", "Smartly", "Always" }, 1);
+                ComboMenu.AddValue("2ndR", new CheckBox("Use always second r", false));
             }
 
             MenuManager.AddSubMenu("Harass");
             {
-                HarassMenu.Add("Q", new CheckBox("Use Q"));
-                HarassMenu.Add("W", new CheckBox("Use W"));
-                HarassMenu.Add("E", new CheckBox("Use E", false));
-                HarassMenu.Add("ManaPercent", new Slider("Min. ManaPercent", 25));
+                HarassMenu.AddValue("Q", new CheckBox("Use Q"));
+                HarassMenu.AddValue("W", new CheckBox("Use W"));
+                HarassMenu.AddValue("E", new CheckBox("Use E", false));
+                HarassMenu.AddValue("ManaPercent", new Slider("Minimum Mana Percent", 25));
             }
 
             MenuManager.AddSubMenu("Clear");
             {
-                ClearMenu.AddGroupLabel("LaneClear");
+                ClearMenu.AddValue("LaneClear", new GroupLabel("LaneClear"));
                 {
-                    ClearMenu.Add("LaneClear.Q", new Slider("Use Q if hit >= {0}", 4, 0, 10));
-                    ClearMenu.Add("LaneClear.W", new Slider("Use W if hit >= {0}", 3, 0, 10));
-                    ClearMenu.Add("LaneClear.ManaPercent", new Slider("Min. ManaPercent", 50));
+                    ClearMenu.AddValue("LaneClear.Q", new Slider("Use Q if hit is greater than {0}", 4, 0, 10));
+                    ClearMenu.AddValue("LaneClear.W", new Slider("Use W if hit is greater than {0}", 3, 0, 10));
+                    ClearMenu.AddValue("LaneClear.ManaPercent", new Slider("Minimum Mana Percent", 50));
                 }
-                ClearMenu.AddGroupLabel("LastHit");
+                ClearMenu.AddValue("LastHit", new GroupLabel("LastHit"));
                 {
-                    ClearMenu.AddStringList("LastHit.Q", "Use Q", new[] { "None", "Smart", "Always" }, 1);
-                    ClearMenu.Add("LastHit.ManaPercent", new Slider("Min. ManaPercent", 50));
+                    ClearMenu.AddStringList("LastHit.Q", "Use Q", new[] { "Never", "Smartly", "Always" }, 1);
+                    ClearMenu.AddValue("LastHit.ManaPercent", new Slider("Minimum Mana Percent", 50));
                 }
-                ClearMenu.AddGroupLabel("JungleClear");
+                ClearMenu.AddValue("JungleClear", new GroupLabel("JungleClear"));
                 {
-                    ClearMenu.Add("JungleClear.Q", new CheckBox("Use Q"));
-                    ClearMenu.Add("JungleClear.W", new CheckBox("Use W"));
-                    ClearMenu.Add("JungleClear.R", new CheckBox("Use R"));
-                    ClearMenu.Add("JungleClear.ManaPercent", new Slider("Min. ManaPercent", 20));
+                    ClearMenu.AddValue("JungleClear.Q", new CheckBox("Use Q"));
+                    ClearMenu.AddValue("JungleClear.W", new CheckBox("Use W"));
+                    ClearMenu.AddValue("JungleClear.R", new CheckBox("Use R"));
+                    ClearMenu.AddValue("JungleClear.ManaPercent", new Slider("Minimum Mana Percent", 20));
                 }
             }
 
             MenuManager.AddKillStealMenu();
             {
-                KillStealMenu.Add("Q", new CheckBox("Use Q"));
-                KillStealMenu.Add("W", new CheckBox("Use W"));
-                KillStealMenu.Add("R", new CheckBox("Use R"));
+                KillStealMenu.AddValue("Q", new CheckBox("Use Q"));
+                KillStealMenu.AddValue("W", new CheckBox("Use W"));
+                KillStealMenu.AddValue("R", new CheckBox("Use R"));
             }
 
             MenuManager.AddSubMenu("Automatic");
             {
-                AutomaticMenu.Add("Gapcloser", new CheckBox("Use E on enemy dashing"));
-                AutomaticMenu.Add("Interrupter", new CheckBox("Use E to interrupt enemy spell"));
+                AutomaticMenu.AddValue("Gapcloser", new CheckBox("Use E on enemy dashing"));
+                AutomaticMenu.AddValue("Interrupter", new CheckBox("Use E to interrupt enemy spell"));
             }
             MenuManager.AddDrawingsMenu();
             {
@@ -167,7 +167,7 @@ namespace KoreanAIO.Champions
                 E.AddDrawings(false);
                 R.AddDrawings();
             }
-            
+
         }
 
         protected override void PermaActive()

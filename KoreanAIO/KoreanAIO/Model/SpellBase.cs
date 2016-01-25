@@ -22,8 +22,8 @@ namespace KoreanAIO.Model
 
     public enum LastHitType
     {
-        None,
-        Smart,
+        Never,
+        Smartly,
         Always
     }
 
@@ -306,13 +306,13 @@ namespace KoreanAIO.Model
             {
                 MenuManager.AddSubMenu("Prediction");
             }
-            Slider = MenuManager.GetSubMenu("Prediction").Add(SlotName, new Slider(SlotName + " HitChancePercent", defaultValue > 0 ? defaultValue : (int)MinHitChancePercent));
+            Slider = MenuManager.GetSubMenu("Prediction").AddValue(SlotName, new Slider(SlotName + " HitChancePercent", defaultValue > 0 ? defaultValue : (int)MinHitChancePercent));
             return this;
         }
 
         public SpellBase AddDrawings(bool defaultValue = true, ColorBGRA? color = null)
         {
-            var checkBox = MenuManager.GetSubMenu("Drawings").Add(SlotName, new CheckBox("Draw " + SlotName + " range", defaultValue));
+            var checkBox = MenuManager.GetSubMenu("Drawings").AddValue(SlotName, new CheckBox("Draw " + SlotName + " range", defaultValue));
             CircleManager.Circles.Add(new Circle(checkBox, color ?? new ColorBGRA(255, 255, 255, 100), () => Range, () => IsReady, () => RangeCheckSource));
             return this;
         }
@@ -641,12 +641,12 @@ namespace KoreanAIO.Model
 
         public List<Obj_AI_Base> LastHit(LastHitType? t, bool useCast = true)
         {
-            var type = t ?? LastHitType.Smart;
-            if (IsReady && type > LastHitType.None)
+            var type = t ?? LastHitType.Smartly;
+            if (IsReady && type > LastHitType.Never)
             {
                 if (_killableMinions.Count == 0)
                 {
-                    if (type == LastHitType.Smart)
+                    if (type == LastHitType.Smartly)
                     {
                         if (LaneClearMinions.Count > 0)
                         {

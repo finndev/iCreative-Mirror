@@ -38,7 +38,8 @@ namespace KoreanAIO
             Utilities.DamageIndicator.Initialize,
             Managers.ItemManager.Initialize,
             Utilities.FpsBooster.Initialize,
-            Managers.CacheManager.Initialize
+            Managers.CacheManager.Initialize,
+            Utilities.LanguageTranslator.Initialize
         };
 
         public static void WriteInConsole(string message)

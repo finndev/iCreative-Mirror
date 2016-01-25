@@ -187,72 +187,72 @@ namespace KoreanAIO.Champions
 
                 MenuManager.AddSubMenu("Combo");
                 {
-                    ComboMenu.Add("TeamFight", new Slider("Use TeamFight logic if enemies near >= {0}", 3, 1, 5));
-                    ComboMenu.AddGroupLabel("Common logic");
-                    ComboMenu.Add("Q", new CheckBox("Use Q on target"));
-                    ComboMenu.Add("W", new CheckBox("Use W on target"));
-                    ComboMenu.Add("E.Shield", new CheckBox("Use E on enemy spells"));
-                    ComboMenu.Add("E.HealthPercent", new Slider("Use E if HealthPercent <= {0}", 40));
-                    ComboMenu.AddGroupLabel("1 vs 1 logic");
-                    ComboMenu.Add("R.Killable", new CheckBox("Use R on target if killable"));
-                    ComboMenu.AddGroupLabel("TeamFight logic");
-                    ComboMenu.Add("Q.Hit", new Slider("Use Q if hit >= {0}", 2, 1, 5));
-                    ComboMenu.Add("W.Hit", new Slider("Use W if hit >= {0}", 2, 1, 5));
-                    ComboMenu.Add("R.Hit", new Slider("Use R if hit >= {0}", 3, 1, 5));
+                    ComboMenu.AddValue("TeamFight", new Slider("Use TeamFight logic if enemies near >= {0}", 3, 1, 5));
+                    ComboMenu.AddValue("Common", new GroupLabel("Common logic"));
+                    ComboMenu.AddValue("Q", new CheckBox("Use Q on target"));
+                    ComboMenu.AddValue("W", new CheckBox("Use W on target"));
+                    ComboMenu.AddValue("E.Shield", new CheckBox("Use E on enemy spells"));
+                    ComboMenu.AddValue("E.HealthPercent", new Slider("Use E if HealthPercent <= {0}", 40));
+                    ComboMenu.AddValue("1vs1", new GroupLabel("1 vs 1 logic"));
+                    ComboMenu.AddValue("R.Killable", new CheckBox("Use R on target if killable"));
+                    ComboMenu.AddValue("TeamFight", new GroupLabel("TeamFight Logic"));
+                    ComboMenu.AddValue("Q.Hit", new Slider("Use Q if hit >= {0}", 2, 1, 5));
+                    ComboMenu.AddValue("W.Hit", new Slider("Use W if hit >= {0}", 2, 1, 5));
+                    ComboMenu.AddValue("R.Hit", new Slider("Use R if hit >= {0}", 3, 1, 5));
                 }
 
                 MenuManager.AddSubMenu("Harass");
                 {
-                    HarassMenu.Add("Q", new CheckBox("Use Q"));
-                    HarassMenu.Add("W", new CheckBox("Use W"));
-                    HarassMenu.Add("E.Shield", new CheckBox("Use E on enemy spells"));
-                    HarassMenu.Add("E.HealthPercent", new Slider("Use E if HealthPercent <= {0}", 40));
-                    HarassMenu.Add("ManaPercent", new Slider("Min. ManaPercent", 25));
+                    HarassMenu.AddValue("Q", new CheckBox("Use Q"));
+                    HarassMenu.AddValue("W", new CheckBox("Use W"));
+                    HarassMenu.AddValue("E.Shield", new CheckBox("Use E on enemy spells"));
+                    HarassMenu.AddValue("E.HealthPercent", new Slider("Use E if HealthPercent <= {0}", 40));
+                    HarassMenu.AddValue("ManaPercent", new Slider("Minimum Mana Percent", 25));
                 }
 
                 MenuManager.AddSubMenu("Clear");
                 {
-                    ClearMenu.AddGroupLabel("LaneClear");
+                    ClearMenu.AddValue("LaneClear", new GroupLabel("LaneClear"));
                     {
-                        ClearMenu.Add("LaneClear.Q", new Slider("Use Q if hit >= {0}", 4, 0, 10));
-                        ClearMenu.Add("LaneClear.W", new Slider("Use W if hit >= {0}", 3, 0, 10));
-                        ClearMenu.Add("LaneClear.E", new Slider("Use E if hit >= {0}", 6, 0, 10));
-                        ClearMenu.Add("LaneClear.ManaPercent", new Slider("Min. ManaPercent", 50));
+                        ClearMenu.AddValue("LaneClear.Q", new Slider("Use Q if hit is greater than {0}", 4, 0, 10));
+                        ClearMenu.AddValue("LaneClear.W", new Slider("Use W if hit is greater than {0}", 3, 0, 10));
+                        ClearMenu.AddValue("LaneClear.E", new Slider("Use E if hit is greater than {0}", 6, 0, 10));
+                        ClearMenu.AddValue("LaneClear.ManaPercent", new Slider("Minimum Mana Percent", 50));
                     }
-                    ClearMenu.AddGroupLabel("LastHit");
+                    ClearMenu.AddValue("LastHit", new GroupLabel("LastHit"));
                     {
-                        ClearMenu.AddStringList("LastHit.Q", "Use Q", new[] { "None", "Smart", "Always" }, 1);
-                        ClearMenu.Add("LastHit.ManaPercent", new Slider("Min. ManaPercent", 50));
+                        ClearMenu.AddStringList("LastHit.Q", "Use Q", new[] { "Never", "Smartly", "Always" }, 1);
+                        ClearMenu.AddValue("LastHit.ManaPercent", new Slider("Minimum Mana Percent", 50));
                     }
-                    ClearMenu.AddGroupLabel("JungleClear");
+                    ClearMenu.AddValue("JungleClear", new GroupLabel("JungleClear"));
                     {
-                        ClearMenu.Add("JungleClear.Q", new CheckBox("Use Q"));
-                        ClearMenu.Add("JungleClear.W", new CheckBox("Use W"));
-                        ClearMenu.Add("JungleClear.E", new CheckBox("Use E"));
-                        ClearMenu.Add("JungleClear.ManaPercent", new Slider("Min. ManaPercent", 20));
+                        ClearMenu.AddValue("JungleClear.Q", new CheckBox("Use Q"));
+                        ClearMenu.AddValue("JungleClear.W", new CheckBox("Use W"));
+                        ClearMenu.AddValue("JungleClear.E", new CheckBox("Use E"));
+                        ClearMenu.AddValue("JungleClear.ManaPercent", new Slider("Minimum Mana Percent", 20));
                     }
                 }
 
                 MenuManager.AddKillStealMenu();
                 {
-                    KillStealMenu.Add("Q", new CheckBox("Use Q"));
-                    KillStealMenu.Add("W", new CheckBox("Use W"));
-                    KillStealMenu.Add("E", new CheckBox("Use E"));
-                    KillStealMenu.Add("R", new CheckBox("Use R", false));
+                    KillStealMenu.AddValue("Q", new CheckBox("Use Q"));
+                    KillStealMenu.AddValue("W", new CheckBox("Use W"));
+                    KillStealMenu.AddValue("E", new CheckBox("Use E"));
+                    KillStealMenu.AddValue("R", new CheckBox("Use R", false));
                 }
 
                 MenuManager.AddSubMenu("Automatic");
                 {
-                    AutomaticMenu.Add("Gapcloser", new CheckBox("Use E on ally gapclosing"));
-                    AutomaticMenu.Add("Interrupter", new CheckBox("Use R to interrupt enemy spell"));
-                    AutomaticMenu.Add("E.Shield", new CheckBox("Use E on enemy spells"));
-                    AutomaticMenu.Add("W.Hit", new Slider("Use W if hit >= {0}", 2, 1, 5));
-                    AutomaticMenu.Add("R.Hit", new Slider("Use R if hit >= {0}", 3, 1, 5));
+                    AutomaticMenu.AddValue("Gapcloser", new CheckBox("Use E on ally gapclosing"));
+                    AutomaticMenu.AddValue("Interrupter", new CheckBox("Use R to interrupt enemy spell"));
+                    AutomaticMenu.AddValue("E.Shield", new CheckBox("Use E on enemy spells"));
+                    AutomaticMenu.AddValue("W.Hit", new Slider("Use W if hit >= {0}", 2, 1, 5));
+                    AutomaticMenu.AddValue("R.Hit", new Slider("Use R if hit >= {0}", 3, 1, 5));
                 }
 
                 MenuManager.AddDrawingsMenu();
                 {
-                    var c = DrawingsMenu.Add("Ball", new CheckBox("Draw ball position"));
+                    var c = DrawingsMenu.AddValue("Ball", new CheckBox("Draw ball position"));
                     CircleManager.Circles.Add(new Circle(c, new ColorBGRA(0, 0, 255, 100), () => 120, () => true,
                         () => Ball)
                     { Width = 3 });
@@ -263,16 +263,16 @@ namespace KoreanAIO.Champions
                 }
                 MenuManager.AddSubMenu("Misc");
                 {
-                    MiscMenu.Add("R.Block", new CheckBox("Block R if will not hit"));
+                    MiscMenu.AddValue("R.Block", new CheckBox("Block R if will not hit"));
                     if (EntityManager.Heroes.Enemies.Count > 0)
                     {
                         var enemiesAdded = new HashSet<string>();
-                        MiscMenu.AddGroupLabel("Don't use R in:");
+                        MiscMenu.AddValue("BlackList.R", new GroupLabel("Don't use R on:"));
                         foreach (var enemy in EntityManager.Heroes.Enemies)
                         {
                             if (!enemiesAdded.Contains(enemy.ChampionName))
                             {
-                                MiscMenu.Add("BlackList." + enemy.ChampionName, new CheckBox(enemy.ChampionName, false));
+                                MiscMenu.AddValue("BlackList." + enemy.ChampionName, new CheckBox(enemy.ChampionName, false));
                                 enemiesAdded.Add(enemy.ChampionName);
                             }
                         }
