@@ -387,10 +387,10 @@ namespace KoreanAIO.Model
                 case SpellType.Circular:
                     return source.IsInRange(pred.CastPosition, Range + Radius);
                 case SpellType.Linear:
-                    return source.IsInRange(pred.CastPosition, Range + Width);
+                    return source.IsInRange(pred.CastPosition, Range);
             }
             //Self
-            return source.IsInRange(pred.CastPosition, Range);
+            return source.IsInRange(pred.CastPosition, Range + target.BoundingRadius / 2);
         }
 
         public PredictionResult GetPrediction(Obj_AI_Base target, CustomSettings custom = null)
