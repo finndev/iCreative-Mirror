@@ -55,7 +55,7 @@ namespace LeeSin
                     {
                         var pred = SpellManager.Q1.GetPrediction(_smiteTarget);
                         var width = _smiteTarget.BoundingRadius + SpellManager.Q1.Width;//
-                        var timeToArriveQ = (_missile.Distance(pred.CastPosition) - width) / SpellManager.Q1.Speed - SpellManager.SmiteCastDelay - (Game.Ping / 2000f + 0.07f);
+                        var timeToArriveQ = (_missile.Distance(pred.CastPosition) - width) / SpellManager.Q1.Speed - SpellManager.SmiteCastDelay - (Game.Ping / 2000f + 0.1f);
                         if (timeToArriveQ <= 0)
                         {
                             canSmite = true;
@@ -102,9 +102,10 @@ namespace LeeSin
         {
             if (IsWaitingMissile)
             {
-                if (sender != null && sender is MissileClient)
+                var client = sender as MissileClient;
+                if (client != null)
                 {
-                    var missile = sender as MissileClient;
+                    var missile = client;
                     if (missile.SpellCaster.IsMe)
                     {
                         if (missile.SData.Name.ToLower().Contains("blindmonkqone"))
@@ -121,9 +122,10 @@ namespace LeeSin
         {
             if (MissileIsValid)
             {
-                if (sender != null && sender is MissileClient)
+                var client = sender as MissileClient;
+                if (client != null)
                 {
-                    var missile = sender as MissileClient;
+                    var missile = client;
                     if (missile.SpellCaster.IsMe)
                     {
                         if (_missile.NetworkId == missile.NetworkId)
@@ -184,15 +186,14 @@ namespace LeeSin
                 var pred = SpellManager.Q1.GetPrediction(target);
                 if (pred.HitChancePercent >= SpellSlot.Q.HitChancePercent())
                 {
-                    var minions = pred.GetCollisionObjects<Obj_AI_Minion>().Where(m => m.IsValidTarget() && Util.MyHero.Distance(m, true) < Util.MyHero.Distance(target, true));
+                    var minions = pred.GetCollisionObjects<Obj_AI_Minion>().Where(m => m.IsValidTarget() && Util.MyHero.Distance(m, true) < Util.MyHero.Distance(target, true)).ToList();
                     var canSmite = (Combo.IsActive && AutoSmite.Menu.GetCheckBoxValue("Q.Combo")) || (Harass.IsActive && AutoSmite.Menu.GetCheckBoxValue("Q.Harass")) || (Insec.IsActive && AutoSmite.Menu.GetCheckBoxValue("Q.Insec"));
-                    if (SpellManager.SmiteIsReady && minions.Count() == 1 && canSmite)
+                    var minion = minions.FirstOrDefault();
+                    if (SpellManager.SmiteIsReady && minions.Count == 1 && canSmite && minion != null)
                     {
-                        var collision = minions.FirstOrDefault();
-                        var minion = collision as Obj_AI_Minion;
-                        if (minion != null && collision.IsInSmiteRange())
+                        if (minion.IsInSmiteRange())
                         {
-                            int time = SpellManager.Q1.CastDelay + 1000 * (int)(Util.MyHero.Distance(minion) / SpellManager.Q1.Speed) + (int)SpellManager.SmiteCastDelay * 1000 - 70;
+                            int time = SpellManager.Q1.CastDelay + 1000 * (int)(Util.MyHero.Distance(minion) / SpellManager.Q1.Speed) + (int)SpellManager.SmiteCastDelay * 1000;
                             if (Prediction.Health.GetPrediction(minion, time) <= Util.MyHero.GetSummonerSpellDamage(minion, DamageLibrary.SummonerSpells.Smite))
                             {
                                 _smiteTarget = minion;
