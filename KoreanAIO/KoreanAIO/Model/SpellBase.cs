@@ -306,7 +306,7 @@ namespace KoreanAIO.Model
             {
                 MenuManager.AddSubMenu("Prediction");
             }
-            Slider = MenuManager.GetSubMenu("Prediction").AddValue(SlotName, new Slider(SlotName + " HitChancePercent", defaultValue > 0 ? defaultValue : (int)MinHitChancePercent));
+            Slider = MenuManager.GetSubMenu("Prediction").AddValue(SlotName, new Slider(SlotName + ": HitChancePercent", defaultValue > 0 ? defaultValue : (int)MinHitChancePercent));
             return this;
         }
 
