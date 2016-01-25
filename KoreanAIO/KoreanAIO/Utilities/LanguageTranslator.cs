@@ -388,7 +388,7 @@ namespace KoreanAIO.Utilities
                 {"Automatic", "自动"},
                 {"Evader", "躲避"},
                 {"Drawings", "线圈"},
-                {"Flee", "Flee"},
+                {"Flee", "逃跑"},
                 {"Misc", "杂项"},
                 /* LastHit */
                 {"Never", "从不"},
@@ -396,9 +396,9 @@ namespace KoreanAIO.Utilities
                 {"Always", "一直"},
                 /* Checkbox, sliders and others */
                 {"MinimumManaPercent", "最低能量使用"},
-                {"DisableUnderEnemyTurret", "Disable under enemy turret"},
-                {"IfKillable", "If killable"},
-                {"IfNeeded", "If needed"},
+                {"DisableUnderEnemyTurret", "在敌方塔下屏蔽"},
+                {"IfKillable", "如果可击杀"},
+                {"IfNeeded", "如果需要"},
                 {"UseIgnite", "使用点燃抢头"},
                 {"UseIgnite.Killable", "使用点燃如果可击杀"},
                 {"UseSmite", "使用惩戒抢头"},
@@ -421,7 +421,7 @@ namespace KoreanAIO.Utilities
                 {"UseR.Interrupter", "使用R打断敌人技能"},
                 {"R.BlackList", "对敌人不使用R"},
                 {"Items", "使用物品"},
-                {"Zhonyas", "Use Zhonyas if my % of health is less than {0}"},
+                {"Zhonyas", "自动中亚当生命值百分比低于 {0}"},
                 /* Zed */
                 {"R.Prevent", "R之前不使用技能"},
                 {"R.Combo.Mode", "R 模式"},
