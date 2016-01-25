@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq.Expressions;
+using EloBuddy;
 using EloBuddy.SDK.Menu.Values;
 using KoreanAIO.Managers;
 
@@ -8,19 +11,34 @@ namespace KoreanAIO.Utilities
     {
         English,
         Spanish,
-        Korean,
-        Chinese,
         French,
         German,
         Italian,
         Portuguese,
-        Polish
+        Polish,
+        Chinese,
+        ChineseTraditional,
+        Korean
     }
 
     public static class LanguageTranslator
     {
         private static readonly Dictionary<Language, Dictionary<string, string>> Translations =
             new Dictionary<Language, Dictionary<string, string>>();
+        private static readonly Dictionary<string, Language> CulturesToLanguage = new Dictionary<string, Language>
+        {
+            { "en-US", Language.English},
+            { "en-GB", Language.English},
+            { "es-ES", Language.Spanish},
+            { "fr-FR", Language.French},
+            { "de-DE", Language.German},
+            { "it-IT", Language.Italian},
+            { "pt-BR", Language.Portuguese},
+            { "pt-PT", Language.Portuguese},
+            { "zh-CHS", Language.Chinese},
+            { "zh-CHT", Language.ChineseTraditional},
+            { "ko-KR", Language.Korean},
+        };
 
         static LanguageTranslator()
         {
@@ -128,13 +146,13 @@ namespace KoreanAIO.Utilities
                 {"Draw.W", "Draw W range"},
                 {"Draw.E", "Draw E range"},
                 {"Draw.R", "Draw R range"},
-                { "Draw.Toggles", "Draw toggles status"},
+                {"Draw.Toggles", "Draw toggles status"},
                 /* Prediction*/
                 {"Q.HitChancePercent", "Q: HitChancePercent"},
                 {"W.HitChancePercent", "W: HitChancePercent"},
                 {"E.HitChancePercent", "E: HitChancePercent"},
                 {"QE.HitChancePercent", "QE: HitChancePercent"},
-                {"R.HitChancePercent", "R: HitChancePercent"},
+                {"R.HitChancePercent", "R: HitChancePercent"}
             };
             Translations[Language.Spanish] = new Dictionary<string, string>
             {
@@ -240,18 +258,18 @@ namespace KoreanAIO.Utilities
                 {"Draw.W", "Dibujar el rango de la W"},
                 {"Draw.E", "Dibujar el rango de la E"},
                 {"Draw.R", "Dibujar el rango de la R"},
-                { "Draw.Toggles", "Dibujar el estado de los interruptores"},
+                {"Draw.Toggles", "Dibujar el estado de los interruptores"},
                 /* Prediction*/
                 {"Q.HitChancePercent", "Q: Porcentaje de probabilidad de golpe"},
                 {"W.HitChancePercent", "W: Porcentaje de probabilidad de golpe"},
                 {"E.HitChancePercent", "E: Porcentaje de probabilidad de golpe"},
                 {"QE.HitChancePercent", "QE: Porcentaje de probabilidad de golpe"},
-                {"R.HitChancePercent", "R: Porcentaje de probabilidad de golpe"},
+                {"R.HitChancePercent", "R: Porcentaje de probabilidad de golpe"}
             };
             Translations[Language.German] = new Dictionary<string, string>
             {
                 {"Language", "Sprache"},
-                {"German", "Deutsch"},
+                {"German", "Deutsch"}
             };
             Translations[Language.Polish] = new Dictionary<string, string>
             {
@@ -354,13 +372,13 @@ namespace KoreanAIO.Utilities
                 {"Draw.W", "Pokaż W zasięg"},
                 {"Draw.E", "Pokaż E zasięg"},
                 {"Draw.R", "Pokaż R zasięg"},
-                { "Draw.Toggles", "Draw toggles status"},
+                {"Draw.Toggles", "Draw toggles status"},
                 /* Prediction*/
                 {"Q.HitChancePercent", "Q: SzansaNaTrafienie"},
                 {"W.HitChancePercent", "W: SzansaNaTrafienie"},
                 {"E.HitChancePercent", "E: SzansaNaTrafienie"},
                 {"QE.HitChancePercent", "QE: SzansaNaTrafienie"},
-                {"R.HitChancePercent", "R: SzansaNaTrafienie"},
+                {"R.HitChancePercent", "R: SzansaNaTrafienie"}
             };
             Translations[Language.Chinese] = new Dictionary<string, string>
             {
@@ -388,7 +406,7 @@ namespace KoreanAIO.Utilities
                 {"Automatic", "自动"},
                 {"Evader", "躲避"},
                 {"Drawings", "线圈"},
-                {"Flee", "Flee"},
+                {"Flee", "逃跑"},
                 {"Misc", "杂项"},
                 /* LastHit */
                 {"Never", "从不"},
@@ -396,9 +414,9 @@ namespace KoreanAIO.Utilities
                 {"Always", "一直"},
                 /* Checkbox, sliders and others */
                 {"MinimumManaPercent", "最低能量使用"},
-                {"DisableUnderEnemyTurret", "Disable under enemy turret"},
-                {"IfKillable", "If killable"},
-                {"IfNeeded", "If needed"},
+                {"DisableUnderEnemyTurret", "在敌方塔下屏蔽"},
+                {"IfKillable", "如果可击杀"},
+                {"IfNeeded", "如果需要"},
                 {"UseIgnite", "使用点燃抢头"},
                 {"UseIgnite.Killable", "使用点燃如果可击杀"},
                 {"UseSmite", "使用惩戒抢头"},
@@ -421,7 +439,7 @@ namespace KoreanAIO.Utilities
                 {"UseR.Interrupter", "使用R打断敌人技能"},
                 {"R.BlackList", "对敌人不使用R"},
                 {"Items", "使用物品"},
-                {"Zhonyas", "Use Zhonyas if my % of health is less than {0}"},
+                {"Zhonyas", "自动中亚当生命值百分比低于 {0}"},
                 /* Zed */
                 {"R.Prevent", "R之前不使用技能"},
                 {"R.Combo.Mode", "R 模式"},
@@ -466,13 +484,125 @@ namespace KoreanAIO.Utilities
                 {"Draw.W", "显示 W 范围"},
                 {"Draw.E", "显示 E 范围"},
                 {"Draw.R", "显示 R 范围"},
-                { "Draw.Toggles", "自动技能面板显示"},
+                {"Draw.Toggles", "自动技能面板显示"},
                 /* Prediction*/
                 {"Q.HitChancePercent", "Q: 命中率百分比"},
                 {"W.HitChancePercent", "W: 命中率百分比"},
                 {"E.HitChancePercent", "E: 命中率百分比"},
                 {"QE.HitChancePercent", "QE: 命中率百分比"},
-                {"R.HitChancePercent", "R: 命中率百分比"},
+                {"R.HitChancePercent", "R: 命中率百分比"}
+            };
+            Translations[Language.ChineseTraditional] = new Dictionary<string, string>
+            {
+                {"Language", "語言"},
+                {"ChineseTraditional", "中文"},
+                {"Enabled", "開啟"},
+                {"Disabled", "關閉"},
+                {"Available", "可用的"},
+                /* Keys */
+                {"Combo.WithoutR", "不用R連招"},
+                {"Harass.WEQ", "騷擾 2"},
+                /* Toggles */
+                {"LastHit.Toggle", "自動尾兵"},
+                {"Harass.Toggle", "自動騷擾"},
+                /* Submenus */
+                {"Keys", "熱鍵"},
+                {"Prediction", "預判"},
+                {"Combo", "連招"},
+                {"Harass", "騷擾"},
+                {"Clear", "清線"},
+                {"LaneClear", "清線"},
+                {"LastHit", "尾兵"},
+                {"JungleClear", "清野"},
+                {"KillSteal", "搶人頭"},
+                {"Automatic", "自動"},
+                {"Evader", "躲避"},
+                {"Drawings", "線圈"},
+                {"Flee", "逃跑"},
+                {"Misc", "雜項"},
+                /* LastHit */
+                {"Never", "從不"},
+                {"Smartly", "中毒的"},
+                {"Always", "一直"},
+                /* Checkbox, sliders and others */
+                {"MinimumManaPercent", "最低能量使用"},
+                {"DisableUnderEnemyTurret", "在敵方塔下遮罩"},
+                {"IfKillable", "如果可擊殺"},
+                {"IfNeeded", "如果需要d"},
+                {"UseIgnite", "使用點燃搶頭"},
+                {"UseIgnite.Killable", "使用點燃如果可擊殺"},
+                {"UseSmite", "使用懲戒搶頭"},
+                {"UseQ", "使用 Q"},
+                {"UseQ.Hit", "使用Q如果命中敵人數量 >= {0}"},
+                {"UseQ.Gapcloser", "敵人切入時使用Q"},
+                {"UseQ.Interrupter", "使用Q打斷敵人技能"},
+                {"UseW", "使用 W"},
+                {"UseW.Hit", "使用W如果命中敵人數量 >= {0}"},
+                {"UseW.Gapcloser", "敵人切入時使用W"},
+                {"UseW.Interrupter", "使用W打斷敵人技能"},
+                {"UseE", "使用 E"},
+                {"UseE.Hit", "使用E如果命中敵人數量 >= {0}"},
+                {"UseE.Gapcloser", "敵人切入時使用E"},
+                {"UseE.Interrupter", "使用E打斷敵人技能"},
+                {"UseR", "使用 R"},
+                {"UseR.Killable", "當敵人可擊殺使用R"},
+                {"UseR.Hit", "使用R如果命中敵人數量 >= {0}"},
+                {"UseR.Gapcloser", "敵人切入時使用R"},
+                {"UseR.Interrupter", "使用R打斷敵人技能"},
+                {"R.BlackList", "對敵人不使用R"},
+                {"Items", "使用物品"},
+                {"Zhonyas", "自動中亞當生命值百分比低於 {0}"},
+                /* Zed */
+                {"R.Prevent", "R之前不使用技能"},
+                {"R.Combo.Mode", "R 模式"},
+                {"UseQ.Collision", "為Q檢查施法路徑 （更多傷害）"},
+                {"UseW1", "使用 W1"},
+                {"UseW2", "使用 W2"},
+                {"UseR1", "使用 R1"},
+                {"UseR2", "使用 R2"},
+                {"SwapDead", "使用 W2/R2 如果可擊殺敵人"},
+                {"SwapGapclose", "使用 W2/R2 接近目標"},
+                {"SwapKillable", "使用W2如果可擊殺"},
+                {"SwapHP", "使用 W2/R2 如果生命 >= {0}"},
+                {"Line", "線性"},
+                {"Triangle", "三角"},
+                {"MousePos", "滑鼠位置"},
+                {"IsDead", "接受死亡吧"},
+                {"Passive", "被動"},
+                {"Draw.WShadow", "顯示W線圈範圍"},
+                {"Draw.RShadow", "顯示R線圈範圍"},
+                {"Draw.TargetIsDead", "顯示目標可擊殺提示"},
+                {"Draw.PassiveIsReady", "顯示主動技能冷卻提示"},
+                /* Cassiopeia */
+                {"Poisoned", "中毒的"},
+                {"AssistedUltimate", "大招輔助"},
+                /* Diana */
+                {"UseQR", "在小兵上使用QR進行間距"},
+                {"R.2nd", "連招使用R2"},
+                /* Orianna */
+                {"TeamFight.Count", "使用團戰邏輯當敵人數量 >= {0}"},
+                {"Common.Logic", "普通邏輯"},
+                {"1vs1.Logic", "1 vs 1 邏輯"},
+                {"TeamFight.Logic", "團戰邏輯"},
+                {"UseE.HealthPercent", "使用E當生命低於 <= {0}"},
+                {"UseE.Spells", "使用E抵擋敵方技能"},
+                {"Draw.Ball", "顯示球的位置"},
+                {"R.Block", "遮罩R如果會空大"},
+                /* Drawings */
+                {"Draw.Disable", "關閉線圈"},
+                {"Draw.DamageIndicator", "敵方HP顯示技能總傷害"},
+                {"Draw.Target", "目標身上顯示圈"},
+                {"Draw.Q", "顯示 Q 範圍"},
+                {"Draw.W", "顯示 W 範圍"},
+                {"Draw.E", "顯示 E 範圍"},
+                {"Draw.R", "顯示 R 範圍"},
+                {"Draw.Toggles", "自動技能面板顯示"},
+                /* Prediction*/
+                {"Q.HitChancePercent", "Q: 命中率百分比"},
+                {"W.HitChancePercent", "W: 命中率百分比"},
+                {"E.HitChancePercent", "E: 命中率百分比"},
+                {"QE.HitChancePercent", "QE: 命中率百分比"},
+                {"R.HitChancePercent", "R: 命中率百分比"}
             };
         }
 
@@ -481,9 +611,21 @@ namespace KoreanAIO.Utilities
             get { return (Language) MenuManager.Menu["Language"].Cast<Slider>().CurrentValue; }
         }
 
+        public static Language CurrentCulture
+        {
+            get
+            {
+                if (CulturesToLanguage.ContainsKey(CultureInfo.InstalledUICulture.ToString()))
+                {
+                    return CulturesToLanguage[CultureInfo.InstalledUICulture.ToString()];
+                }
+                return Language.English;
+            }
+        }
+
         public static void Initialize()
         {
-            MenuManager.Translate(Language.English, (Language) MenuManager.Menu["Language"].Cast<Slider>().CurrentValue);
+            MenuManager.Translate(Language.English, (Language)MenuManager.Menu["Language"].Cast<Slider>().CurrentValue);
         }
 
         public static string GetTranslationFromId(this string name)

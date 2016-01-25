@@ -32,9 +32,9 @@ namespace KoreanAIO.Managers
         public static readonly List<Tuple<Slider, string, string[]>> StringLists = new List<Tuple<Slider, string, string[]>>();
         public static void Initialize()
         {
-            Menu = MainMenu.AddMenu("Korean AIO", "KoreanAIO Build: 6.1.0, Champion: " + AIO.MyHero.ChampionName);
+            Menu = MainMenu.AddMenu("Korean AIO", "KoreanAIO Build: 6.1.3, Champion: " + AIO.MyHero.ChampionName);
             var displayNames = Enum.GetValues(typeof(Language)).Cast<Language>().ToArray();
-            var slider = Menu.Add("Language", new Slider("Language: English", 0, 0, displayNames.Length - 1));
+            var slider = Menu.Add("Language", new Slider("Language: English", (int)LanguageTranslator.CurrentCulture, 0, displayNames.Length - 1));
             slider.DisplayName = "Language".GetTranslationFromId() + ": " + displayNames[slider.CurrentValue].ToString().GetTranslationFromId();
             slider.OnValueChange += delegate (ValueBase<int> sender, ValueBase<int>.ValueChangeArgs args)
             {

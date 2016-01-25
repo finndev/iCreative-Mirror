@@ -5,7 +5,6 @@ using EloBuddy.SDK;
 using EloBuddy.SDK.Menu.Values;
 using KoreanAIO.Managers;
 using KoreanAIO.Model;
-using KoreanAIO.Utilities;
 
 namespace KoreanAIO.Champions
 {
