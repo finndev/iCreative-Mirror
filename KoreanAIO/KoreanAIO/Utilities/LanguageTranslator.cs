@@ -145,7 +145,7 @@ namespace KoreanAIO.Utilities
                 {"Available", "Disponible"},
                 /* Keys */
                 {"Combo.WithoutR", "Combate sin R"},
-                {"Harass.WEQ", "Acoso QWE"},
+                {"Harass.WEQ", "Acoso WEQ"},
                 /* Toggles */
                 {"LastHit.Toggle", "Interruptor último golpe"},
                 {"Harass.Toggle", "Interruptor acoso"},
@@ -261,7 +261,7 @@ namespace KoreanAIO.Utilities
                 {"Disabled", "Wyłączony"},
                 /* Keys */
                 {"Combo.WithoutR", "Combo bez R"},
-                {"Harass.WEQ", "Harass QWE"},
+                {"Harass.WEQ", "Harass WEQ"},
                 /* Toggles */
                 {"LastHit.Toggle", "LastHit Włączony"},
                 {"Harass.Toggle", "Harass Włączony"},
@@ -386,7 +386,7 @@ namespace KoreanAIO.Utilities
                 {"JungleClear", "清野"},
                 {"KillSteal", "抢人头"},
                 {"Automatic", "自动"},
-                {"Evader", "Evader"},
+                {"Evader", "躲避"},
                 {"Drawings", "线圈"},
                 {"Flee", "Flee"},
                 {"Misc", "杂项"},
