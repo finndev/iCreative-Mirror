@@ -195,10 +195,10 @@ namespace KoreanAIO.Champions
                     ComboMenu.AddValue("E.HealthPercent", new Slider("Use E if HealthPercent <= {0}", 40));
                     ComboMenu.AddValue("1vs1", new GroupLabel("1 vs 1 logic"));
                     ComboMenu.AddValue("R.Killable", new CheckBox("Use R on target if killable"));
-                    ComboMenu.AddValue("TeamFight", new GroupLabel("TeamFight Logic"));
-                    ComboMenu.AddValue("Q.Hit", new Slider("Use Q if hit >= {0}", 2, 1, 5));
-                    ComboMenu.AddValue("W.Hit", new Slider("Use W if hit >= {0}", 2, 1, 5));
-                    ComboMenu.AddValue("R.Hit", new Slider("Use R if hit >= {0}", 3, 1, 5));
+                    ComboMenu.AddValue("TeamFightLogic", new GroupLabel("TeamFight Logic"));
+                    ComboMenu.AddValue("Q.Hit", new Slider("Use Q if hit is greater than {0}", 2, 1, 5));
+                    ComboMenu.AddValue("W.Hit", new Slider("Use W if hit is greater than {0}", 2, 1, 5));
+                    ComboMenu.AddValue("R.Hit", new Slider("Use R if hit is greater than {0}", 3, 1, 5));
                 }
 
                 MenuManager.AddSubMenu("Harass");

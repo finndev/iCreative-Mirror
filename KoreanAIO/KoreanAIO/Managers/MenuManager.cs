@@ -116,10 +116,10 @@ namespace KoreanAIO.Managers
         public static void AddStringList(this Menu m, string uniqueId, string displayName, string[] displayNames, int defaultValue = 0)
         {
             var slider = m.Add(uniqueId, new Slider(displayName, defaultValue, 0, displayNames.Length - 1));
-            slider.DisplayName = (LanguageTranslator.GetTranslationFromDisplayName(Language.English, ((Language)slider.CurrentValue), displayName) ?? displayName) + ": " + (LanguageTranslator.GetTranslationFromDisplayName(Language.English, ((Language)slider.CurrentValue), displayNames[slider.CurrentValue]) ?? displayNames[slider.CurrentValue]);
-            slider.OnValueChange += delegate
+            slider.DisplayName = (LanguageTranslator.GetTranslationFromDisplayName(Language.English, LanguageTranslator.CurrentLanguage, displayName) ?? displayName) + ": " + (LanguageTranslator.GetTranslationFromDisplayName(Language.English, LanguageTranslator.CurrentLanguage, displayNames[slider.CurrentValue]) ?? displayNames[slider.CurrentValue]);
+            slider.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs args)
             {
-                slider.DisplayName = (LanguageTranslator.GetTranslationFromDisplayName(Language.English, ((Language)slider.CurrentValue), displayName) ?? displayName) + ": " + (LanguageTranslator.GetTranslationFromDisplayName(Language.English, ((Language)slider.CurrentValue), displayNames[slider.CurrentValue]) ?? displayNames[slider.CurrentValue]);
+                slider.DisplayName = (LanguageTranslator.GetTranslationFromDisplayName(Language.English, LanguageTranslator.CurrentLanguage, displayName) ?? displayName) + ": " + (LanguageTranslator.GetTranslationFromDisplayName(Language.English, LanguageTranslator.CurrentLanguage, displayNames[args.NewValue]) ?? displayNames[args.NewValue]);
             };
             StringLists.Add(new Tuple<Slider, string, string[]>(slider, displayName, displayNames));
         }
