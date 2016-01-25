@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using EloBuddy.SDK.Menu.Values;
 using KoreanAIO.Managers;
 
