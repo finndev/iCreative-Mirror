@@ -216,7 +216,7 @@ namespace KoreanAIO.Champions
             }
             MenuManager.AddSubMenu("Harass");
             {
-                HarassMenu.AddValue("Collision", new CheckBox("Add collision check for Q (more damage)", false));
+                HarassMenu.AddValue("Collision", new CheckBox("Check collision when casting Q (more damage)", false));
                 HarassMenu.AddValue("SwapGapclose", new CheckBox("Use W2 if target is killable"));
                 HarassMenu.AddValue("ManaPercent", new Slider("Minimum Mana Percent", 20));
             }
