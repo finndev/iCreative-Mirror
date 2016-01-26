@@ -36,7 +36,7 @@ namespace KoreanAIO.Champions
                 CastDelay = 500
             };
 
-            Spellbook.OnCastSpell += delegate(Spellbook sender, SpellbookCastSpellEventArgs args)
+            Spellbook.OnCastSpell += delegate (Spellbook sender, SpellbookCastSpellEventArgs args)
             {
                 if (sender.Owner.IsMe)
                 {
@@ -54,7 +54,7 @@ namespace KoreanAIO.Champions
                 }
             };
 
-            Obj_AI_Base.OnProcessSpellCast += delegate(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+            Obj_AI_Base.OnProcessSpellCast += delegate (Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
             {
                 if (sender.IsMe)
                 {
@@ -105,7 +105,7 @@ namespace KoreanAIO.Champions
             {
                 ComboMenu.AddValue("Q", new CheckBox("Use Q"));
                 ComboMenu.AddValue("W", new CheckBox("Use W"));
-                ComboMenu.AddStringList("E", "Use E", new[] {"Never", "If Poisoned", "Always"}, 1);
+                ComboMenu.AddStringList("E", "Use E", new[] { "Never", "If Poisoned", "Always" }, 1);
                 ComboMenu.AddValue("R", new Slider("Use R if hit is greater than {0}", 3, 0, 5));
             }
 
@@ -113,7 +113,7 @@ namespace KoreanAIO.Champions
             {
                 HarassMenu.AddValue("Q", new CheckBox("Use Q"));
                 HarassMenu.AddValue("W", new CheckBox("Use W"));
-                HarassMenu.AddStringList("E", "Use E", new[] {"Never", "If Poisoned", "Always"}, 1);
+                HarassMenu.AddStringList("E", "Use E", new[] { "Never", "If Poisoned", "Always" }, 1);
                 HarassMenu.AddValue("ManaPercent", new Slider("Minimum Mana Percent", 25));
             }
 
@@ -123,12 +123,12 @@ namespace KoreanAIO.Champions
                 {
                     ClearMenu.AddValue("LaneClear.Q", new Slider("Use Q if hit is greater than {0}", 2, 0, 10));
                     ClearMenu.AddValue("LaneClear.W", new Slider("Use W if hit is greater than {0}", 3, 0, 10));
-                    ClearMenu.AddStringList("LaneClear.E", "Use E", new[] {"Never", "If Poisoned", "Always"}, 1);
+                    ClearMenu.AddStringList("LaneClear.E", "Use E", new[] { "Never", "If Poisoned", "Always" }, 1);
                     ClearMenu.AddValue("LaneClear.ManaPercent", new Slider("Minimum Mana Percent", 50));
                 }
                 ClearMenu.AddValue("LastHit", new GroupLabel("LastHit"));
                 {
-                    ClearMenu.AddStringList("LastHit.E", "Use E", new[] {"Never", "If Poisoned", "Always"}, 1);
+                    ClearMenu.AddStringList("LastHit.E", "Use E", new[] { "Never", "If Poisoned", "Always" }, 1);
                     ClearMenu.AddValue("LastHit.ManaPercent", new Slider("Minimum Mana Percent", 50));
                 }
                 ClearMenu.AddValue("JungleClear", new GroupLabel("JungleClear"));
@@ -469,7 +469,7 @@ namespace KoreanAIO.Champions
                         target.Buffs.Where(b => b.IsActive && b.Type == BuffType.Poison && b.EndTime > 0)
                             .OrderByDescending(b => b.EndTime)
                             .FirstOrDefault();
-                    if (bestEndTime != null && bestEndTime.EndTime - Game.Time >= E.GetArrivalTime(target)/1000f)
+                    if (bestEndTime != null && bestEndTime.EndTime - Game.Time >= E.GetArrivalTime(target) / 1000f)
                     {
                         CachedPoisoned[target.NetworkId] = true;
                     }
@@ -487,16 +487,16 @@ namespace KoreanAIO.Champions
                 {
                     case SpellSlot.Q:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                            40f*level + 35f + 0.45f*MyHero.FlatMagicDamageMod)/2f;
+                            40f * level + 35f + 0.45f * MyHero.FlatMagicDamageMod) / 2f;
                     case SpellSlot.W:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                            45f*level + 45f + 0.9f*MyHero.FlatMagicDamageMod)/2;
+                            45f * level + 45f + 0.9f * MyHero.FlatMagicDamageMod) / 2;
                     case SpellSlot.E:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                            25f*level + 30f + 0.55f*MyHero.FlatMagicDamageMod);
+                            25f * level + 30f + 0.55f * MyHero.FlatMagicDamageMod);
                     case SpellSlot.R:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                            100f*level + 50f + 0.5f*MyHero.FlatMagicDamageMod);
+                            100f * level + 50f + 0.5f * MyHero.FlatMagicDamageMod);
                 }
             }
             return base.GetSpellDamage(slot, target);

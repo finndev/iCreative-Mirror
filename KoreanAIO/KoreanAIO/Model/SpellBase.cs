@@ -218,7 +218,7 @@ namespace KoreanAIO.Model
 
         public int Radius
         {
-            get { return Width/2; }
+            get { return Width / 2; }
         }
 
         public bool SourceObjectIsValid
@@ -276,7 +276,7 @@ namespace KoreanAIO.Model
 
         public int RangeSqr
         {
-            get { return Range*Range; }
+            get { return Range * Range; }
         }
 
         public float HitChancePercent
@@ -306,7 +306,7 @@ namespace KoreanAIO.Model
 
         public bool IsKillable(Obj_AI_Base target)
         {
-            return target.TotalShieldHealth() + target.HPRegenRate*2 <= GetDamage(target);
+            return target.TotalShieldHealth() + target.HPRegenRate * 2 <= GetDamage(target);
         }
 
         public SpellBase AddConfigurableHitChancePercent(int defaultValue = 0)
@@ -318,7 +318,7 @@ namespace KoreanAIO.Model
             Slider = MenuManager.GetSubMenu("Prediction")
                 .AddValue(SlotName,
                     new Slider(SlotName + ": HitChancePercent",
-                        defaultValue > 0 ? defaultValue : (int) MinHitChancePercent));
+                        defaultValue > 0 ? defaultValue : (int)MinHitChancePercent));
             return this;
         }
 
@@ -360,7 +360,7 @@ namespace KoreanAIO.Model
             var result = CastDelay;
             if (Speed != int.MaxValue)
             {
-                result += (int) (1000*SourceObject.GetDistance(target)/Speed);
+                result += (int)(1000 * SourceObject.GetDistance(target) / Speed);
             }
             return result;
         }
@@ -370,7 +370,7 @@ namespace KoreanAIO.Model
             var result = CastDelay;
             if (Speed != int.MaxValue)
             {
-                result += (int) (1000*SourceObject.Distance(position)/Speed);
+                result += (int)(1000 * SourceObject.Distance(position) / Speed);
             }
             return result;
         }
@@ -406,7 +406,7 @@ namespace KoreanAIO.Model
                     return source.IsInRange(pred.CastPosition, Range);
             }
             //Self
-            return source.IsInRange(pred.CastPosition, Range + target.BoundingRadius/2);
+            return source.IsInRange(pred.CastPosition, Range + target.BoundingRadius / 2);
         }
 
         public PredictionResult GetPrediction(Obj_AI_Base target, CustomSettings custom = null)
@@ -442,7 +442,7 @@ namespace KoreanAIO.Model
                             source.Position);
                         break;
                     default:
-                        result = Prediction.Position.PredictLinearMissile(target, range, 2*width, castDelay, speed,
+                        result = Prediction.Position.PredictLinearMissile(target, range, 2 * width, castDelay, speed,
                             allowedCollisionCount, source.Position);
                         break;
                 }
@@ -724,7 +724,7 @@ namespace KoreanAIO.Model
             if (!_cachedIsOnSegment[point.NetworkId][startPoint.NetworkId].ContainsKey(endPoint.NetworkId))
             {
                 _cachedIsOnSegment[point.NetworkId][startPoint.NetworkId].Add(endPoint.NetworkId,
-                    GetPrediction(point).HitChancePercent >= HitChancePercent/2 &&
+                    GetPrediction(point).HitChancePercent >= HitChancePercent / 2 &&
                     GetPrediction(point)
                         .CastPosition.To2D()
                         .Distance(startPoint.Position.To2D(), GetPrediction(endPoint).CastPosition.To2D(), true, true) <=
@@ -813,7 +813,7 @@ namespace KoreanAIO.Model
             if (!_cachedObjectsInRange[target1.NetworkId].ContainsKey(target2.NetworkId))
             {
                 _cachedObjectsInRange[target1.NetworkId].Add(target2.NetworkId,
-                    GetPrediction(target2).HitChancePercent >= HitChancePercent/2 &&
+                    GetPrediction(target2).HitChancePercent >= HitChancePercent / 2 &&
                     GetPrediction(target1)
                         .CastPosition.IsInRange(GetPrediction(target2).CastPosition, Radius + target1.BoundingRadius));
             }

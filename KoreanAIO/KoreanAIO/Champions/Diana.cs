@@ -37,7 +37,7 @@ namespace KoreanAIO.Champions
             {
                 Speed = 2500
             };
-            Obj_AI_Base.OnProcessSpellCast += delegate(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+            Obj_AI_Base.OnProcessSpellCast += delegate (Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
             {
                 if (sender.IsMe)
                 {
@@ -53,7 +53,7 @@ namespace KoreanAIO.Champions
                     }
                 }
             };
-            GameObject.OnCreate += delegate(GameObject sender, EventArgs args)
+            GameObject.OnCreate += delegate (GameObject sender, EventArgs args)
             {
                 var missile = sender as MissileClient;
                 if (missile != null && missile.SpellCaster != null && missile.SpellCaster.IsMe)
@@ -64,7 +64,7 @@ namespace KoreanAIO.Champions
                     }
                 }
             };
-            GameObject.OnDelete += delegate(GameObject sender, EventArgs args)
+            GameObject.OnDelete += delegate (GameObject sender, EventArgs args)
             {
                 var missile = sender as MissileClient;
                 if (missile != null && missile.SpellCaster != null && missile.SpellCaster.IsMe)
@@ -75,7 +75,7 @@ namespace KoreanAIO.Champions
                     }
                 }
             };
-            Gapcloser.OnGapcloser += delegate(AIHeroClient sender, Gapcloser.GapcloserEventArgs args)
+            Gapcloser.OnGapcloser += delegate (AIHeroClient sender, Gapcloser.GapcloserEventArgs args)
             {
                 if (sender.IsEnemy)
                 {
@@ -86,7 +86,7 @@ namespace KoreanAIO.Champions
                 }
             };
             Interrupter.OnInterruptableSpell +=
-                delegate(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
+                delegate (Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
                 {
                     if (sender.IsEnemy)
                     {
@@ -96,7 +96,7 @@ namespace KoreanAIO.Champions
                         }
                     }
                 };
-            Dash.OnDash += delegate(Obj_AI_Base sender, Dash.DashEventArgs args)
+            Dash.OnDash += delegate (Obj_AI_Base sender, Dash.DashEventArgs args)
             {
                 if (sender.IsEnemy)
                 {
@@ -113,8 +113,8 @@ namespace KoreanAIO.Champions
                 ComboMenu.AddValue("W", new CheckBox("Use W"));
                 ComboMenu.AddValue("QR", new CheckBox("Use QR on minion to gapclose"));
                 ComboMenu.AddValue("Ignite", new CheckBox("Use Ignite if target is killable", false));
-                ComboMenu.AddStringList("E", "Use E", new[] {"Never", "Smartly", "Always"}, 1);
-                ComboMenu.AddStringList("R", "Use R", new[] {"Never", "Smartly", "Always"}, 1);
+                ComboMenu.AddStringList("E", "Use E", new[] { "Never", "Smartly", "Always" }, 1);
+                ComboMenu.AddStringList("R", "Use R", new[] { "Never", "Smartly", "Always" }, 1);
                 ComboMenu.AddValue("2ndR", new CheckBox("Use always second r", false));
             }
 
@@ -136,7 +136,7 @@ namespace KoreanAIO.Champions
                 }
                 ClearMenu.AddValue("LastHit", new GroupLabel("LastHit"));
                 {
-                    ClearMenu.AddStringList("LastHit.Q", "Use Q", new[] {"Never", "Smartly", "Always"}, 1);
+                    ClearMenu.AddStringList("LastHit.Q", "Use Q", new[] { "Never", "Smartly", "Always" }, 1);
                     ClearMenu.AddValue("LastHit.ManaPercent", new Slider("Minimum Mana Percent", 50));
                 }
                 ClearMenu.AddValue("JungleClear", new GroupLabel("JungleClear"));
@@ -190,13 +190,13 @@ namespace KoreanAIO.Champions
                     {
                         Q.Speed =
                             (int)
-                                (1000*Q.Source.Distance(LastMissileVector)/(Core.GameTickCount - LastMissileVectorTime));
+                                (1000 * Q.Source.Distance(LastMissileVector) / (Core.GameTickCount - LastMissileVectorTime));
                     }
                     LastMissileVector = new Vector3(Q.Source.Position.X, Q.Source.Position.Y, Q.Source.Position.Z);
                     LastMissileVectorTime = Core.GameTickCount;
                 }
                 Q.CastDelay = 0;
-                Q.Range = (int) (825 + MyHero.GetDistance(Q.Source));
+                Q.Range = (int)(825 + MyHero.GetDistance(Q.Source));
             }
             else
             {
@@ -348,7 +348,7 @@ namespace KoreanAIO.Champions
         {
             if (MyHero.ManaPercent >= ClearMenu.Slider("LastHit.ManaPercent"))
             {
-                Q.LastHit((LastHitType) ClearMenu.Slider("LastHit.Q"));
+                Q.LastHit((LastHitType)ClearMenu.Slider("LastHit.Q"));
             }
             base.LastHit();
         }
@@ -382,7 +382,7 @@ namespace KoreanAIO.Champions
             if (Q.IsReady && target != null)
             {
                 Q.Cast(target,
-                    new CustomSettings {Width = target.Type == GameObjectType.AIHeroClient ? QHeroWidth : Q.Width});
+                    new CustomSettings { Width = target.Type == GameObjectType.AIHeroClient ? QHeroWidth : Q.Width });
             }
         }
 
@@ -404,8 +404,8 @@ namespace KoreanAIO.Champions
                     }
                     if (MissileIsValid && MyHero.GetDistanceSqr(QMissile) <= MyHero.GetDistanceSqr(target))
                     {
-                        var timeToArriveQ = QMissile.GetDistance(target)/Q.Speed;
-                        var timeToArriveR = MyHero.GetDistance(target)/R.Speed + Game.Ping/2000f;
+                        var timeToArriveQ = QMissile.GetDistance(target) / Q.Speed;
+                        var timeToArriveR = MyHero.GetDistance(target) / R.Speed + Game.Ping / 2000f;
                         if (timeToArriveR <= timeToArriveQ)
                         {
                             var pred = Q.GetPrediction(target);
@@ -461,15 +461,15 @@ namespace KoreanAIO.Champions
                 {
                     case SpellSlot.Q:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                            35f*level + 30f + 0.7f*MyHero.FlatMagicDamageMod);
+                            35f * level + 30f + 0.7f * MyHero.FlatMagicDamageMod);
                     case SpellSlot.W:
-                        return 3*MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                            12f*level + 10f + 0.2f*MyHero.FlatMagicDamageMod);
+                        return 3 * MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
+                            12f * level + 10f + 0.2f * MyHero.FlatMagicDamageMod);
                     case SpellSlot.E:
                         return 0f;
                     case SpellSlot.R:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                            60f*level + 40f + 0.6f*MyHero.FlatMagicDamageMod);
+                            60f * level + 40f + 0.6f * MyHero.FlatMagicDamageMod);
                 }
             }
             return base.GetSpellDamage(slot, target);

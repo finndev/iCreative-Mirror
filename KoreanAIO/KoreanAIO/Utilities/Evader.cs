@@ -161,7 +161,7 @@ namespace KoreanAIO.Utilities
                     }
                 }
             }
-            Obj_AI_Base.OnProcessSpellCast += delegate(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+            Obj_AI_Base.OnProcessSpellCast += delegate (Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
             {
                 var hero = sender as AIHeroClient;
                 if (hero != null && sender.IsEnemy && AllowedSlots.Contains(args.Slot) && hero.IsValidTarget(1500f) &&
@@ -190,7 +190,7 @@ namespace KoreanAIO.Utilities
                     }
                 }
             };
-            GameObject.OnCreate += delegate(GameObject sender, EventArgs args)
+            GameObject.OnCreate += delegate (GameObject sender, EventArgs args)
             {
                 var missile = sender as MissileClient;
                 if (missile != null)
@@ -220,7 +220,7 @@ namespace KoreanAIO.Utilities
                     }
                 }
             };
-            GameObject.OnDelete += delegate(GameObject sender, EventArgs args)
+            GameObject.OnDelete += delegate (GameObject sender, EventArgs args)
             {
                 var missile = sender as MissileClient;
                 if (missile != null)
@@ -336,9 +336,9 @@ namespace KoreanAIO.Utilities
                     ? args.SData.CastRangeDisplayOverride
                     : args.SData.CastRange);
             var startVector = missileIsValid ? args.Missile.Position : args.Spell.Start;
-            var realEnd = args.Spell.Start + (args.Spell.End - args.Spell.Start).Normalized()*range;
+            var realEnd = args.Spell.Start + (args.Spell.End - args.Spell.Start).Normalized() * range;
             var endVector = missileIsValid ? args.Missile.EndPosition : realEnd;
-            var width = AIO.MyHero.BoundingRadius*1.5f;
+            var width = AIO.MyHero.BoundingRadius * 1.5f;
             var willHit = false;
             var containsMissile = args.ContainsMissile;
             switch (spellType)
@@ -351,8 +351,8 @@ namespace KoreanAIO.Utilities
                     width += args.SData.LineWidth;
                     break;
                 case SpellType.Circular:
-                    width += Math.Max(args.SData.CastRadius, args.SData.CastRadiusSecondary)/2f;
-                        //Math.Max(args.SData.CastRadius, args.SData.CastRadiusSecondary);
+                    width += Math.Max(args.SData.CastRadius, args.SData.CastRadiusSecondary) / 2f;
+                    //Math.Max(args.SData.CastRadius, args.SData.CastRadiusSecondary);
                     break;
                 case SpellType.Cone:
                     width += args.SData.LineWidth;
@@ -372,10 +372,10 @@ namespace KoreanAIO.Utilities
                         : currentPosition.To2D().Distance(startVector.To2D(), endVector.To2D(), true, false);
                     if (distance <= width && distance > 0 && distance < float.MaxValue)
                     {
-                        var timeToEvade = (width - distance)/AIO.MyHero.MoveSpeed + Game.Ping/2000f;
+                        var timeToEvade = (width - distance) / AIO.MyHero.MoveSpeed + Game.Ping / 2000f;
                         var timeToArrive = args.SData.MissileFixedTravelTime > 0
                             ? args.SData.MissileFixedTravelTime
-                            : currentPosition.Distance(args.Missile)/args.Missile.SData.MissileSpeed;
+                            : currentPosition.Distance(args.Missile) / args.Missile.SData.MissileSpeed;
                         willHit = timeToEvade >= timeToArrive;
                     }
                 }

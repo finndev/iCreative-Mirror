@@ -57,7 +57,7 @@ namespace KoreanAIO.Champions
                 };
                 R.SetSourceFunction(() => Ball);
                 R.SetRangeCheckSourceFunction(() => Ball);
-                Spellbook.OnCastSpell += delegate(Spellbook sender, SpellbookCastSpellEventArgs args)
+                Spellbook.OnCastSpell += delegate (Spellbook sender, SpellbookCastSpellEventArgs args)
                 {
                     if (sender.Owner.IsMe)
                     {
@@ -68,7 +68,7 @@ namespace KoreanAIO.Champions
                     }
                 };
                 GameObject eTarget = null;
-                Obj_AI_Base.OnProcessSpellCast += delegate(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+                Obj_AI_Base.OnProcessSpellCast += delegate (Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
                 {
                     if (sender.IsMe)
                     {
@@ -78,7 +78,7 @@ namespace KoreanAIO.Champions
                         }
                     }
                 };
-                GameObject.OnCreate += delegate(GameObject sender, EventArgs args)
+                GameObject.OnCreate += delegate (GameObject sender, EventArgs args)
                 {
                     if (sender.Name.Equals(BallName))
                     {
@@ -96,7 +96,7 @@ namespace KoreanAIO.Champions
                         }
                     }
                 };
-                GameObject.OnDelete += delegate(GameObject sender, EventArgs args)
+                GameObject.OnDelete += delegate (GameObject sender, EventArgs args)
                 {
                     var missile = sender as MissileClient;
                     if (missile != null && missile.SpellCaster != null && missile.SpellCaster.IsMe)
@@ -107,14 +107,14 @@ namespace KoreanAIO.Champions
                         }
                     }
                 };
-                Obj_AI_Base.OnPlayAnimation += delegate(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
+                Obj_AI_Base.OnPlayAnimation += delegate (Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
                 {
                     if (sender.IsMe && args.Animation.Equals("Prop"))
                     {
                         _ballObject = sender;
                     }
                 };
-                Gapcloser.OnGapcloser += delegate(AIHeroClient sender, Gapcloser.GapcloserEventArgs args)
+                Gapcloser.OnGapcloser += delegate (AIHeroClient sender, Gapcloser.GapcloserEventArgs args)
                 {
                     if (sender.IsAlly)
                     {
@@ -126,7 +126,7 @@ namespace KoreanAIO.Champions
                         }
                     }
                 };
-                Dash.OnDash += delegate(Obj_AI_Base sender, Dash.DashEventArgs args)
+                Dash.OnDash += delegate (Obj_AI_Base sender, Dash.DashEventArgs args)
                 {
                     if (sender.IsAlly)
                     {
@@ -139,7 +139,7 @@ namespace KoreanAIO.Champions
                     }
                 };
                 Interrupter.OnInterruptableSpell +=
-                    delegate(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
+                    delegate (Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
                     {
                         if (sender.IsEnemy)
                         {
@@ -156,7 +156,7 @@ namespace KoreanAIO.Champions
                             }
                         }
                     };
-                Obj_AI_Base.OnBasicAttack += delegate(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+                Obj_AI_Base.OnBasicAttack += delegate (Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
                 {
                     if (sender.IsEnemy && _canShield && args.Target != null && args.Target.IsMe)
                     {
@@ -173,7 +173,7 @@ namespace KoreanAIO.Champions
                         }
                     }
                 };
-                Obj_AI_Base.OnProcessSpellCast += delegate(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+                Obj_AI_Base.OnProcessSpellCast += delegate (Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
                 {
                     if (sender.IsEnemy && _canShield && args.Target != null && args.Target.IsMe)
                     {
@@ -224,7 +224,7 @@ namespace KoreanAIO.Champions
                     }
                     ClearMenu.AddValue("LastHit", new GroupLabel("LastHit"));
                     {
-                        ClearMenu.AddStringList("LastHit.Q", "Use Q", new[] {"Never", "Smartly", "Always"}, 1);
+                        ClearMenu.AddStringList("LastHit.Q", "Use Q", new[] { "Never", "Smartly", "Always" }, 1);
                         ClearMenu.AddValue("LastHit.ManaPercent", new Slider("Minimum Mana Percent", 50));
                     }
                     ClearMenu.AddValue("JungleClear", new GroupLabel("JungleClear"));
@@ -258,7 +258,7 @@ namespace KoreanAIO.Champions
                     var c = DrawingsMenu.AddValue("Ball", new CheckBox("Draw ball position"));
                     CircleManager.Circles.Add(new Circle(c, new ColorBGRA(0, 0, 255, 100), () => 120, () => true,
                         () => Ball)
-                    {Width = 3});
+                    { Width = 3 });
                     Q.AddDrawings();
                     W.AddDrawings();
                     E.AddDrawings(false);
@@ -513,7 +513,7 @@ namespace KoreanAIO.Champions
         {
             if (MyHero.ManaPercent >= ClearMenu.Slider("LastHit.ManaPercent"))
             {
-                var tuples = Q.LastHit((LastHitType) ClearMenu.Slider("LastHit.Q"), false);
+                var tuples = Q.LastHit((LastHitType)ClearMenu.Slider("LastHit.Q"), false);
                 var minion = tuples.FirstOrDefault();
                 if (minion != null)
                 {
@@ -574,9 +574,9 @@ namespace KoreanAIO.Champions
                 var pred = Q.GetPrediction(target);
                 if (E.IsReady && MyHero.Mana >= Q.Mana + E.Mana && target.Type == GameObjectType.AIHeroClient &&
                     pred.HitChancePercent <= 5 &&
-                    !Q.Source.IsInRange(pred.CastPosition, Q.Range*1.2f))
+                    !Q.Source.IsInRange(pred.CastPosition, Q.Range * 1.2f))
                 {
-                    var pred2 = Q.GetPrediction(target, new CustomSettings {Source = MyHero});
+                    var pred2 = Q.GetPrediction(target, new CustomSettings { Source = MyHero });
                     if (pred2.HitChancePercent >= Q.HitChancePercent)
                     {
                         CastE(MyHero);
@@ -679,7 +679,7 @@ namespace KoreanAIO.Champions
         {
             var bestAllyNear =
                 UnitManager.ValidAllyHeroesInRange.Where(
-                    h => h.InRange(target, R.Range*1.5f) && Ball.GetDistanceSqr(target) > h.GetDistanceSqr(target))
+                    h => h.InRange(target, R.Range * 1.5f) && Ball.GetDistanceSqr(target) > h.GetDistanceSqr(target))
                     .OrderBy(h => h.GetDistanceSqr(target))
                     .FirstOrDefault();
             if (E.IsReady && bestAllyNear != null)
@@ -702,17 +702,17 @@ namespace KoreanAIO.Champions
                 Q.CastDelay = R.CastDelay + qCastDelay;
                 Q.Width = R.Range;
                 var list = (from enemy in UnitManager.ValidEnemyHeroesInRange
-                    select Q.GetPrediction(enemy)
+                            select Q.GetPrediction(enemy)
                     into pred
-                    where pred.HitChancePercent >= R.HitChancePercent/2f
-                    select pred.CastPosition.To2D()).ToList();
+                            where pred.HitChancePercent >= R.HitChancePercent / 2f
+                            select pred.CastPosition.To2D()).ToList();
                 if (list.Count > 0)
                 {
                     var bestCount = -1;
                     var bestPoint = new Vector2(0, 0);
                     foreach (var point in list)
                     {
-                        var count = list.Count(v => point.Distance(v, true) <= (R.Range*1.4f).Pow());
+                        var count = list.Count(v => point.Distance(v, true) <= (R.Range * 1.4f).Pow());
                         if (count > bestCount)
                         {
                             bestCount = count;
@@ -741,10 +741,10 @@ namespace KoreanAIO.Champions
                 E.Width = R.Range;
                 E.Type = SpellType.Circular;
                 var enemyList = (from enemy in UnitManager.ValidEnemyHeroesInRange
-                    select E.GetPrediction(enemy)
+                                 select E.GetPrediction(enemy)
                     into pred
-                    where pred.HitChancePercent >= R.HitChancePercent/2f
-                    select pred.CastPosition).ToList();
+                                 where pred.HitChancePercent >= R.HitChancePercent / 2f
+                                 select pred.CastPosition).ToList();
                 if (enemyList.Count > 0)
                 {
                     var allyList =
@@ -754,7 +754,7 @@ namespace KoreanAIO.Champions
                     var bestPoint = new Vector3(0, 0, 0);
                     foreach (var ally in allyList)
                     {
-                        var count = enemyList.Count(v => ally.IsInRange(v, R.Range*1.4f));
+                        var count = enemyList.Count(v => ally.IsInRange(v, R.Range * 1.4f));
                         if (count > bestCount)
                         {
                             bestCount = count;
@@ -787,7 +787,7 @@ namespace KoreanAIO.Champions
                 var checkTarget = target != null;
                 foreach (var obj in list)
                 {
-                    var pred = Q.GetPrediction(obj, new CustomSettings {Width = QAoeWidth});
+                    var pred = Q.GetPrediction(obj, new CustomSettings { Width = QAoeWidth });
                     if (pred.HitChancePercent >= Q.HitChancePercent)
                     {
                         var res = Q.ObjectsInLine(list.Where(o => !o.IdEquals(obj)).ToList(), obj);
@@ -822,7 +822,7 @@ namespace KoreanAIO.Champions
                             h => E.InRange(h) && h.GetDistanceSqr(Ball) > 0))
                 {
                     var pred = E.GetPrediction(ally);
-                    if (pred.HitChancePercent >= E.HitChancePercent/3)
+                    if (pred.HitChancePercent >= E.HitChancePercent / 3)
                     {
                         var res = E.ObjectsInLine(objAiBases, ally);
                         var count = res.Count + 1;
@@ -851,16 +851,16 @@ namespace KoreanAIO.Champions
                 {
                     case SpellSlot.Q:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                            30f*level + 30f + 0.5f*MyHero.FlatMagicDamageMod);
+                            30f * level + 30f + 0.5f * MyHero.FlatMagicDamageMod);
                     case SpellSlot.W:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                            45f*level + 25f + 0.7f*MyHero.FlatMagicDamageMod);
+                            45f * level + 25f + 0.7f * MyHero.FlatMagicDamageMod);
                     case SpellSlot.E:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                            30f*level + 30f + 0.3f*MyHero.FlatMagicDamageMod);
+                            30f * level + 30f + 0.3f * MyHero.FlatMagicDamageMod);
                     case SpellSlot.R:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                            75f*level + 75f + 0.7f*MyHero.FlatMagicDamageMod);
+                            75f * level + 75f + 0.7f * MyHero.FlatMagicDamageMod);
                 }
             }
             return base.GetSpellDamage(slot, target);
