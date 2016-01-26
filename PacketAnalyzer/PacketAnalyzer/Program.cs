@@ -15,19 +15,22 @@ namespace PacketAnalyzer
 {
     class Program
     {
-        public static readonly string DesktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        public static readonly string ResultPath = Path.Combine(DesktopPath, "EloBuddy Results");
+        public static readonly string ResultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "EloBuddy_Results");
         public static StreamWriter PacketsSentWriter;
         public static StreamWriter PacketsReceivedWriter;
-        public static readonly List<GamePacket> PacketsSent = new List<GamePacket>();
+        public static int Count;
         static void Main()
         {
             if (!Directory.Exists(ResultPath))
             {
                 Directory.CreateDirectory(ResultPath);
             }
-            PacketsSentWriter = File.CreateText(Path.Combine(ResultPath, "PacketsSent: " + Player.Instance.ChampionName + ", " + Game.GameId + ".txt"));
-            PacketsReceivedWriter = File.CreateText(Path.Combine(ResultPath, "PacketsReceived: " + Player.Instance.ChampionName + ", " + Game.GameId + ".txt"));
+            while (File.Exists(Path.Combine(ResultPath, "PacketsSent" + Count + ".txt")))
+            {
+                Count++;
+            }
+            PacketsSentWriter = File.CreateText(Path.Combine(ResultPath, "PacketsSent " + Count + ".txt"));
+            PacketsReceivedWriter = File.CreateText(Path.Combine(ResultPath, "PacketsReceived " + Count + ".txt"));
             Game.OnSendPacket += GameOnOnSendPacket;
             Game.OnProcessPacket += GameOnOnProcessPacket;
         }
