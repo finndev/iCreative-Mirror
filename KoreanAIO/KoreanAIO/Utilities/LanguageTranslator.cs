@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using EloBuddy.SDK.Menu.Values;
 using KoreanAIO.Managers;
 
@@ -602,6 +603,119 @@ namespace KoreanAIO.Utilities
                 {"QE.HitChancePercent", "QE: 命中率百分比"},
                 {"R.HitChancePercent", "R: 命中率百分比"}
             };
+            Translations[Language.Portuguese] = new Dictionary<string, string>
+            {
+                {"Language", "Idioma"},
+                {"Portuguese", "Português"},
+                {"Enabled", "Habilitado"},
+                {"Disabled", "Desabilitado"},
+                {"Available", "Disponivel"},
+                /* Keys */
+                {"Combo.WithoutR", "Combo sem o R"},
+                {"Harass.WEQ", "Harass WEQ"},
+                /* Sempre ativo */
+                {"LastHit.Toggle", "LastHit Sempre"},
+                {"Harass.Toggle", "Harass Sempre"},
+                /* Submenus */
+                {"Keys", "Teclas"},
+                {"Prediction", "Prediction"},
+                {"Combo", "Combo"},
+                {"Harass", "Harass"},
+                {"Clear", "Clear"},
+                {"LaneClear", "LaneClear"},
+                {"LastHit", "LastHit"},
+                {"JungleClear", "JungleClear"},
+                {"KillSteal", "KillSteal"},
+                {"Automatic", "Automatico"},
+                {"Evader", "Evader"},
+                {"Drawings", "Circulos/notificacoes"},
+                {"Flee", "Fuga"},
+                {"Misc", "Outros"},
+                /* LastHit */
+                {"Never", "Nunca"},
+                {"Smartly", "Inteligente"},
+                {"Always", "Sempre"},
+                /* Checkbox, sliders and others */
+                {"MinimumManaPercent", "Porcentagem minima de mana"},
+                {"DisableUnderEnemyTurret", "Desabilitar debaixo da torre"},
+                {"IfKillable", "Se der pra matar"},
+                {"IfNeeded", "Se necessario"},
+                {"UseIgnite", "Usar Ignite"},
+                {"UseIgnite.Killable", "Usar Ignite se der pra matar"},
+                {"UseSmite", "Usar Smite"},
+                {"UseQ", "Usar o Q"},
+                {"UseQ.Hit", "Usar o Q se o hit for maior que {0}"},
+                {"UseQ.Gapcloser", "Usar o Q em gapcloses / dashes"},
+                {"UseQ.Interrupter", "Usar o Q para interromper"},
+                {"UseW", "Usar o W"},
+                {"UseW.Hit", "Use o W se o hit for maior que {0}"},
+                {"UseW.Gapcloser", "Usar o W em gapcloses / dashes"},
+                {"UseW.Interrupter", "Usar o W para interromper"},
+                {"UseE", "Usar o E"},
+                {"UseE.Hit", "Use o E se o hit for maior que {0}"},
+                {"UseE.Gapcloser", "Usar o E em gapcloses / dashes"},
+                {"UseE.Interrupter", "Usar o E para interromper"},
+                {"UseR", "Usar o R"},
+                {"UseR.Killable", "Usar o R se der pra matar"},
+                {"UseR.Hit", "Usar o R se o hit for maior que {0}"},
+                {"UseR.Gapcloser", "Usar o R em gapcloses / dahes"},
+                {"UseR.Interrupter", "Usar o R para interromper"},
+                {"R.BlackList", "Nao usar o R em:"},
+                {"Items", "Usar items ofensivos"},
+                {"Zhonyas", "Usar Zhonyas se minha vida for menor que % {0}"},
+                /* Zed */
+                {"R.Prevent", "Não usar spells antes do R"},
+                {"R.Combo.Mode", "R Modo do combo"},
+                {"UseQ.Collision", "Checar collisao antes de usar o Q (mais dano)"},
+                {"UseW1", "Usar W1"},
+                {"UseW2", "Usar W2"},
+                {"UseR1", "Usar R1"},
+                {"UseR2", "Uare R2"},
+                {"SwapDead", "Usar W2/R2 se o alvo for morrer"},
+                {"SwapGapclose", "Usar o W2/R2 para chegar perto do alvo"},
+                {"SwapKillable", "Usar o W2 se der pra matar"},
+                {"SwapHP", "Usar W2/R2 se a minha % de vida for menor que {0}"},
+                {"Line", "Linha"},
+                {"Triangle", "Triangulo"},
+                {"MousePos", "Posicao do Mouse"},
+                {"IsDead", "Se fodeu"},
+                {"Passive", "Passiva"},
+                {"Draw.WShadow", "Destacar a sombra do W"},
+                {"Draw.RShadow", "Destacar a sombra do R"},
+                {"Draw.TargetIsDead", "Mostrar texto quando alvo for morrer"},
+                {"Draw.PassiveIsReady", "Mostrar texto quando a passive estiver disponivel"},
+                /* Cassiopeia */
+                {"Poisoned", "Se estiver com veneno"},
+                {"AssistedUltimate", "Ajuda com a Ult"},
+                /* Diana */
+                {"UseQR", "Usar QR em minions para chegar perto"},
+                {"R.2nd", "Sempre usar o segundo R"},
+                /* Orianna */
+                {"TeamFight.Count", "Usar logica de teamfight se o numero de inimigos for maior que {0}"},
+                {"Common.Logic", "Logica Normal"},
+                {"1vs1.Logic", "Logica de x1"},
+                {"TeamFight.Logic", "Logica de TeamFight"},
+                {"UseE.HealthPercent", "Usar o E se minha % de vida for menor que {0}"},
+                {"UseE.Spells", "Usar o E em Skills inimigas"},
+                {"Draw.Ball", "Mostrar a posição da bola"},
+                {"R.Block", "Bloquear o R se não for acertar"},
+                /* Drawings */
+                {"Draw.Disable", "Desabilitar todos os circulos"},
+                {"Draw.DamageIndicator", "Mostrar indicador de dano"},
+                {"Draw.Target", "Destacar Alvo"},
+                {"Draw.Q", "Mostrar range do Q"},
+                {"Draw.W", "Mostrar range do W"},
+                {"Draw.E", "Mostrar range do E"},
+                {"Draw.R", "Mostrar range do R"},
+                {"Draw.Toggles", "Destacar o status de \"sempre ativo\""},
+                /* Prediction*/
+                {"Q.HitChancePercent", "Q: Porcentagem de chance de acerto"},
+                {"W.HitChancePercent", "W: Porcentagem de chance de acerto"},
+                {"E.HitChancePercent", "E: Porcentagem de chance de acerto"},
+                {"QE.HitChancePercent", "QE: Porcentagem de chance de acerto"},
+                {"R.HitChancePercent", "R: Porcentagem de chance de acerto"}
+            };
+
         }
 
         public static Language CurrentLanguage
@@ -648,35 +762,14 @@ namespace KoreanAIO.Utilities
             {
                 if (Translations.ContainsKey(from))
                 {
-                    foreach (var pair in Translations[from])
+                    foreach (var pair in from pair in Translations[@from] where pair.Value == displayName where Translations.ContainsKey(to) where Translations[to].ContainsKey(pair.Key) select pair)
                     {
-                        if (pair.Value == displayName)
-                        {
-                            if (Translations.ContainsKey(to))
-                            {
-                                if (Translations[to].ContainsKey(pair.Key))
-                                {
-                                    return Translations[to][pair.Key];
-                                }
-                            }
-                        }
+                        return Translations[to][pair.Key];
                     }
                 }
                 if (Translations.ContainsKey(Language.English))
                 {
-                    foreach (var pair in Translations[Language.English])
-                    {
-                        if (pair.Value == displayName)
-                        {
-                            if (Translations.ContainsKey(to))
-                            {
-                                if (Translations[to].ContainsKey(pair.Key))
-                                {
-                                    return Translations[to][pair.Key];
-                                }
-                            }
-                        }
-                    }
+                    return (from pair in Translations[Language.English] where pair.Value == displayName where Translations.ContainsKey(to) where Translations[to].ContainsKey(pair.Key) select Translations[to][pair.Key]).FirstOrDefault();
                 }
             }
             return null;
