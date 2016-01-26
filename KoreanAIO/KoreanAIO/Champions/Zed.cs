@@ -612,7 +612,6 @@ namespace KoreanAIO.Champions
                 {
                     if (MyHero.ManaPercent >= HarassMenu.Slider("ManaPercent"))
                     {
-                        CastW(Target);
                         CastE(Target);
                         CastQ(Target);
                     }
