@@ -16,6 +16,7 @@ namespace KoreanAIO.Managers
         public static Item YoumuusGhostblade;
         public static Item RanduinsOmen;
         public static Item ZhonyasHourglass;
+
         public static void Initialize()
         {
             Tiamat = new Item(ItemId.Tiamat_Melee_Only, 300);
@@ -23,10 +24,20 @@ namespace KoreanAIO.Managers
             BladeOfTheRuinedKing = new Item(ItemId.Blade_of_the_Ruined_King, 450);
             BilgewaterCutlass = new Item(ItemId.Bilgewater_Cutlass, 400);
             HextechGunblade = new Item(ItemId.Hextech_Gunblade, 400);
-            YoumuusGhostblade = new Item(ItemId.Youmuus_Ghostblade, (int)(AIO.MyHero.AttackRange + AIO.MyHero.BoundingRadius + 300));
+            YoumuusGhostblade = new Item(ItemId.Youmuus_Ghostblade,
+                (int) (AIO.MyHero.AttackRange + AIO.MyHero.BoundingRadius + 300));
             RanduinsOmen = new Item(ItemId.Randuins_Omen, 500);
             ZhonyasHourglass = new Item(ItemId.Zhonyas_Hourglass);
-            OffensiveItems = new List<Item> {Tiamat, Hydra, BladeOfTheRuinedKing, BilgewaterCutlass, HextechGunblade, YoumuusGhostblade, RanduinsOmen};
+            OffensiveItems = new List<Item>
+            {
+                Tiamat,
+                Hydra,
+                BladeOfTheRuinedKing,
+                BilgewaterCutlass,
+                HextechGunblade,
+                YoumuusGhostblade,
+                RanduinsOmen
+            };
         }
 
         public static void CastOffensiveItems(AIHeroClient target)

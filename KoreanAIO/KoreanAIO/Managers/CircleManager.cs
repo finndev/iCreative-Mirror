@@ -10,19 +10,15 @@ namespace KoreanAIO.Managers
     public class Circle
     {
         public CheckBox CheckBox;
-
-        public bool Enabled
-        {
-            get { return CheckBox.CurrentValue; }
-        }
+        public ColorBGRA Color;
 
         public Func<bool> Condition;
-        public Func<GameObject> SourceObject;
         public Func<float> Range;
-        public ColorBGRA Color;
+        public Func<GameObject> SourceObject;
         public int Width = 1;
 
-        public Circle(CheckBox checkBox, ColorBGRA color, Func<float> range, Func<bool> condition, Func<GameObject> source)
+        public Circle(CheckBox checkBox, ColorBGRA color, Func<float> range, Func<bool> condition,
+            Func<GameObject> source)
         {
             CheckBox = checkBox;
             Range = range;
@@ -30,11 +26,17 @@ namespace KoreanAIO.Managers
             Condition = condition;
             SourceObject = source;
         }
+
+        public bool Enabled
+        {
+            get { return CheckBox.CurrentValue; }
+        }
     }
 
     public static class CircleManager
     {
         public static readonly List<Circle> Circles = new List<Circle>();
+
         public static void Draw()
         {
             foreach (var circle in Circles.Where(c => c.Enabled && c.Condition()))

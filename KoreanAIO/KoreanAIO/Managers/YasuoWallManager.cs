@@ -17,14 +17,14 @@ namespace KoreanAIO.Managers
             if (EntityManager.Heroes.Enemies.Any(h => h.Hero == Champion.Yasuo))
             {
                 _containsYasuo = true;
-                GameObject.OnCreate += delegate (GameObject sender, EventArgs args)
+                GameObject.OnCreate += delegate(GameObject sender, EventArgs args)
                 {
                     if (sender.Name.Contains("Yasuo_Base_W_windwall") && !sender.Name.Contains("_activate.troy"))
                     {
                         _wallObject = sender;
                     }
                 };
-                GameObject.OnDelete += delegate (GameObject sender, EventArgs args)
+                GameObject.OnDelete += delegate(GameObject sender, EventArgs args)
                 {
                     if (sender.Name.Contains("Yasuo_Base_W_windwall") && !sender.Name.Contains("_activate.troy"))
                     {
@@ -32,7 +32,7 @@ namespace KoreanAIO.Managers
                     }
                 };
                 Obj_AI_Base.OnProcessSpellCast +=
-                    delegate (Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+                    delegate(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
                     {
                         var hero = sender as AIHeroClient;
                         if (hero != null && hero.IsEnemy && hero.Hero == Champion.Yasuo && args.Slot == SpellSlot.W)
@@ -50,9 +50,13 @@ namespace KoreanAIO.Managers
                 if (_wallObject != null && _wallObject.IsValid && !_wallObject.IsDead)
                 {
                     var level = Convert.ToInt32(_wallObject.Name.Substring(_wallObject.Name.Length - 6, 1));
-                    var width = 250f + level * 50f;
-                    var pos1 = _wallObject.Position.To2D() + (_wallObject.Position.To2D() - _startPosition.To2D()).Normalized().Perpendicular() * width / 2f;
-                    var pos2 = _wallObject.Position.To2D() + (_wallObject.Position.To2D() - _startPosition.To2D()).Normalized().Perpendicular2() * width / 2f;
+                    var width = 250f + level*50f;
+                    var pos1 = _wallObject.Position.To2D() +
+                               (_wallObject.Position.To2D() - _startPosition.To2D()).Normalized().Perpendicular()*width/
+                               2f;
+                    var pos2 = _wallObject.Position.To2D() +
+                               (_wallObject.Position.To2D() - _startPosition.To2D()).Normalized().Perpendicular2()*width/
+                               2f;
                     var intersection = pos1.Intersection(pos2, startPosition.To2D(), endPosition.To2D());
                     return intersection.Point.IsValid();
                 }

@@ -11,6 +11,7 @@ using KoreanAIO.Model;
 using KoreanAIO.Utilities;
 using SharpDX;
 using Circle = KoreanAIO.Managers.Circle;
+using Color = System.Drawing.Color;
 
 namespace KoreanAIO.Champions
 {
@@ -50,10 +51,10 @@ namespace KoreanAIO.Champions
             R = new SpellBase(SpellSlot.R, SpellType.Targeted, 625);
             IsDeadText = new Text("", new Font("Arial", 30F, FontStyle.Bold))
             {
-                Color = System.Drawing.Color.Red,
+                Color = Color.Red,
                 Position = new Vector2(100, 50)
             };
-            Obj_AI_Base.OnBuffGain += delegate (Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
+            Obj_AI_Base.OnBuffGain += delegate(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
             {
                 var minion = sender as Obj_AI_Minion;
                 if (minion != null && minion.IsAlly && minion.BaseSkinName == ShadowSkinName && args.Buff.Caster.IsMe)
@@ -69,7 +70,7 @@ namespace KoreanAIO.Champions
                     }
                 }
             };
-            Obj_AI_Base.OnPlayAnimation += delegate (Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
+            Obj_AI_Base.OnPlayAnimation += delegate(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
             {
                 var minion = sender as Obj_AI_Minion;
                 if (minion != null && minion.IsAlly && minion.BaseSkinName == ShadowSkinName)
@@ -87,14 +88,14 @@ namespace KoreanAIO.Champions
                     }
                 }
             };
-            GameObject.OnCreate += delegate (GameObject sender, EventArgs args)
+            GameObject.OnCreate += delegate(GameObject sender, EventArgs args)
             {
                 if (sender.Name == IsDeadName && RTarget != null && RTarget.IsInRange(sender, 200))
                 {
                     IsDeadObject = sender;
                 }
             };
-            GameObject.OnDelete += delegate (GameObject sender, EventArgs args)
+            GameObject.OnDelete += delegate(GameObject sender, EventArgs args)
             {
                 var minion = sender as Obj_AI_Minion;
                 if (minion != null && minion.IsAlly && minion.BaseSkinName == ShadowSkinName)
@@ -113,7 +114,7 @@ namespace KoreanAIO.Champions
                     IsDeadObject = null;
                 }
             };
-            Obj_AI_Base.OnProcessSpellCast += delegate (Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+            Obj_AI_Base.OnProcessSpellCast += delegate(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
             {
                 if (sender.IsMe)
                 {
@@ -134,19 +135,22 @@ namespace KoreanAIO.Champions
                     }
                 }
             };
-            Evader.OnEvader += delegate (EvaderArgs args)
+            Evader.OnEvader += delegate(EvaderArgs args)
             {
-                var w1Distance = (W.IsReady && IsW1 && EvaderMenu.CheckBox("Evader.W1"))
+                var w1Distance = W.IsReady && IsW1 && EvaderMenu.CheckBox("Evader.W1")
                     ? MyHero.GetDistanceSqr(args.Sender)
                     : 16000000;
-                var w2Distance = (W.IsReady && WShadowIsValid && EvaderMenu.CheckBox("Evader.W2") && !args.WillHitMyHero(WShadow.Position))
+                var w2Distance = W.IsReady && WShadowIsValid && EvaderMenu.CheckBox("Evader.W2") &&
+                                 !args.WillHitMyHero(WShadow.Position)
                     ? WShadow.GetDistanceSqr(args.Sender)
                     : 16000000;
                 var rTarget = TargetSelector.GetTarget(R.Range, DamageType.Physical) ?? args.Sender;
-                var r1Distance = (R.IsReady && IsR1 && rTarget != null && R.InRange(rTarget) && EvaderMenu.CheckBox("Evader.R1"))
+                var r1Distance = R.IsReady && IsR1 && rTarget != null && R.InRange(rTarget) &&
+                                 EvaderMenu.CheckBox("Evader.R1")
                     ? MyHero.GetDistanceSqr(args.Sender)
                     : 16000000;
-                var r2Distance = (R.IsReady && RShadowIsValid && EvaderMenu.CheckBox("Evader.R2") && !args.WillHitMyHero(RShadow.Position))
+                var r2Distance = R.IsReady && RShadowIsValid && EvaderMenu.CheckBox("Evader.R2") &&
+                                 !args.WillHitMyHero(RShadow.Position)
                     ? RShadow.GetDistanceSqr(args.Sender)
                     : 16000000;
                 var min = Math.Min(w1Distance, Math.Min(w2Distance, Math.Min(r1Distance, r2Distance)));
@@ -167,7 +171,7 @@ namespace KoreanAIO.Champions
                     else if (Math.Abs(min - w1Distance) < float.Epsilon)
                     {
                         var wPos = MyHero.ServerPosition +
-                                   ((args.Sender.ServerPosition - MyHero.ServerPosition).Normalized() * WRange)
+                                   ((args.Sender.ServerPosition - MyHero.ServerPosition).Normalized()*WRange)
                                        .To2D()
                                        .Perpendicular()
                                        .To3DWorld();
@@ -190,7 +194,7 @@ namespace KoreanAIO.Champions
 
             MenuManager.AddSubMenu("Combo");
             {
-                ComboMenu.AddStringList("Mode", "R Combo Mode", new[] { "Line", "Triangle", "MousePos" });
+                ComboMenu.AddStringList("Mode", "R Combo Mode", new[] {"Line", "Triangle", "MousePos"});
                 ComboMenu.AddValue("Q", new CheckBox("Use Q"));
                 ComboMenu.AddValue("W", new CheckBox("Use W"));
                 ComboMenu.AddValue("E", new CheckBox("Use E"));
@@ -208,7 +212,8 @@ namespace KoreanAIO.Champions
                     {
                         if (!enemiesAdded.Contains(enemy.ChampionName))
                         {
-                            ComboMenu.AddValue("BlackList." + enemy.ChampionName, new CheckBox(enemy.ChampionName, false));
+                            ComboMenu.AddValue("BlackList." + enemy.ChampionName,
+                                new CheckBox(enemy.ChampionName, false));
                             enemiesAdded.Add(enemy.ChampionName);
                         }
                     }
@@ -232,8 +237,8 @@ namespace KoreanAIO.Champions
                 }
                 ClearMenu.AddValue("LastHit", new GroupLabel("LastHit"));
                 {
-                    ClearMenu.AddStringList("LastHit.Q", "Use Q", new[] { "Never", "Smartly", "Always" }, 1);
-                    ClearMenu.AddStringList("LastHit.E", "Use E", new[] { "Never", "Smartly", "Always" }, 1);
+                    ClearMenu.AddStringList("LastHit.Q", "Use Q", new[] {"Never", "Smartly", "Always"}, 1);
+                    ClearMenu.AddStringList("LastHit.E", "Use E", new[] {"Never", "Smartly", "Always"}, 1);
                     ClearMenu.AddValue("LastHit.ManaPercent", new Slider("Minimum Mana Percent", 50));
                 }
                 ClearMenu.AddValue("JungleClear", new GroupLabel("JungleClear"));
@@ -277,17 +282,16 @@ namespace KoreanAIO.Champions
                     DrawingsMenu.AddValue("W.Shadow", new CheckBox("Draw W shadow circle")), SharpDX.Color.Blue,
                     () => 100, () => WShadowIsValid,
                     () => WShadow)
-                { Width = 1 });
+                {Width = 1});
 
                 CircleManager.Circles.Add(new Circle(
                     DrawingsMenu.AddValue("R.Shadow", new CheckBox("Draw R shadow circle")), SharpDX.Color.Orange,
                     () => 100, () => RShadowIsValid,
                     () => RShadow)
-                { Width = 1 });
+                {Width = 1});
                 DrawingsMenu.AddValue("IsDead", new CheckBox("Draw text if target will die"));
                 DrawingsMenu.AddValue("Passive", new CheckBox("Draw text when passive is available"));
             }
-
         }
 
         public bool RShadowIsValid
@@ -312,7 +316,12 @@ namespace KoreanAIO.Champions
 
         private bool IsWaitingShadow
         {
-            get { return WShadow == null && W.LastCastTime > 0 && Core.GameTickCount - W.LastCastTime <= W.GetArrivalTime(W.LastEndPosition) + Game.Ping / 2 - Q.CastDelay - 80; }
+            get
+            {
+                return WShadow == null && W.LastCastTime > 0 &&
+                       Core.GameTickCount - W.LastCastTime <=
+                       W.GetArrivalTime(W.LastEndPosition) + Game.Ping/2 - Q.CastDelay - 80;
+            }
         }
 
         private bool IsCombo2
@@ -328,6 +337,11 @@ namespace KoreanAIO.Champions
         private Obj_AI_Base RTarget
         {
             get { return UnitManager.ValidEnemyHeroes.FirstOrDefault(TargetHaveR); }
+        }
+
+        public bool ShouldWaitMana
+        {
+            get { return W.IsReady && IsW1 && MyHero.Mana < W.Mana + Q.Mana; }
         }
 
         public override void OnEndScene()
@@ -356,7 +370,8 @@ namespace KoreanAIO.Champions
                         UnitManager.ValidEnemyHeroes.Where(
                             h => h.HealthPercent <= 50f && h.VisibleOnScreen && !h.TargetHaveBuff("zedpassivecd")))
                 {
-                    Drawing.DrawText(enemy.ServerPosition.WorldToScreen(), System.Drawing.Color.White, "Passive".GetTranslationFromId() + " " + "Available".GetTranslationFromId().ToLower(),
+                    Drawing.DrawText(enemy.ServerPosition.WorldToScreen(), Color.White,
+                        "Passive".GetTranslationFromId() + " " + "Available".GetTranslationFromId().ToLower(),
                         6);
                 }
             }
@@ -368,19 +383,19 @@ namespace KoreanAIO.Champions
             Range = Q.Range;
             if (WShadow != null && RShadow != null)
             {
-                Range = (int)(Q.Range + Math.Max(MyHero.GetDistance(RShadow), MyHero.GetDistance(WShadow)));
+                Range = (int) (Q.Range + Math.Max(MyHero.GetDistance(RShadow), MyHero.GetDistance(WShadow)));
             }
             else if (IsW1 && W.IsReady && RShadow != null)
             {
-                Range = (int)(Q.Range + Math.Max(MyHero.GetDistance(RShadow), WRange));
+                Range = (int) (Q.Range + Math.Max(MyHero.GetDistance(RShadow), WRange));
             }
             else if (WShadow != null)
             {
-                Range = (int)(Q.Range + MyHero.GetDistance(WShadow));
+                Range = (int) (Q.Range + MyHero.GetDistance(WShadow));
             }
             else if (IsW1 && W.IsReady)
             {
-                Range = (Q.Range + WRange);
+                Range = Q.Range + WRange;
             }
             var currentList = UnitManager.ValidEnemyHeroesInRange.ToList();
             UnitManager.ValidEnemyHeroesInRange.Clear();
@@ -423,8 +438,12 @@ namespace KoreanAIO.Champions
 
         protected void SwapByCountingEnemies()
         {
-            var wCount = (WShadowIsValid && W.IsReady && !WShadow.IsUnderEnemyturret()) ? WShadow.CountEnemiesInRange(400) : 100;
-            var rCount = (RShadowIsValid && R.IsReady && !RShadow.IsUnderEnemyturret()) ? RShadow.CountEnemiesInRange(400) : 100;
+            var wCount = WShadowIsValid && W.IsReady && !WShadow.IsUnderEnemyturret()
+                ? WShadow.CountEnemiesInRange(400)
+                : 100;
+            var rCount = RShadowIsValid && R.IsReady && !RShadow.IsUnderEnemyturret()
+                ? RShadow.CountEnemiesInRange(400)
+                : 100;
             var min = Math.Min(rCount, wCount);
             if (MyHero.CountEnemiesInRange(400) > min)
             {
@@ -446,7 +465,8 @@ namespace KoreanAIO.Champions
                 var distanceSqr = MyHero.GetDistanceSqr(Target);
                 var health = Target.TotalShieldHealth();
                 var result = GetBestCombo(Target);
-                if (IsDeadObject != null && (AutomaticMenu.CheckBox("SwapDead") || (ComboMenu.CheckBox("SwapDead") && ModeManager.Combo)))
+                if (IsDeadObject != null &&
+                    (AutomaticMenu.CheckBox("SwapDead") || (ComboMenu.CheckBox("SwapDead") && ModeManager.Combo)))
                 {
                     SwapByCountingEnemies();
                 }
@@ -459,12 +479,12 @@ namespace KoreanAIO.Champions
                             SwapByCountingEnemies();
                         }
                     }
-                    else if (ComboMenu.CheckBox("SwapGapclose") && distanceSqr >= (E.Range * 1.3f).Pow())
+                    else if (ComboMenu.CheckBox("SwapGapclose") && distanceSqr >= (E.Range*1.3f).Pow())
                     {
-                        var wShadowDistance = (WShadowIsValid && W.IsReady && !WShadow.IsUnderEnemyturret())
+                        var wShadowDistance = WShadowIsValid && W.IsReady && !WShadow.IsUnderEnemyturret()
                             ? Target.GetDistanceSqr(WShadow)
                             : 16000000f;
-                        var rShadowDistance = (RShadowIsValid && R.IsReady && !RShadow.IsUnderEnemyturret())
+                        var rShadowDistance = RShadowIsValid && R.IsReady && !RShadow.IsUnderEnemyturret()
                             ? Target.GetDistanceSqr(RShadow)
                             : 16000000f;
                         var min = Math.Min(Math.Min(wShadowDistance, rShadowDistance), distanceSqr);
@@ -485,7 +505,8 @@ namespace KoreanAIO.Champions
                 {
                     if (HarassMenu.CheckBox("SwapGapclose") && W.IsReady && !IsW1 && WShadowIsValid &&
                         Target.HealthPercent <= 50f && GetPassiveDamage(Target, health) > 0f && result.IsKillable &&
-                        distanceSqr > WShadow.GetDistanceSqr(Target) && WShadow.GetDistanceSqr(Target) <= E.RangeSqr && Target.HealthPercent <= MyHero.HealthPercent)
+                        distanceSqr > WShadow.GetDistanceSqr(Target) && WShadow.GetDistanceSqr(Target) <= E.RangeSqr &&
+                        Target.HealthPercent <= MyHero.HealthPercent)
                     {
                         W.Cast();
                     }
@@ -525,7 +546,8 @@ namespace KoreanAIO.Champions
                 {
                     CastQ(enemy);
                 }
-                if (KillStealMenu.CheckBox("W") && enemy.HealthPercent <= 20f && NeedsW(enemy) && (result.W || W.IsKillable(enemy)))
+                if (KillStealMenu.CheckBox("W") && enemy.HealthPercent <= 20f && NeedsW(enemy) &&
+                    (result.W || W.IsKillable(enemy)))
                 {
                     W.Cast(enemy);
                 }
@@ -615,8 +637,8 @@ namespace KoreanAIO.Champions
         {
             if (MyHero.ManaPercent >= ClearMenu.Slider("LastHit.ManaPercent"))
             {
-                Q.LastHit((LastHitType)ClearMenu.Slider("LastHit.Q"));
-                E.LastHit((LastHitType)ClearMenu.Slider("LastHit.E"));
+                Q.LastHit((LastHitType) ClearMenu.Slider("LastHit.Q"));
+                E.LastHit((LastHitType) ClearMenu.Slider("LastHit.E"));
             }
             base.LastHit();
         }
@@ -669,9 +691,10 @@ namespace KoreanAIO.Champions
                 }
                 Q.RangeCheckSourceObject = Q.Source;
                 var qRange = Q.Range;
-                if (W.LastCastTime > 0 && !WShadowIsValid && Core.GameTickCount - W.LastCastTime <= W.GetArrivalTime(W.LastEndPosition))
+                if (W.LastCastTime > 0 && !WShadowIsValid &&
+                    Core.GameTickCount - W.LastCastTime <= W.GetArrivalTime(W.LastEndPosition))
                 {
-                    Q.Range = Q.Range + (int)W.LastEndPosition.Distance(Q.Source);
+                    Q.Range = Q.Range + (int) W.LastEndPosition.Distance(Q.Source);
                 }
                 Q.Cast(target);
                 Q.Range = qRange;
@@ -683,8 +706,8 @@ namespace KoreanAIO.Champions
             if (W.IsReady && IsW1 && target != null)
             {
                 W.LastCastTime = Core.GameTickCount;
-                var r = Q.GetPrediction(target, new CustomSettings { Range = Q.Range + W.Range });
-                if (r.HitChancePercent >= Q.HitChancePercent / 2 && Core.GameTickCount - W.LastSentTime > 175)
+                var r = Q.GetPrediction(target, new CustomSettings {Range = Q.Range + W.Range});
+                if (r.HitChancePercent >= Q.HitChancePercent/2 && Core.GameTickCount - W.LastSentTime > 175)
                 {
                     Vector3 wPos;
                     if (RShadowIsValid)
@@ -693,7 +716,7 @@ namespace KoreanAIO.Champions
                         {
                             case 1:
                                 wPos = MyHero.ServerPosition +
-                                       ((r.CastPosition - RShadow.ServerPosition).Normalized() * WRange)
+                                       ((r.CastPosition - RShadow.ServerPosition).Normalized()*WRange)
                                            .To2D()
                                            .Perpendicular()
                                            .To3DWorld();
@@ -703,13 +726,13 @@ namespace KoreanAIO.Champions
                                 break;
                             default:
                                 wPos = MyHero.ServerPosition +
-                                       (r.CastPosition - RShadow.ServerPosition).Normalized() * WRange;
+                                       (r.CastPosition - RShadow.ServerPosition).Normalized()*WRange;
                                 break;
                         }
                     }
                     else
                     {
-                        wPos = MyHero.ServerPosition + (r.CastPosition - MyHero.ServerPosition).Normalized() * WRange;
+                        wPos = MyHero.ServerPosition + (r.CastPosition - MyHero.ServerPosition).Normalized()*WRange;
                     }
                     if (MyHero.Spellbook.CastSpell(SpellSlot.W, wPos))
                     {
@@ -752,14 +775,6 @@ namespace KoreanAIO.Champions
             }
         }
 
-        public bool ShouldWaitMana
-        {
-            get
-            {
-                return W.IsReady && IsW1 && MyHero.Mana < W.Mana + Q.Mana;
-            }
-        }
-
         public bool NeedsW(Obj_AI_Base target)
         {
             if (MyHero.GetDistanceSqr(target) <= WRange.Pow() &&
@@ -784,14 +799,14 @@ namespace KoreanAIO.Champions
             {
                 health = target.Health;
             }
-            if (100 * health / target.MaxHealth <= 50f)
+            if (100*health/target.MaxHealth <= 50f)
             {
                 if (target.TargetHaveBuff("zedpassivecd"))
                 {
                     return 0f;
                 }
                 return MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                    target.MaxHealth * ((int)Math.Truncate((MyHero.Level - 1f) / 6f) * 2f + 6f) / 100f);
+                    target.MaxHealth*((int) Math.Truncate((MyHero.Level - 1f)/6f)*2f + 6f)/100f);
             }
             return 0;
         }
@@ -809,12 +824,12 @@ namespace KoreanAIO.Champions
                 var hero = target as AIHeroClient;
                 if (hero != null && TargetHaveR(hero))
                 {
-                    damage += (damage - Ignite.GetDamage(target) - Smite.GetDamage(target)) * (20f + R.Level * 10) / 100f;
+                    damage += (damage - Ignite.GetDamage(target) - Smite.GetDamage(target))*(20f + R.Level*10)/100f;
                 }
             }
             else
             {
-                damage += damage * (20f + R.Level * 10) / 100f;
+                damage += damage*(20f + R.Level*10)/100f;
             }
             damage += MyHero.GetAttackDamage(target);
             damage += GetPassiveDamage(target, target.TotalShieldHealth() - damage);
@@ -831,19 +846,19 @@ namespace KoreanAIO.Champions
                 {
                     case SpellSlot.Q:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Physical,
-                            40f * level + 35f + 1f * MyHero.FlatPhysicalDamageMod);
+                            40f*level + 35f + 1f*MyHero.FlatPhysicalDamageMod);
                     case SpellSlot.W:
                         if (WShadowIsValid || (IsW1 && W.IsReady))
                         {
                             if (Q.IsReady)
                             {
-                                result += GetSpellDamage(SpellSlot.Q, target) / 2f;
+                                result += GetSpellDamage(SpellSlot.Q, target)/2f;
                             }
                         }
                         return result;
                     case SpellSlot.E:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Physical,
-                            30f * level + 30f + 0.8f * MyHero.FlatPhysicalDamageMod);
+                            30f*level + 30f + 0.8f*MyHero.FlatPhysicalDamageMod);
                     case SpellSlot.R:
                         var hero = target as AIHeroClient;
                         if (hero == null)
@@ -854,7 +869,7 @@ namespace KoreanAIO.Champions
                         {
                             if (Q.IsReady)
                             {
-                                result += GetSpellDamage(SpellSlot.Q, target) / 2f;
+                                result += GetSpellDamage(SpellSlot.Q, target)/2f;
                             }
                         }
                         if (RShadowIsValid)
@@ -866,7 +881,7 @@ namespace KoreanAIO.Champions
                             return 0f;
                         }
                         return result +
-                               MyHero.CalculateDamageOnUnit(target, DamageType.Physical, 1f * MyHero.TotalAttackDamage);
+                               MyHero.CalculateDamageOnUnit(target, DamageType.Physical, 1f*MyHero.TotalAttackDamage);
                 }
             }
             return base.GetSpellDamage(slot, target);

@@ -12,130 +12,20 @@ namespace KoreanAIO.Champions
 {
     public class ChampionBase
     {
-        public AIHeroClient MyHero
-        {
-            get { return AIO.MyHero; }
-        }
+        public const float RefreshTime = 0.4f;
 
-        public Vector3 MousePos
-        {
-            get { return Game.CursorPos; }
-        }
+        public readonly Dictionary<int, BestDamageResult> PredictedDamage = new Dictionary<int, BestDamageResult>();
+        public SpellBase E;
+
+        public SpellBase Q;
+        public SpellBase R;
+        public SpellBase R2;
 
         public float Range = 1200f;
 
         public AIHeroClient Target;
-
-        protected Menu Menu
-        {
-            get
-            {
-                return MenuManager.Menu;
-            }
-        }
-        public Menu ComboMenu
-        {
-            get
-            {
-                return MenuManager.GetSubMenu("Combo");
-            }
-        }
-        public Menu KillStealMenu
-        {
-            get
-            {
-                return MenuManager.GetSubMenu("KillSteal");
-            }
-        }
-        public Menu HarassMenu
-        {
-            get
-            {
-                return MenuManager.GetSubMenu("Harass");
-            }
-        }
-        public Menu ClearMenu
-        {
-            get
-            {
-                return MenuManager.GetSubMenu("Clear");
-            }
-        }
-        public Menu PredictionMenu
-        {
-            get
-            {
-                return MenuManager.GetSubMenu("Prediction");
-            }
-        }
-        public Menu DrawingsMenu
-        {
-            get
-            {
-                return MenuManager.GetSubMenu("Drawings");
-            }
-        }
-        public Menu FleeMenu
-        {
-            get
-            {
-                return MenuManager.GetSubMenu("Flee");
-            }
-        }
-        public Menu AutomaticMenu
-        {
-            get
-            {
-                return MenuManager.GetSubMenu("Automatic");
-            }
-        }
-        public Menu MiscMenu
-        {
-            get
-            {
-                return MenuManager.GetSubMenu("Misc");
-            }
-        }
-        public Menu KeysMenu
-        {
-            get
-            {
-                return MenuManager.GetSubMenu("Keys");
-            }
-        }
-        public Menu EvaderMenu
-        {
-            get
-            {
-                return MenuManager.GetSubMenu("Evader");
-            }
-        }
-        
-        public SpellBase Q;
         public SpellBase W;
         public SpellBase W2;
-        public SpellBase E;
-        public SpellBase R;
-        public SpellBase R2;
-
-        public SpellBase Ignite
-        {
-            get { return SpellManager.Ignite; }
-        }
-        public SpellBase Heal
-        {
-            get { return SpellManager.Heal; }
-        }
-
-        public SpellBase Smite
-        {
-            get { return SpellManager.Smite; }
-        }
-
-        public SpellBase Flash
-        {
-            get { return SpellManager.Flash; }
-        }
 
         public ChampionBase()
         {
@@ -184,20 +74,107 @@ namespace KoreanAIO.Champions
             };
         }
 
+        public AIHeroClient MyHero
+        {
+            get { return AIO.MyHero; }
+        }
+
+        public Vector3 MousePos
+        {
+            get { return Game.CursorPos; }
+        }
+
+        protected Menu Menu
+        {
+            get { return MenuManager.Menu; }
+        }
+
+        public Menu ComboMenu
+        {
+            get { return MenuManager.GetSubMenu("Combo"); }
+        }
+
+        public Menu KillStealMenu
+        {
+            get { return MenuManager.GetSubMenu("KillSteal"); }
+        }
+
+        public Menu HarassMenu
+        {
+            get { return MenuManager.GetSubMenu("Harass"); }
+        }
+
+        public Menu ClearMenu
+        {
+            get { return MenuManager.GetSubMenu("Clear"); }
+        }
+
+        public Menu PredictionMenu
+        {
+            get { return MenuManager.GetSubMenu("Prediction"); }
+        }
+
+        public Menu DrawingsMenu
+        {
+            get { return MenuManager.GetSubMenu("Drawings"); }
+        }
+
+        public Menu FleeMenu
+        {
+            get { return MenuManager.GetSubMenu("Flee"); }
+        }
+
+        public Menu AutomaticMenu
+        {
+            get { return MenuManager.GetSubMenu("Automatic"); }
+        }
+
+        public Menu MiscMenu
+        {
+            get { return MenuManager.GetSubMenu("Misc"); }
+        }
+
+        public Menu KeysMenu
+        {
+            get { return MenuManager.GetSubMenu("Keys"); }
+        }
+
+        public Menu EvaderMenu
+        {
+            get { return MenuManager.GetSubMenu("Evader"); }
+        }
+
+        public SpellBase Ignite
+        {
+            get { return SpellManager.Ignite; }
+        }
+
+        public SpellBase Heal
+        {
+            get { return SpellManager.Heal; }
+        }
+
+        public SpellBase Smite
+        {
+            get { return SpellManager.Smite; }
+        }
+
+        public SpellBase Flash
+        {
+            get { return SpellManager.Flash; }
+        }
+
 
         protected virtual void PermaActive()
         {
-
         }
 
         protected virtual void Combo()
         {
-
         }
 
         protected virtual void Harass()
         {
-
         }
 
         protected virtual void LaneClear()
@@ -207,12 +184,10 @@ namespace KoreanAIO.Champions
 
         protected virtual void JungleClear()
         {
-
         }
 
         protected virtual void LastHit()
         {
-
         }
 
         protected virtual void KillSteal()
@@ -221,7 +196,8 @@ namespace KoreanAIO.Champions
             {
                 if (KillStealMenu.CheckBox("Ignite") && Ignite.IsKillable(enemy))
                 {
-                    if (!MyHero.InAutoAttackRange(enemy) || MyHero.GetAttackDamage(enemy, true) <= enemy.TotalShieldHealth())
+                    if (!MyHero.InAutoAttackRange(enemy) ||
+                        MyHero.GetAttackDamage(enemy, true) <= enemy.TotalShieldHealth())
                     {
                         Ignite.Cast(enemy);
                     }
@@ -232,28 +208,23 @@ namespace KoreanAIO.Champions
                 }
             }
         }
+
         protected virtual void Flee()
         {
-
         }
 
         public virtual void OnDraw()
         {
-
         }
 
         public virtual void OnEndScene()
         {
-
         }
-
-        public readonly Dictionary<int, BestDamageResult> PredictedDamage = new Dictionary<int, BestDamageResult>();
-        public const float RefreshTime = 0.4f;
 
 
         protected virtual float GetComboDamage(Obj_AI_Base target, IEnumerable<SpellBase> list)
         {
-            return 2f * MyHero.GetAttackDamage(target, true) + list.Sum(spell => spell.GetDamage(target));
+            return 2f*MyHero.GetAttackDamage(target, true) + list.Sum(spell => spell.GetDamage(target));
         }
 
         public virtual BestDamageResult GetBestCombo(Obj_AI_Base target)
@@ -263,7 +234,7 @@ namespace KoreanAIO.Champions
                 var canBeCalculated = FpsBooster.CanBeExecuted(CalculationType.Damage);
                 if (!PredictedDamage.ContainsKey(target.NetworkId))
                 {
-                    PredictedDamage[target.NetworkId] = new BestDamageResult { Target = target };
+                    PredictedDamage[target.NetworkId] = new BestDamageResult {Target = target};
                     canBeCalculated = false;
                 }
                 var bestDamage = PredictedDamage[target.NetworkId];
@@ -271,31 +242,31 @@ namespace KoreanAIO.Champions
                 {
                     return bestDamage;
                 }
-                bestDamage = new BestDamageResult { Target = target };
-                foreach (var r1 in R.IsReady ? new[] { false, true } : new[] { false })
+                bestDamage = new BestDamageResult {Target = target};
+                foreach (var r1 in R.IsReady ? new[] {false, true} : new[] {false})
                 {
-                    var list = new List<SpellBase> { Smite, Ignite };
+                    var list = new List<SpellBase> {Smite, Ignite};
                     var manaWasted = 0f;
                     if (r1)
                     {
                         list.Add(R);
                         manaWasted = R.Mana;
                     }
-                    foreach (var q1 in Q.IsReady ? new[] { false, true } : new[] { false })
+                    foreach (var q1 in Q.IsReady ? new[] {false, true} : new[] {false})
                     {
                         if (q1)
                         {
                             list.Add(Q);
                             manaWasted += Q.Mana;
                         }
-                        foreach (var w1 in W.IsReady ? new[] { false, true } : new[] { false })
+                        foreach (var w1 in W.IsReady ? new[] {false, true} : new[] {false})
                         {
                             if (w1)
                             {
                                 list.Add(W);
                                 manaWasted += W.Mana;
                             }
-                            foreach (var e1 in E.IsReady ? new[] { false, true } : new[] { false })
+                            foreach (var e1 in E.IsReady ? new[] {false, true} : new[] {false})
                             {
                                 if (e1)
                                 {
@@ -333,8 +304,9 @@ namespace KoreanAIO.Champions
                 PredictedDamage[target.NetworkId] = bestDamage;
                 return PredictedDamage[target.NetworkId];
             }
-            return new BestDamageResult { Damage = 0, Mana = 0 };
+            return new BestDamageResult {Damage = 0, Mana = 0};
         }
+
         public virtual float GetSpellDamage(SpellSlot slot, Obj_AI_Base target)
         {
             if (slot != SpellSlot.Unknown)

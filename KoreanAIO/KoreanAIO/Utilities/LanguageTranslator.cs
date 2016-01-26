@@ -15,6 +15,7 @@ namespace KoreanAIO.Utilities
         Italian,
         Portuguese,
         Polish,
+        Turkish,
         Chinese,
         ChineseTraditional,
         Korean
@@ -24,19 +25,22 @@ namespace KoreanAIO.Utilities
     {
         private static readonly Dictionary<Language, Dictionary<string, string>> Translations =
             new Dictionary<Language, Dictionary<string, string>>();
+
         private static readonly Dictionary<string, Language> CulturesToLanguage = new Dictionary<string, Language>
         {
-            { "en-US", Language.English},
-            { "en-GB", Language.English},
-            { "es-ES", Language.Spanish},
-            { "fr-FR", Language.French},
-            { "de-DE", Language.German},
-            { "it-IT", Language.Italian},
-            { "pt-BR", Language.Portuguese},
-            { "pt-PT", Language.Portuguese},
-            { "zh-CHS", Language.Chinese},
-            { "zh-CHT", Language.ChineseTraditional},
-            { "ko-KR", Language.Korean},
+            {"en-US", Language.English},
+            {"en-GB", Language.English},
+            {"es-ES", Language.Spanish},
+            {"fr-FR", Language.French},
+            {"de-DE", Language.German},
+            {"it-IT", Language.Italian},
+            {"pt-BR", Language.Portuguese},
+            {"pt-PT", Language.Portuguese},
+            {"pl-PL", Language.Polish},
+            {"tr-TR", Language.Turkish},
+            {"zh-CHS", Language.Chinese},
+            {"zh-CHT", Language.ChineseTraditional},
+            {"ko-KR", Language.Korean}
         };
 
         static LanguageTranslator()
@@ -268,7 +272,114 @@ namespace KoreanAIO.Utilities
             Translations[Language.German] = new Dictionary<string, string>
             {
                 {"Language", "Sprache"},
-                {"German", "Deutsch"}
+                {"German", "Deutsch"},
+                {"Enabled", "Enabled"},
+                {"Disabled", "Disabled"},
+                {"Available", "Available"},
+                /* Keys */
+                {"Combo.WithoutR", "Combo without R"},
+                {"Harass.WEQ", "Harass WEQ"},
+                /* Toggles */
+                {"LastHit.Toggle", "LastHit Toggle"},
+                {"Harass.Toggle", "Harass Toggle"},
+                /* Submenus */
+                {"Keys", "Keys"},
+                {"Prediction", "Prediction"},
+                {"Combo", "Combo"},
+                {"Harass", "Harass"},
+                {"Clear", "Clear"},
+                {"LaneClear", "LaneClear"},
+                {"LastHit", "LastHit"},
+                {"JungleClear", "JungleClear"},
+                {"KillSteal", "KillSteal"},
+                {"Automatic", "Automatic"},
+                {"Evader", "Evader"},
+                {"Drawings", "Drawings"},
+                {"Flee", "Flee"},
+                {"Misc", "Misc"},
+                /* LastHit */
+                {"Never", "Never"},
+                {"Smartly", "Smartly"},
+                {"Always", "Always"},
+                /* Checkbox, sliders and others */
+                {"MinimumManaPercent", "Minimum Mana Percent"},
+                {"DisableUnderEnemyTurret", "Disable under enemy turret"},
+                {"IfKillable", "If killable"},
+                {"IfNeeded", "If needed"},
+                {"UseIgnite", "Use Ignite"},
+                {"UseIgnite.Killable", "Use Ignite if target is killable"},
+                {"UseSmite", "Use Smite"},
+                {"UseQ", "Use Q"},
+                {"UseQ.Hit", "Use Q if hit is greater than {0}"},
+                {"UseQ.Gapcloser", "Use Q on hero gapclosing / dashing"},
+                {"UseQ.Interrupter", "Use Q on channeling spells"},
+                {"UseW", "Use W"},
+                {"UseW.Hit", "Use W if hit is greater than {0}"},
+                {"UseW.Gapcloser", "Use W on hero gapclosing / dashing"},
+                {"UseW.Interrupter", "Use W on channeling spells"},
+                {"UseE", "Use E"},
+                {"UseE.Hit", "Use E if hit is greater than {0}"},
+                {"UseE.Gapcloser", "Use E on hero gapclosing / dashing"},
+                {"UseE.Interrupter", "Use E on channeling spells"},
+                {"UseR", "Use R"},
+                {"UseR.Killable", "Use R if target is killable"},
+                {"UseR.Hit", "Use R if hit is greater than {0}"},
+                {"UseR.Gapcloser", "Use R on hero gapclosing / dashing"},
+                {"UseR.Interrupter", "Use R on channeling spells"},
+                {"R.BlackList", "Don't use R on:"},
+                {"Items", "Use offensive items"},
+                {"Zhonyas", "Use Zhonyas if my % of health is less than {0}"},
+                /* Zed */
+                {"R.Prevent", "Don't use spells before R"},
+                {"R.Combo.Mode", "R Combo Mode"},
+                {"UseQ.Collision", "Check collision when casting Q (more damage)"},
+                {"UseW1", "Use W1"},
+                {"UseW2", "Use W2"},
+                {"UseR1", "Use R1"},
+                {"UseR2", "Use R2"},
+                {"SwapDead", "Use W2/R2 if target will die"},
+                {"SwapGapclose", "Use W2/R2 to get close to target"},
+                {"SwapKillable", "Use W2 if target is killable"},
+                {"SwapHP", "Use W2/R2 if my % of health is less than {0}"},
+                {"Line", "Line"},
+                {"Triangle", "Triangle"},
+                {"MousePos", "MousePos"},
+                {"IsDead", "Is Dead"},
+                {"Passive", "Passive"},
+                {"Draw.WShadow", "Draw W shadow circle"},
+                {"Draw.RShadow", "Draw R shadow circle"},
+                {"Draw.TargetIsDead", "Draw text if target will die"},
+                {"Draw.PassiveIsReady", "Draw text when passive is available"},
+                /* Cassiopeia */
+                {"Poisoned", "If Poisoned"},
+                {"AssistedUltimate", "Assisted Ultimate"},
+                /* Diana */
+                {"UseQR", "Use QR on minion to gapclose"},
+                {"R.2nd", "Use always second r"},
+                /* Orianna */
+                {"TeamFight.Count", "Use TeamFight logic if enemies near is greater than {0}"},
+                {"Common.Logic", "Common logic"},
+                {"1vs1.Logic", "1 vs 1 logic"},
+                {"TeamFight.Logic", "TeamFight logic"},
+                {"UseE.HealthPercent", "Use E if my % of health is less than {0}"},
+                {"UseE.Spells", "Use E on enemy spells"},
+                {"Draw.Ball", "Draw ball position"},
+                {"R.Block", "Block R if will not hit"},
+                /* Drawings */
+                {"Draw.Disable", "Disable all drawings"},
+                {"Draw.DamageIndicator", "Draw damage indicator"},
+                {"Draw.Target", "Draw circle on target"},
+                {"Draw.Q", "Draw Q range"},
+                {"Draw.W", "Draw W range"},
+                {"Draw.E", "Draw E range"},
+                {"Draw.R", "Draw R range"},
+                {"Draw.Toggles", "Draw toggles status"},
+                /* Prediction*/
+                {"Q.HitChancePercent", "Q: HitChancePercent"},
+                {"W.HitChancePercent", "W: HitChancePercent"},
+                {"E.HitChancePercent", "E: HitChancePercent"},
+                {"QE.HitChancePercent", "QE: HitChancePercent"},
+                {"R.HitChancePercent", "R: HitChancePercent"}
             };
             Translations[Language.Polish] = new Dictionary<string, string>
             {
@@ -715,7 +826,230 @@ namespace KoreanAIO.Utilities
                 {"QE.HitChancePercent", "QE: Porcentagem de chance de acerto"},
                 {"R.HitChancePercent", "R: Porcentagem de chance de acerto"}
             };
-
+            Translations[Language.Italian] = new Dictionary<string, string>
+            {
+                {"Language", "Language"},
+                {"Italian", "Italian"},
+                {"Enabled", "Enabled"},
+                {"Disabled", "Disabled"},
+                {"Available", "Available"},
+                /* Keys */
+                {"Combo.WithoutR", "Combo without R"},
+                {"Harass.WEQ", "Harass WEQ"},
+                /* Toggles */
+                {"LastHit.Toggle", "LastHit Toggle"},
+                {"Harass.Toggle", "Harass Toggle"},
+                /* Submenus */
+                {"Keys", "Keys"},
+                {"Prediction", "Prediction"},
+                {"Combo", "Combo"},
+                {"Harass", "Harass"},
+                {"Clear", "Clear"},
+                {"LaneClear", "LaneClear"},
+                {"LastHit", "LastHit"},
+                {"JungleClear", "JungleClear"},
+                {"KillSteal", "KillSteal"},
+                {"Automatic", "Automatic"},
+                {"Evader", "Evader"},
+                {"Drawings", "Drawings"},
+                {"Flee", "Flee"},
+                {"Misc", "Misc"},
+                /* LastHit */
+                {"Never", "Never"},
+                {"Smartly", "Smartly"},
+                {"Always", "Always"},
+                /* Checkbox, sliders and others */
+                {"MinimumManaPercent", "Minimum Mana Percent"},
+                {"DisableUnderEnemyTurret", "Disable under enemy turret"},
+                {"IfKillable", "If killable"},
+                {"IfNeeded", "If needed"},
+                {"UseIgnite", "Use Ignite"},
+                {"UseIgnite.Killable", "Use Ignite if target is killable"},
+                {"UseSmite", "Use Smite"},
+                {"UseQ", "Use Q"},
+                {"UseQ.Hit", "Use Q if hit is greater than {0}"},
+                {"UseQ.Gapcloser", "Use Q on hero gapclosing / dashing"},
+                {"UseQ.Interrupter", "Use Q on channeling spells"},
+                {"UseW", "Use W"},
+                {"UseW.Hit", "Use W if hit is greater than {0}"},
+                {"UseW.Gapcloser", "Use W on hero gapclosing / dashing"},
+                {"UseW.Interrupter", "Use W on channeling spells"},
+                {"UseE", "Use E"},
+                {"UseE.Hit", "Use E if hit is greater than {0}"},
+                {"UseE.Gapcloser", "Use E on hero gapclosing / dashing"},
+                {"UseE.Interrupter", "Use E on channeling spells"},
+                {"UseR", "Use R"},
+                {"UseR.Killable", "Use R if target is killable"},
+                {"UseR.Hit", "Use R if hit is greater than {0}"},
+                {"UseR.Gapcloser", "Use R on hero gapclosing / dashing"},
+                {"UseR.Interrupter", "Use R on channeling spells"},
+                {"R.BlackList", "Don't use R on:"},
+                {"Items", "Use offensive items"},
+                {"Zhonyas", "Use Zhonyas if my % of health is less than {0}"},
+                /* Zed */
+                {"R.Prevent", "Don't use spells before R"},
+                {"R.Combo.Mode", "R Combo Mode"},
+                {"UseQ.Collision", "Check collision when casting Q (more damage)"},
+                {"UseW1", "Use W1"},
+                {"UseW2", "Use W2"},
+                {"UseR1", "Use R1"},
+                {"UseR2", "Use R2"},
+                {"SwapDead", "Use W2/R2 if target will die"},
+                {"SwapGapclose", "Use W2/R2 to get close to target"},
+                {"SwapKillable", "Use W2 if target is killable"},
+                {"SwapHP", "Use W2/R2 if my % of health is less than {0}"},
+                {"Line", "Line"},
+                {"Triangle", "Triangle"},
+                {"MousePos", "MousePos"},
+                {"IsDead", "Is Dead"},
+                {"Passive", "Passive"},
+                {"Draw.WShadow", "Draw W shadow circle"},
+                {"Draw.RShadow", "Draw R shadow circle"},
+                {"Draw.TargetIsDead", "Draw text if target will die"},
+                {"Draw.PassiveIsReady", "Draw text when passive is available"},
+                /* Cassiopeia */
+                {"Poisoned", "If Poisoned"},
+                {"AssistedUltimate", "Assisted Ultimate"},
+                /* Diana */
+                {"UseQR", "Use QR on minion to gapclose"},
+                {"R.2nd", "Use always second r"},
+                /* Orianna */
+                {"TeamFight.Count", "Use TeamFight logic if enemies near is greater than {0}"},
+                {"Common.Logic", "Common logic"},
+                {"1vs1.Logic", "1 vs 1 logic"},
+                {"TeamFight.Logic", "TeamFight logic"},
+                {"UseE.HealthPercent", "Use E if my % of health is less than {0}"},
+                {"UseE.Spells", "Use E on enemy spells"},
+                {"Draw.Ball", "Draw ball position"},
+                {"R.Block", "Block R if will not hit"},
+                /* Drawings */
+                {"Draw.Disable", "Disable all drawings"},
+                {"Draw.DamageIndicator", "Draw damage indicator"},
+                {"Draw.Target", "Draw circle on target"},
+                {"Draw.Q", "Draw Q range"},
+                {"Draw.W", "Draw W range"},
+                {"Draw.E", "Draw E range"},
+                {"Draw.R", "Draw R range"},
+                {"Draw.Toggles", "Draw toggles status"},
+                /* Prediction*/
+                {"Q.HitChancePercent", "Q: HitChancePercent"},
+                {"W.HitChancePercent", "W: HitChancePercent"},
+                {"E.HitChancePercent", "E: HitChancePercent"},
+                {"QE.HitChancePercent", "QE: HitChancePercent"},
+                {"R.HitChancePercent", "R: HitChancePercent"}
+            };
+            Translations[Language.Turkish] = new Dictionary<string, string>
+            {
+                {"Language", "Dil"},
+                {"Turkish", "Türkçe"},
+                {"Enabled", "Etkin"},
+                {"Disabled", "Etkin Değil"},
+                {"Available", "Kullanılabilir"},
+                /* Keys */
+                {"Combo.WithoutR", "R'siz kombo"},
+                {"Harass.WEQ", "WEQ ile dürtme"},
+                /* Toggles */
+                {"LastHit.Toggle", "Son vuruş (aç/kapa)"},
+                {"Harass.Toggle", "Dürtme (aç/kapa)"},
+                /* Submenus */
+                {"Keys", "Düğmeler"},
+                {"Prediction", "Tutturma"},
+                {"Combo", "Kombo"},
+                {"Harass", "Dürtme"},
+                {"Clear", "Temizleme"},
+                {"LaneClear", "MinyonTemizleme"},
+                {"LastHit", "SonVuruş"},
+                {"JungleClear", "OrmanTemizleme"},
+                {"KillSteal", "KillÇalma"},
+                {"Automatic", "Otomatik"},
+                {"Evader", "Dodgelama"},
+                {"Drawings", "Çizimler"},
+                {"Flee", "Kaçış"},
+                {"Misc", "Çeşitli"},
+                /* LastHit */
+                {"Never", "Asla"},
+                {"Smartly", "Akıllıca"},
+                {"Always", "Hep"},
+                /* Checkbox, sliders and others */
+                {"MinimumManaPercent", "Minimum Mana Yüzdesi"},
+                {"DisableUnderEnemyTurret", "Düşman kulesinin altında devre dışı bırak"},
+                {"IfKillable", "Öldürülebilir ise"},
+                {"IfNeeded", "Gerekirse"},
+                {"UseIgnite", "Tutuştur kullan"},
+                {"UseIgnite.Killable", "Hedef öldürülebilir ise tutuştur kullan"},
+                {"UseSmite", "Çarp kullan"},
+                {"UseQ", "Q kullan"},
+                {"UseQ.Hit", "Hasar {0} dan büyükse Q kullan"},
+                {"UseQ.Gapcloser", "Yaklaşma/atılma yapan rakibe Q kullan"},
+                {"UseQ.Interrupter", "Odaklanılan yeteneklere Q kullan"},
+                {"UseW", "W kullan"},
+                {"UseW.Hit", "Hasar {0} dan büyükse W kullan"},
+                {"UseW.Gapcloser", "Yaklaşma/atılma yapan rakibe W kullan"},
+                {"UseW.Interrupter", "Odaklanılan yeteneklere W kullan"},
+                {"UseE", "E kullan"},
+                {"UseE.Hit", "Hasar {0} dan büyükse E kullan"},
+                {"UseE.Gapcloser", "Yaklaşma/atılma yapan rakibe E kullan"},
+                {"UseE.Interrupter", "Odaklanılan yeteneklere E kullan"},
+                {"UseR", "R kullan"},
+                {"UseR.Killable", "Hedef öldürülebilir ise R kullan"},
+                {"UseR.Hit", "Hasar {0} dan büyükse R kullan"},
+                {"UseR.Gapcloser", "Yaklaşma/atılma yapan rakibe R kullan"},
+                {"UseR.Interrupter", "Odaklanılan yeteneklere R kullan"},
+                {"R.BlackList", "İşaretlenenlere R kullanma:"},
+                {"Items", "Saldırı amaçlı eşyaları kullan"},
+                {"Zhonyas", "Canım % {0} dan azsa Zhonya bas"},
+                /* Zed */
+                {"R.Prevent", "R'den önce yetenek kullanma"},
+                {"R.Combo.Mode", "R Kombo Modu"},
+                {"UseQ.Collision", "Q atmadan önce kolüzyona dikkat et (daha çok hasar)"},
+                {"UseW1", "W1 kullan (Gölge at)"},
+                {"UseW2", "W2 kullan (Gölgeyle yer değiş)"},
+                {"UseR1", "R1 kullan (Ulti at)"},
+                {"UseR2", "R2 kullan (Gölgeyle yer değiş)"},
+                {"SwapDead", "Hedef ölecekse gölgelerin biriyle yer değiştir"},
+                {"SwapGapclose", "Gölgelerle yer değiştirerek hedefe yaklaş"},
+                {"SwapKillable", "Hedef öldürülebilirse gölgeyle yaklaş"},
+                {"SwapHP", "Canım % {0} dan azsa gölgeyle yer değiştir"},
+                {"Line", "Çizgi"},
+                {"Triangle", "Üçgen"},
+                {"MousePos", "FareKonumu"},
+                {"IsDead", "Öldü"},
+                {"Passive", "Pasif"},
+                {"Draw.WShadow", "W gölgesine daire koy"},
+                {"Draw.RShadow", "R gölgesine daire koy"},
+                {"Draw.TargetIsDead", "Hedef ölecekse 'öldü' yaz"},
+                {"Draw.PassiveIsReady", "Pasif hedefte çalışabilecekse 'Pasif' yaz"},
+                /* Cassiopeia */
+                {"Poisoned", "Zehirlenmiş ise"},
+                {"AssistedUltimate", "Ulti yardımcısı"},
+                /* Diana */
+                {"UseQR", "Hedefe yaklaşmak için minyona QR kullan"},
+                {"R.2nd", "Her zaman ikinci R'yi kullan"},
+                /* Orianna */
+                {"TeamFight.Count", "Yakında {0} dan fazla rakip varsa Takım Savaşı Mantığını kullan"},
+                {"Common.Logic", "Genel Mantık"},
+                {"1vs1.Logic", "1 vs 1 mantığı"},
+                {"TeamFight.Logic", "Takım Savaşı Mantığı"},
+                {"UseE.HealthPercent", "Canım % {0} den azsa E kullan"},
+                {"UseE.Spells", "Rakip yeteneklerine karşı E kullan"},
+                {"Draw.Ball", "Topun konumunu çiz"},
+                {"R.Block", "Kimseye çarpmayacaksa R'yi engelle"},
+                /* Drawings */
+                {"Draw.Disable", "Bütün çizimleri devre dışı bırak"},
+                {"Draw.DamageIndicator", "Hedefe verilebilecek hasarı çiz"},
+                {"Draw.Target", "Hedefin altına daire çiz"},
+                {"Draw.Q", "Q menzilini çiz"},
+                {"Draw.W", "W menzilini çiz"},
+                {"Draw.E", "E menzilini çiz"},
+                {"Draw.R", "R menzilini çiz"},
+                {"Draw.Toggles", "Aç/kapa özelliklerinin durumunu yaz"},
+                /* Prediction*/
+                {"Q.HitChancePercent", "Q: VurmaŞansıYüzdesi"},
+                {"W.HitChancePercent", "W: VurmaŞansıYüzdesi"},
+                {"E.HitChancePercent", "E: VurmaŞansıYüzdesi"},
+                {"QE.HitChancePercent", "QE: VurmaŞansıYüzdesi"},
+                {"R.HitChancePercent", "R: VurmaŞansıYüzdesi"}
+            };
         }
 
         public static Language CurrentLanguage
@@ -737,7 +1071,7 @@ namespace KoreanAIO.Utilities
 
         public static void Initialize()
         {
-            MenuManager.Translate(Language.English, (Language)MenuManager.Menu["Language"].Cast<Slider>().CurrentValue);
+            MenuManager.Translate(Language.English, (Language) MenuManager.Menu["Language"].Cast<Slider>().CurrentValue);
         }
 
         public static string GetTranslationFromId(this string name)
@@ -762,14 +1096,22 @@ namespace KoreanAIO.Utilities
             {
                 if (Translations.ContainsKey(from))
                 {
-                    foreach (var pair in from pair in Translations[@from] where pair.Value == displayName where Translations.ContainsKey(to) where Translations[to].ContainsKey(pair.Key) select pair)
+                    foreach (var pair in from pair in Translations[@from]
+                        where pair.Value == displayName
+                        where Translations.ContainsKey(to)
+                        where Translations[to].ContainsKey(pair.Key)
+                        select pair)
                     {
                         return Translations[to][pair.Key];
                     }
                 }
                 if (Translations.ContainsKey(Language.English))
                 {
-                    return (from pair in Translations[Language.English] where pair.Value == displayName where Translations.ContainsKey(to) where Translations[to].ContainsKey(pair.Key) select Translations[to][pair.Key]).FirstOrDefault();
+                    return (from pair in Translations[Language.English]
+                        where pair.Value == displayName
+                        where Translations.ContainsKey(to)
+                        where Translations[to].ContainsKey(pair.Key)
+                        select Translations[to][pair.Key]).FirstOrDefault();
                 }
             }
             return null;

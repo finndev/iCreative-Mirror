@@ -6,7 +6,8 @@ namespace KoreanAIO.Managers
 {
     public static class DrawingsManager
     {
-        public static Menu Menu {
+        public static Menu Menu
+        {
             get { return MenuManager.GetSubMenu("Drawings"); }
         }
 
@@ -35,6 +36,5 @@ namespace KoreanAIO.Managers
                 }
             };
         }
-
     }
 }

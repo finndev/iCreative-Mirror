@@ -17,6 +17,7 @@ namespace KoreanAIO.Managers
         private static readonly Dictionary<KeyBind, Text> Texts = new Dictionary<KeyBind, Text>();
         private static readonly Color EnabledColor = Color.FromArgb(255, 255, 255, 255);
         private static readonly Color DisabledColor = Color.FromArgb(100, 255, 255, 255);
+
         public static void RegisterToggle(KeyBind key, Action action)
         {
             if (!Toggles.ContainsKey(key))
@@ -42,8 +43,11 @@ namespace KoreanAIO.Managers
                 {
                     var value = pair.Key.CurrentValue;
                     pair.Value.Color = value ? EnabledColor : DisabledColor;
-                    pair.Value.TextValue = pair.Key.DisplayName + ": " + (value ? "Enabled".GetTranslationFromId() : "Disabled".GetTranslationFromId());
-                    pair.Value.Position = AIO.MyHero.Position.WorldToScreen() + new Vector2(-pair.Value.Bounding.Width / 2f, 45f + (pair.Value.Bounding.Height + 5f) * count);
+                    pair.Value.TextValue = pair.Key.DisplayName + ": " +
+                                           (value ? "Enabled".GetTranslationFromId() : "Disabled".GetTranslationFromId());
+                    pair.Value.Position = AIO.MyHero.Position.WorldToScreen() +
+                                          new Vector2(-pair.Value.Bounding.Width/2f,
+                                              45f + (pair.Value.Bounding.Height + 5f)*count);
                     pair.Value.Draw();
                     count++;
                 }

@@ -46,8 +46,15 @@ namespace KoreanAIO.Model
         private readonly BestPositionResult _bestObjectInLine = new BestPositionResult();
         private readonly Dictionary<Obj_AI_Base, float> _cachedDamage = new Dictionary<Obj_AI_Base, float>();
 
+        private readonly Dictionary<int, Dictionary<int, Dictionary<int, bool>>> _cachedIsOnSegment =
+            new Dictionary<int, Dictionary<int, Dictionary<int, bool>>>();
+
+        private readonly Dictionary<int, Dictionary<int, bool>> _cachedObjectsInRange =
+            new Dictionary<int, Dictionary<int, bool>>();
+
         private readonly List<Obj_AI_Base> _enemyHeroes = new List<Obj_AI_Base>();
         private readonly List<Obj_AI_Base> _enemyMinions = new List<Obj_AI_Base>();
+        private readonly List<Obj_AI_Base> _killableMinions = new List<Obj_AI_Base>();
         private readonly List<Obj_AI_Base> _laneClearMinions = new List<Obj_AI_Base>();
         private readonly List<Obj_AI_Base> _monsters = new List<Obj_AI_Base>();
 
@@ -60,9 +67,6 @@ namespace KoreanAIO.Model
         private bool _monstersCanBeCalculated;
 
         private string _name;
-        private readonly List<Obj_AI_Base> _killableMinions = new List<Obj_AI_Base>();
-        private readonly Dictionary<int, Dictionary<int, Dictionary<int, bool>>> _cachedIsOnSegment = new Dictionary<int, Dictionary<int, Dictionary<int, bool>>>();
-        private readonly Dictionary<int, Dictionary<int, bool>> _cachedObjectsInRange = new Dictionary<int, Dictionary<int, bool>>();
         private int _speed;
 
         private int _width;
@@ -72,11 +76,6 @@ namespace KoreanAIO.Model
 
         public int CastDelay;
         public bool CollidesWithYasuoWall = true;
-
-        public SpellDataInst Instance
-        {
-            get { return Slot != SpellSlot.Unknown ? AIO.MyHero.Spellbook.GetSpell(Slot) : null; }
-        }
 
         public int LastCastTime;
         public Vector3 LastEndPosition;
@@ -136,6 +135,11 @@ namespace KoreanAIO.Model
             };
         }
 
+        public SpellDataInst Instance
+        {
+            get { return Slot != SpellSlot.Unknown ? AIO.MyHero.Spellbook.GetSpell(Slot) : null; }
+        }
+
         public List<Obj_AI_Base> EnemyHeroes
         {
             get
@@ -158,7 +162,8 @@ namespace KoreanAIO.Model
                 {
                     _laneClearMinionsCanBeCalculated = false;
                     _laneClearMinions.Clear();
-                    _laneClearMinions.AddRange((Orbwalker.LaneClearMinionsList.Concat(Orbwalker.UnKillableMinionsList)).Where(InRange));
+                    _laneClearMinions.AddRange(
+                        Orbwalker.LaneClearMinionsList.Concat(Orbwalker.UnKillableMinionsList).Where(InRange));
                 }
                 return _laneClearMinions;
             }
@@ -186,7 +191,8 @@ namespace KoreanAIO.Model
                 {
                     _monstersCanBeCalculated = false;
                     _monsters.Clear();
-                    _monsters.AddRange(EntityManager.MinionsAndMonsters.Monsters.Where(InRange).OrderByDescending(m => m.MaxHealth));
+                    _monsters.AddRange(
+                        EntityManager.MinionsAndMonsters.Monsters.Where(InRange).OrderByDescending(m => m.MaxHealth));
                 }
                 return _monsters;
             }
@@ -212,7 +218,7 @@ namespace KoreanAIO.Model
 
         public int Radius
         {
-            get { return Width / 2; }
+            get { return Width/2; }
         }
 
         public bool SourceObjectIsValid
@@ -227,7 +233,10 @@ namespace KoreanAIO.Model
 
         public bool RangeCheckSourceObjectIsValid
         {
-            get { return RangeCheckSourceObject != null && RangeCheckSourceObject.IsValid && !RangeCheckSourceObject.IsDead; }
+            get
+            {
+                return RangeCheckSourceObject != null && RangeCheckSourceObject.IsValid && !RangeCheckSourceObject.IsDead;
+            }
         }
 
         public GameObject RangeCheckSource
@@ -267,7 +276,7 @@ namespace KoreanAIO.Model
 
         public int RangeSqr
         {
-            get { return Range * Range; }
+            get { return Range*Range; }
         }
 
         public float HitChancePercent
@@ -297,7 +306,7 @@ namespace KoreanAIO.Model
 
         public bool IsKillable(Obj_AI_Base target)
         {
-            return target.TotalShieldHealth() + target.HPRegenRate * 2 <= GetDamage(target);
+            return target.TotalShieldHealth() + target.HPRegenRate*2 <= GetDamage(target);
         }
 
         public SpellBase AddConfigurableHitChancePercent(int defaultValue = 0)
@@ -306,14 +315,19 @@ namespace KoreanAIO.Model
             {
                 MenuManager.AddSubMenu("Prediction");
             }
-            Slider = MenuManager.GetSubMenu("Prediction").AddValue(SlotName, new Slider(SlotName + ": HitChancePercent", defaultValue > 0 ? defaultValue : (int)MinHitChancePercent));
+            Slider = MenuManager.GetSubMenu("Prediction")
+                .AddValue(SlotName,
+                    new Slider(SlotName + ": HitChancePercent",
+                        defaultValue > 0 ? defaultValue : (int) MinHitChancePercent));
             return this;
         }
 
         public SpellBase AddDrawings(bool defaultValue = true, ColorBGRA? color = null)
         {
-            var checkBox = MenuManager.GetSubMenu("Drawings").AddValue(SlotName, new CheckBox("Draw " + SlotName + " range", defaultValue));
-            CircleManager.Circles.Add(new Circle(checkBox, color ?? new ColorBGRA(255, 255, 255, 100), () => Range, () => IsReady, () => RangeCheckSource));
+            var checkBox = MenuManager.GetSubMenu("Drawings")
+                .AddValue(SlotName, new CheckBox("Draw " + SlotName + " range", defaultValue));
+            CircleManager.Circles.Add(new Circle(checkBox, color ?? new ColorBGRA(255, 255, 255, 100), () => Range,
+                () => IsReady, () => RangeCheckSource));
             return this;
         }
 
@@ -346,7 +360,7 @@ namespace KoreanAIO.Model
             var result = CastDelay;
             if (Speed != int.MaxValue)
             {
-                result += (int)(1000 * SourceObject.GetDistance(target) / Speed);
+                result += (int) (1000*SourceObject.GetDistance(target)/Speed);
             }
             return result;
         }
@@ -356,7 +370,7 @@ namespace KoreanAIO.Model
             var result = CastDelay;
             if (Speed != int.MaxValue)
             {
-                result += (int)(1000 * SourceObject.Distance(position) / Speed);
+                result += (int) (1000*SourceObject.Distance(position)/Speed);
             }
             return result;
         }
@@ -366,7 +380,8 @@ namespace KoreanAIO.Model
             switch (Type)
             {
                 case SpellType.Targeted:
-                    return RangeCheckSourceObject.InRange(target, Range + AIO.MyHero.BoundingRadius + target.BoundingRadius - 65);
+                    return RangeCheckSourceObject.InRange(target,
+                        Range + AIO.MyHero.BoundingRadius + target.BoundingRadius - 65);
                 case SpellType.Circular:
                     return RangeCheckSourceObject.InRange(target, Range + Radius + target.BoundingRadius);
                 case SpellType.Linear:
@@ -383,45 +398,52 @@ namespace KoreanAIO.Model
             switch (Type)
             {
                 case SpellType.Targeted:
-                    return RangeCheckSource.IsInRange(pred.CastPosition, Range + AIO.MyHero.BoundingRadius + target.BoundingRadius - 65);
+                    return RangeCheckSource.IsInRange(pred.CastPosition,
+                        Range + AIO.MyHero.BoundingRadius + target.BoundingRadius - 65);
                 case SpellType.Circular:
                     return source.IsInRange(pred.CastPosition, Range + Radius);
                 case SpellType.Linear:
                     return source.IsInRange(pred.CastPosition, Range);
             }
             //Self
-            return source.IsInRange(pred.CastPosition, Range + target.BoundingRadius / 2);
+            return source.IsInRange(pred.CastPosition, Range + target.BoundingRadius/2);
         }
 
         public PredictionResult GetPrediction(Obj_AI_Base target, CustomSettings custom = null)
         {
-            var source = (custom != null && custom.Source != null) ? custom.Source : Source;
+            var source = custom != null && custom.Source != null ? custom.Source : Source;
             if (!CachedPredictions.ContainsKey(source.NetworkId))
             {
                 CachedPredictions.Add(source.NetworkId, new Dictionary<int, PredictionResult>());
             }
             if (!CachedPredictions[source.NetworkId].ContainsKey(target.NetworkId))
             {
-                var speed = (custom != null && custom.Speed > 0) ? custom.Speed : Speed;
-                var castDelay = (custom != null && custom.CastDelay > 0) ? custom.CastDelay : CastDelay;
-                var range = (custom != null && custom.Range > 0) ? custom.Range : Range;
-                var width = (custom != null && custom.Width > 0) ? custom.Width : Width;
-                var allowedCollisionCount = (custom != null && custom.AllowedCollisionCount > 0) ? custom.AllowedCollisionCount : AllowedCollisionCount;
-                var type = (custom != null && custom.Type != SpellType.Unknown) ? custom.Type : Type;
+                var speed = custom != null && custom.Speed > 0 ? custom.Speed : Speed;
+                var castDelay = custom != null && custom.CastDelay > 0 ? custom.CastDelay : CastDelay;
+                var range = custom != null && custom.Range > 0 ? custom.Range : Range;
+                var width = custom != null && custom.Width > 0 ? custom.Width : Width;
+                var allowedCollisionCount = custom != null && custom.AllowedCollisionCount > 0
+                    ? custom.AllowedCollisionCount
+                    : AllowedCollisionCount;
+                var type = custom != null && custom.Type != SpellType.Unknown ? custom.Type : Type;
                 PredictionResult result;
                 switch (type)
                 {
                     case SpellType.Circular:
-                        result = Prediction.Position.PredictCircularMissile(target, range, width, castDelay, speed, source.Position);
+                        result = Prediction.Position.PredictCircularMissile(target, range, width, castDelay, speed,
+                            source.Position);
                         break;
                     case SpellType.Cone:
-                        result = Prediction.Position.PredictConeSpell(target, range, width, castDelay, speed, source.Position);
+                        result = Prediction.Position.PredictConeSpell(target, range, width, castDelay, speed,
+                            source.Position);
                         break;
                     case SpellType.Self:
-                        result = Prediction.Position.PredictCircularMissile(target, range, width, castDelay, speed, source.Position);
+                        result = Prediction.Position.PredictCircularMissile(target, range, width, castDelay, speed,
+                            source.Position);
                         break;
                     default:
-                        result = Prediction.Position.PredictLinearMissile(target, range, 2 * width, castDelay, speed, allowedCollisionCount, source.Position);
+                        result = Prediction.Position.PredictLinearMissile(target, range, 2*width, castDelay, speed,
+                            allowedCollisionCount, source.Position);
                         break;
                 }
                 CachedPredictions[source.NetworkId].Add(target.NetworkId, result);
@@ -449,7 +471,8 @@ namespace KoreanAIO.Model
             }
             if (ModeManager.LaneClear || ModeManager.LastHit || ModeManager.Harass)
             {
-                if (Orbwalker.LastTarget != null && Orbwalker.LastTarget.Type == GameObjectType.obj_AI_Minion && !Orbwalker.CanMove)
+                if (Orbwalker.LastTarget != null && Orbwalker.LastTarget.Type == GameObjectType.obj_AI_Minion &&
+                    !Orbwalker.CanMove)
                 {
                     return;
                 }
@@ -505,7 +528,8 @@ namespace KoreanAIO.Model
             }
             if (ModeManager.LaneClear || ModeManager.LastHit || ModeManager.Harass)
             {
-                if (Orbwalker.LastTarget != null && Orbwalker.LastTarget.Type == GameObjectType.obj_AI_Minion && !Orbwalker.CanMove)
+                if (Orbwalker.LastTarget != null && Orbwalker.LastTarget.Type == GameObjectType.obj_AI_Minion &&
+                    !Orbwalker.CanMove)
                 {
                     return;
                 }
@@ -650,14 +674,31 @@ namespace KoreanAIO.Model
                     {
                         if (LaneClearMinions.Count > 0)
                         {
-                            _killableMinions.AddRange(Prediction.Health.GetPrediction(LaneClearMinions.ToDictionary(minion => minion, GetArrivalTime)).Where(tuple => tuple.Value > 0 && GetDamage(tuple.Key) >= tuple.Value && tuple.Key.Health > tuple.Value).OrderByDescending(pair => pair.Key.MaxHealth).ThenBy(pair => pair.Value).ToDictionary(tuple => tuple.Key, tuple => tuple.Value).Keys);
+                            _killableMinions.AddRange(
+                                Prediction.Health.GetPrediction(LaneClearMinions.ToDictionary(minion => minion,
+                                    GetArrivalTime))
+                                    .Where(
+                                        tuple =>
+                                            tuple.Value > 0 && GetDamage(tuple.Key) >= tuple.Value &&
+                                            tuple.Key.Health > tuple.Value)
+                                    .OrderByDescending(pair => pair.Key.MaxHealth)
+                                    .ThenBy(pair => pair.Value)
+                                    .ToDictionary(tuple => tuple.Key, tuple => tuple.Value)
+                                    .Keys);
                         }
                     }
                     else if (type == LastHitType.Always)
                     {
                         if (EnemyMinions.Count > 0)
                         {
-                            _killableMinions.AddRange(Prediction.Health.GetPrediction(EnemyMinions.ToDictionary(minion => minion, GetArrivalTime)).Where(tuple => tuple.Value > 0 && GetDamage(tuple.Key) >= tuple.Value).OrderByDescending(pair => pair.Key.MaxHealth).ThenBy(pair => pair.Value).ToDictionary(tuple => tuple.Key, tuple => tuple.Value).Keys);
+                            _killableMinions.AddRange(
+                                Prediction.Health.GetPrediction(EnemyMinions.ToDictionary(minion => minion,
+                                    GetArrivalTime))
+                                    .Where(tuple => tuple.Value > 0 && GetDamage(tuple.Key) >= tuple.Value)
+                                    .OrderByDescending(pair => pair.Key.MaxHealth)
+                                    .ThenBy(pair => pair.Value)
+                                    .ToDictionary(tuple => tuple.Key, tuple => tuple.Value)
+                                    .Keys);
                         }
                     }
                 }
@@ -682,7 +723,12 @@ namespace KoreanAIO.Model
             }
             if (!_cachedIsOnSegment[point.NetworkId][startPoint.NetworkId].ContainsKey(endPoint.NetworkId))
             {
-                _cachedIsOnSegment[point.NetworkId][startPoint.NetworkId].Add(endPoint.NetworkId, GetPrediction(point).HitChancePercent >= HitChancePercent / 2 && GetPrediction(point).CastPosition.To2D().Distance(startPoint.Position.To2D(), GetPrediction(endPoint).CastPosition.To2D(), true, true) <= (Width + point.BoundingRadius).Pow());
+                _cachedIsOnSegment[point.NetworkId][startPoint.NetworkId].Add(endPoint.NetworkId,
+                    GetPrediction(point).HitChancePercent >= HitChancePercent/2 &&
+                    GetPrediction(point)
+                        .CastPosition.To2D()
+                        .Distance(startPoint.Position.To2D(), GetPrediction(endPoint).CastPosition.To2D(), true, true) <=
+                    (Width + point.BoundingRadius).Pow());
             }
             if (!_cachedIsOnSegment[point.NetworkId].ContainsKey(endPoint.NetworkId))
             {
@@ -690,7 +736,8 @@ namespace KoreanAIO.Model
             }
             if (!_cachedIsOnSegment[point.NetworkId][endPoint.NetworkId].ContainsKey(startPoint.NetworkId))
             {
-                _cachedIsOnSegment[point.NetworkId][endPoint.NetworkId].Add(startPoint.NetworkId, _cachedIsOnSegment[point.NetworkId][startPoint.NetworkId][endPoint.NetworkId]);
+                _cachedIsOnSegment[point.NetworkId][endPoint.NetworkId].Add(startPoint.NetworkId,
+                    _cachedIsOnSegment[point.NetworkId][startPoint.NetworkId][endPoint.NetworkId]);
             }
             return _cachedIsOnSegment[point.NetworkId][startPoint.NetworkId][endPoint.NetworkId];
         }
@@ -705,7 +752,8 @@ namespace KoreanAIO.Model
             return hash;
         }
 
-        public BestPositionResult GetBestObjectInLine(List<Obj_AI_Base> objAiBases, int minHits = 1, Obj_AI_Base target = null)
+        public BestPositionResult GetBestObjectInLine(List<Obj_AI_Base> objAiBases, int minHits = 1,
+            Obj_AI_Base target = null)
         {
             if (_bestObjectInLine.Hits == 0)
             {
@@ -747,7 +795,11 @@ namespace KoreanAIO.Model
             if (IsReady && list.Count > 0)
             {
                 var startObject = startObj ?? Source;
-                hash.AddRange(list.Where(obj => GetPrediction(obj).HitChancePercent >= HitChancePercent && PredictedPosInRange(obj, startObject)));
+                hash.AddRange(
+                    list.Where(
+                        obj =>
+                            GetPrediction(obj).HitChancePercent >= HitChancePercent &&
+                            PredictedPosInRange(obj, startObject)));
             }
             return hash;
         }
@@ -760,7 +812,10 @@ namespace KoreanAIO.Model
             }
             if (!_cachedObjectsInRange[target1.NetworkId].ContainsKey(target2.NetworkId))
             {
-                _cachedObjectsInRange[target1.NetworkId].Add(target2.NetworkId, GetPrediction(target2).HitChancePercent >= HitChancePercent / 2 && GetPrediction(target1).CastPosition.IsInRange(GetPrediction(target2).CastPosition, Radius + target1.BoundingRadius));
+                _cachedObjectsInRange[target1.NetworkId].Add(target2.NetworkId,
+                    GetPrediction(target2).HitChancePercent >= HitChancePercent/2 &&
+                    GetPrediction(target1)
+                        .CastPosition.IsInRange(GetPrediction(target2).CastPosition, Radius + target1.BoundingRadius));
             }
             if (!_cachedObjectsInRange.ContainsKey(target2.NetworkId))
             {
@@ -768,12 +823,14 @@ namespace KoreanAIO.Model
             }
             if (!_cachedObjectsInRange[target2.NetworkId].ContainsKey(target1.NetworkId))
             {
-                _cachedObjectsInRange[target2.NetworkId].Add(target1.NetworkId, _cachedObjectsInRange[target1.NetworkId][target2.NetworkId]);
+                _cachedObjectsInRange[target2.NetworkId].Add(target1.NetworkId,
+                    _cachedObjectsInRange[target1.NetworkId][target2.NetworkId]);
             }
             return _cachedObjectsInRange[target1.NetworkId][target2.NetworkId];
         }
 
-        public BestPositionResult GetBestCircularObject(List<Obj_AI_Base> objAiBases, int minHits = 1, Obj_AI_Base target = null)
+        public BestPositionResult GetBestCircularObject(List<Obj_AI_Base> objAiBases, int minHits = 1,
+            Obj_AI_Base target = null)
         {
             if (_bestCircularObject.Hits == 0)
             {

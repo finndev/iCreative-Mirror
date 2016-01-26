@@ -14,8 +14,8 @@ namespace KoreanAIO.Utilities
 
     public static class FpsBooster
     {
-        private static int _currentIndex;
         private const int MaxIndex = 6;
+        private static int _currentIndex;
 
         public static void Initialize()
         {
@@ -33,9 +33,10 @@ namespace KoreanAIO.Utilities
         {
             return indexs.Contains(_currentIndex);
         }
+
         public static bool CanBeExecuted(CalculationType type)
         {
-            return (int)type == _currentIndex;
+            return (int) type == _currentIndex;
         }
     }
 }

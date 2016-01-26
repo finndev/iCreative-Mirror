@@ -10,15 +10,15 @@ namespace KoreanAIO.Managers
 {
     public class MyValueBase
     {
-        public ValueBase Value;
         public string LastTranslation;
         public string OriginalName;
+        public ValueBase Value;
     }
 
     public class MyMenu
     {
-        public Menu Menu;
         public string LastTranslation;
+        public Menu Menu;
         public string OriginalName;
     }
 
@@ -28,18 +28,26 @@ namespace KoreanAIO.Managers
         public static bool MenuCompleted;
         public static readonly Dictionary<string, MyMenu> SubMenus = new Dictionary<string, MyMenu>();
         public static readonly List<Action> PendingActions = new List<Action>();
-        public static readonly Dictionary<string, Dictionary<string, MyValueBase>> ValuesBasePerMenu = new Dictionary<string, Dictionary<string, MyValueBase>>();
-        public static readonly List<Tuple<Slider, string, string[]>> StringLists = new List<Tuple<Slider, string, string[]>>();
+
+        public static readonly Dictionary<string, Dictionary<string, MyValueBase>> ValuesBasePerMenu =
+            new Dictionary<string, Dictionary<string, MyValueBase>>();
+
+        public static readonly List<Tuple<Slider, string, string[]>> StringLists =
+            new List<Tuple<Slider, string, string[]>>();
+
         public static void Initialize()
         {
             Menu = MainMenu.AddMenu("Korean AIO", "KoreanAIO Build: 6.1.3, Champion: " + AIO.MyHero.ChampionName);
-            var displayNames = Enum.GetValues(typeof(Language)).Cast<Language>().ToArray();
-            var slider = Menu.Add("Language", new Slider("Language: English", (int)LanguageTranslator.CurrentCulture, 0, displayNames.Length - 1));
-            slider.DisplayName = "Language".GetTranslationFromId() + ": " + displayNames[slider.CurrentValue].ToString().GetTranslationFromId();
-            slider.OnValueChange += delegate (ValueBase<int> sender, ValueBase<int>.ValueChangeArgs args)
+            var displayNames = Enum.GetValues(typeof (Language)).Cast<Language>().ToArray();
+            var slider = Menu.Add("Language",
+                new Slider("Language: English", (int) LanguageTranslator.CurrentCulture, 0, displayNames.Length - 1));
+            slider.DisplayName = "Language".GetTranslationFromId() + ": " +
+                                 displayNames[slider.CurrentValue].ToString().GetTranslationFromId();
+            slider.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs args)
             {
-                sender.DisplayName = "Language".GetTranslationFromId() + ": " + displayNames[args.NewValue].ToString().GetTranslationFromId();
-                Translate(((Language)args.OldValue), ((Language)args.NewValue));
+                sender.DisplayName = "Language".GetTranslationFromId() + ": " +
+                                     displayNames[args.NewValue].ToString().GetTranslationFromId();
+                Translate((Language) args.OldValue, (Language) args.NewValue);
             };
         }
 
@@ -50,13 +58,14 @@ namespace KoreanAIO.Managers
             {
                 ValuesBasePerMenu.Add(menu.UniqueMenuId, new Dictionary<string, MyValueBase>());
             }
-            ValuesBasePerMenu[menu.UniqueMenuId].Add(id, new MyValueBase { Value = value, LastTranslation = value.DisplayName, OriginalName = value.DisplayName });
+            ValuesBasePerMenu[menu.UniqueMenuId].Add(id,
+                new MyValueBase {Value = value, LastTranslation = value.DisplayName, OriginalName = value.DisplayName});
             return value;
         }
 
         public static Menu AddSubMenu(string name)
         {
-            SubMenus.Add(name, new MyMenu { Menu = Menu.AddSubMenu(name), LastTranslation = name, OriginalName = name });
+            SubMenus.Add(name, new MyMenu {Menu = Menu.AddSubMenu(name), LastTranslation = name, OriginalName = name});
             return SubMenus[name].Menu;
         }
 
@@ -64,7 +73,9 @@ namespace KoreanAIO.Managers
         {
             foreach (var pair in SubMenus)
             {
-                var translation = LanguageTranslator.GetTranslationFromDisplayName(from, to, pair.Value.LastTranslation) ?? pair.Value.OriginalName;
+                var translation =
+                    LanguageTranslator.GetTranslationFromDisplayName(from, to, pair.Value.LastTranslation) ??
+                    pair.Value.OriginalName;
                 if (translation != null)
                 {
                     pair.Value.Menu.DisplayName = translation;
@@ -75,7 +86,9 @@ namespace KoreanAIO.Managers
             {
                 foreach (var pair2 in pair.Value)
                 {
-                    var translation = LanguageTranslator.GetTranslationFromDisplayName(from, to, pair2.Value.LastTranslation) ?? pair2.Value.OriginalName;
+                    var translation =
+                        LanguageTranslator.GetTranslationFromDisplayName(from, to, pair2.Value.LastTranslation) ??
+                        pair2.Value.OriginalName;
                     if (translation != null)
                     {
                         pair2.Value.Value.DisplayName = translation;
@@ -85,7 +98,12 @@ namespace KoreanAIO.Managers
             }
             foreach (var tuple in StringLists)
             {
-                tuple.Item1.DisplayName = (LanguageTranslator.GetTranslationFromDisplayName(Language.English, LanguageTranslator.CurrentLanguage, tuple.Item2) ?? tuple.Item2) + ": " + (LanguageTranslator.GetTranslationFromDisplayName(Language.English, LanguageTranslator.CurrentLanguage, tuple.Item3[tuple.Item1.CurrentValue]) ?? tuple.Item3[tuple.Item1.CurrentValue]);
+                tuple.Item1.DisplayName =
+                    (LanguageTranslator.GetTranslationFromDisplayName(Language.English,
+                        LanguageTranslator.CurrentLanguage, tuple.Item2) ?? tuple.Item2) + ": " +
+                    (LanguageTranslator.GetTranslationFromDisplayName(Language.English,
+                        LanguageTranslator.CurrentLanguage, tuple.Item3[tuple.Item1.CurrentValue]) ??
+                     tuple.Item3[tuple.Item1.CurrentValue]);
             }
         }
 
@@ -96,13 +114,16 @@ namespace KoreanAIO.Managers
             menu.AddValue("Smite", new CheckBox("Use Smite"));
             menu.AddSeparator();
         }
+
         public static void AddDrawingsMenu()
         {
             var menu = AddSubMenu("Drawings");
             menu.AddValue("Disable", new CheckBox("Disable all drawings", false));
             menu.AddSeparator();
             menu.AddValue("DamageIndicator", new CheckBox("Draw damage indicator"));
-            CircleManager.Circles.Add(new Circle(menu.AddValue("Target", new CheckBox("Draw circle on target")), new ColorBGRA(255, 0, 0, 100), () => 120f, () => AIO.CurrentChampion.Target != null, () => AIO.CurrentChampion.Target) { Width = 5 });
+            CircleManager.Circles.Add(new Circle(menu.AddValue("Target", new CheckBox("Draw circle on target")),
+                new ColorBGRA(255, 0, 0, 100), () => 120f, () => AIO.CurrentChampion.Target != null,
+                () => AIO.CurrentChampion.Target) {Width = 5});
             menu.AddSeparator();
         }
 
@@ -112,14 +133,25 @@ namespace KoreanAIO.Managers
         }
 
 
-        public static void AddStringList(this Menu m, string uniqueId, string displayName, string[] displayNames, int defaultValue = 0)
+        public static void AddStringList(this Menu m, string uniqueId, string displayName, string[] displayNames,
+            int defaultValue = 0)
         {
             var slider = m.Add(uniqueId, new Slider(displayName, defaultValue, 0, displayNames.Length - 1));
-            slider.DisplayName = (LanguageTranslator.GetTranslationFromDisplayName(Language.English, LanguageTranslator.CurrentLanguage, displayName) ?? displayName) + ": " + (LanguageTranslator.GetTranslationFromDisplayName(Language.English, LanguageTranslator.CurrentLanguage, displayNames[slider.CurrentValue]) ?? displayNames[slider.CurrentValue]);
-            slider.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs args)
-            {
-                slider.DisplayName = (LanguageTranslator.GetTranslationFromDisplayName(Language.English, LanguageTranslator.CurrentLanguage, displayName) ?? displayName) + ": " + (LanguageTranslator.GetTranslationFromDisplayName(Language.English, LanguageTranslator.CurrentLanguage, displayNames[args.NewValue]) ?? displayNames[args.NewValue]);
-            };
+            slider.DisplayName =
+                (LanguageTranslator.GetTranslationFromDisplayName(Language.English, LanguageTranslator.CurrentLanguage,
+                    displayName) ?? displayName) + ": " +
+                (LanguageTranslator.GetTranslationFromDisplayName(Language.English, LanguageTranslator.CurrentLanguage,
+                    displayNames[slider.CurrentValue]) ?? displayNames[slider.CurrentValue]);
+            slider.OnValueChange +=
+                delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs args)
+                {
+                    slider.DisplayName =
+                        (LanguageTranslator.GetTranslationFromDisplayName(Language.English,
+                            LanguageTranslator.CurrentLanguage, displayName) ?? displayName) + ": " +
+                        (LanguageTranslator.GetTranslationFromDisplayName(Language.English,
+                            LanguageTranslator.CurrentLanguage, displayNames[args.NewValue]) ??
+                         displayNames[args.NewValue]);
+                };
             StringLists.Add(new Tuple<Slider, string, string[]>(slider, displayName, displayNames));
         }
 
@@ -141,6 +173,5 @@ namespace KoreanAIO.Managers
         {
             return m != null && AIO.CurrentChampion != null && AIO.Initialized && m[s].Cast<KeyBind>().CurrentValue;
         }
-
     }
 }

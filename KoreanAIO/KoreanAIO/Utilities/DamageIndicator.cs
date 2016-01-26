@@ -76,11 +76,11 @@ namespace KoreanAIO.Utilities
                     if (health > 0f)
                     {
                         var damage = d.Damage(enemy);
-                        var afterHealth = (health - damage);
-                        var damagePercent = (afterHealth > 0f ? afterHealth : 0f) / maxHealth;
-                        var currentHealthPercent = health / maxHealth;
-                        var startPoint = new Vector2(damagePercent * BarWidth, 0);
-                        var endPoint = new Vector2(currentHealthPercent * BarWidth, 0);
+                        var afterHealth = health - damage;
+                        var damagePercent = (afterHealth > 0f ? afterHealth : 0f)/maxHealth;
+                        var currentHealthPercent = health/maxHealth;
+                        var startPoint = new Vector2(damagePercent*BarWidth, 0);
+                        var endPoint = new Vector2(currentHealthPercent*BarWidth, 0);
                         Drawing.DrawLine(barPoint + startPoint, barPoint + endPoint, BarHeight, d.Color);
                         health -= damage;
                         lastStartPoint = startPoint;
@@ -89,7 +89,7 @@ namespace KoreanAIO.Utilities
                 if (lastStartPoint.X > -1 && lastStartPoint.Y > -1 && enemy.Health > 0)
                 {
                     var textPoint = barPosition + new Vector2(TextOffset.X, TextOffset.Y);
-                    var text = Math.Min(100 - (int)(health / enemy.TotalShieldHealth() * 100), 100) + "%";
+                    var text = Math.Min(100 - (int) (health/enemy.TotalShieldHealth()*100), 100) + "%";
                     Drawing.DrawText(textPoint + lastStartPoint, Color.White, text, 6);
                 }
                 /*

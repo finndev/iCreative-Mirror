@@ -6,6 +6,8 @@ using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
 using KoreanAIO.Champions;
+using KoreanAIO.Managers;
+using KoreanAIO.Utilities;
 
 namespace KoreanAIO
 {
@@ -13,11 +15,6 @@ namespace KoreanAIO
     public static class AIO
     {
         public static ChampionBase CurrentChampion;
-
-        public static AIHeroClient MyHero
-        {
-            get { return Player.Instance; }
-        }
 
         public static HashSet<Champion> SupportedChampions = new HashSet<Champion>
         {
@@ -27,20 +24,26 @@ namespace KoreanAIO
             Champion.Zed
         };
 
-        public static bool Initialized = false;
+        public static bool Initialized;
+
         public static List<Action> Initializers = new List<Action>
         {
-            Managers.SpellManager.Initialize,
-            Managers.UnitManager.Initialize,
-            Managers.DrawingsManager.Initialize,
-            Managers.MissileManager.Initialize,
-            Managers.YasuoWallManager.Initialize,
-            Utilities.DamageIndicator.Initialize,
-            Managers.ItemManager.Initialize,
-            Utilities.FpsBooster.Initialize,
-            Managers.CacheManager.Initialize,
-            Utilities.LanguageTranslator.Initialize
+            SpellManager.Initialize,
+            UnitManager.Initialize,
+            DrawingsManager.Initialize,
+            MissileManager.Initialize,
+            YasuoWallManager.Initialize,
+            DamageIndicator.Initialize,
+            ItemManager.Initialize,
+            FpsBooster.Initialize,
+            CacheManager.Initialize,
+            LanguageTranslator.Initialize
         };
+
+        public static AIHeroClient MyHero
+        {
+            get { return Player.Instance; }
+        }
 
         public static void WriteInConsole(string message)
         {
@@ -86,10 +89,7 @@ namespace KoreanAIO
                     }
                 };
                 */
-                Core.DelayAction(delegate
-                {
-                    LoadChampion(MyHero.Hero);
-                }, 1000);
+                Core.DelayAction(delegate { LoadChampion(MyHero.Hero); }, 1000);
             };
         }
 
@@ -99,7 +99,12 @@ namespace KoreanAIO
             {
                 if (SupportedChampions.Contains(champion))
                 {
-                    CurrentChampion = (ChampionBase)Activator.CreateInstance(Assembly.GetExecutingAssembly().GetTypes().First(type => type.Name.Equals(champion.ToString().Replace(" ", ""))));
+                    CurrentChampion =
+                        (ChampionBase)
+                            Activator.CreateInstance(
+                                Assembly.GetExecutingAssembly()
+                                    .GetTypes()
+                                    .First(type => type.Name.Equals(champion.ToString().Replace(" ", ""))));
                     foreach (var action in Initializers)
                     {
                         action();
