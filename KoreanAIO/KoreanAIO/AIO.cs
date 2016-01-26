@@ -89,7 +89,7 @@ namespace KoreanAIO
                     }
                 };
                 */
-                Core.DelayAction(delegate { LoadChampion(MyHero.Hero); }, 1000);
+                LoadChampion(MyHero.Hero);
             };
         }
 

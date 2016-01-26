@@ -12,6 +12,7 @@ namespace KoreanAIO.Utilities
         Spanish,
         French,
         German,
+        Dutch,
         Italian,
         Portuguese,
         Polish,
@@ -938,7 +939,6 @@ namespace KoreanAIO.Utilities
                 {"QE.HitChancePercent", "QE: HitChancePercent"},
                 {"R.HitChancePercent", "R: HitChancePercent"}
             };
-
             Translations[Language.Turkish] = new Dictionary<string, string>
             {
                 {"Language", "Dil"},
@@ -1051,7 +1051,118 @@ namespace KoreanAIO.Utilities
                 {"QE.HitChancePercent", "QE: VurmaŞansıYüzdesi"},
                 {"R.HitChancePercent", "R: VurmaŞansıYüzdesi"}
             };
-
+            Translations[Language.Dutch] = new Dictionary<string, string>
+            {
+                {"Language", "Kieli"},
+                {"Dutch", "Dutch"},
+                {"Enabled", "Enabled"},
+                {"Disabled", "Disabled"},
+                {"Available", "Available"},
+                /* Keys */
+                {"Combo.WithoutR", "Combo without R"},
+                {"Harass.WEQ", "Harass WEQ"},
+                /* Toggles */
+                {"LastHit.Toggle", "LastHit Toggle"},
+                {"Harass.Toggle", "Harass Toggle"},
+                /* Submenus */
+                {"Keys", "Keys"},
+                {"Prediction", "Prediction"},
+                {"Combo", "Combo"},
+                {"Harass", "Harass"},
+                {"Clear", "Clear"},
+                {"LaneClear", "LaneClear"},
+                {"LastHit", "LastHit"},
+                {"JungleClear", "JungleClear"},
+                {"KillSteal", "KillSteal"},
+                {"Automatic", "Automatic"},
+                {"Evader", "Evader"},
+                {"Drawings", "Drawings"},
+                {"Flee", "Flee"},
+                {"Misc", "Misc"},
+                /* LastHit */
+                {"Never", "Never"},
+                {"Smartly", "Smartly"},
+                {"Always", "Always"},
+                /* Checkbox, sliders and others */
+                {"MinimumManaPercent", "Minimum Mana Percent"},
+                {"DisableUnderEnemyTurret", "Disable under enemy turret"},
+                {"IfKillable", "If killable"},
+                {"IfNeeded", "If needed"},
+                {"UseIgnite", "Use Ignite"},
+                {"UseIgnite.Killable", "Use Ignite if target is killable"},
+                {"UseSmite", "Use Smite"},
+                {"UseQ", "Use Q"},
+                {"UseQ.Hit", "Use Q if hit is greater than {0}"},
+                {"UseQ.Gapcloser", "Use Q on hero gapclosing / dashing"},
+                {"UseQ.Interrupter", "Use Q on channeling spells"},
+                {"UseW", "Use W"},
+                {"UseW.Hit", "Use W if hit is greater than {0}"},
+                {"UseW.Gapcloser", "Use W on hero gapclosing / dashing"},
+                {"UseW.Interrupter", "Use W on channeling spells"},
+                {"UseE", "Use E"},
+                {"UseE.Hit", "Use E if hit is greater than {0}"},
+                {"UseE.Gapcloser", "Use E on hero gapclosing / dashing"},
+                {"UseE.Interrupter", "Use E on channeling spells"},
+                {"UseR", "Use R"},
+                {"UseR.Killable", "Use R if target is killable"},
+                {"UseR.Hit", "Use R if hit is greater than {0}"},
+                {"UseR.Gapcloser", "Use R on hero gapclosing / dashing"},
+                {"UseR.Interrupter", "Use R on channeling spells"},
+                {"R.BlackList", "Don't use R on:"},
+                {"Items", "Use offensive items"},
+                {"Zhonyas", "Use Zhonyas if my % of health is less than {0}"},
+                /* Zed */
+                {"R.Prevent", "Don't use spells before R"},
+                {"R.Combo.Mode", "R Combo Mode"},
+                {"UseQ.Collision", "Check collision when casting Q (more damage)"},
+                {"UseW1", "Use W1"},
+                {"UseW2", "Use W2"},
+                {"UseR1", "Use R1"},
+                {"UseR2", "Use R2"},
+                {"SwapDead", "Use W2/R2 if target will die"},
+                {"SwapGapclose", "Use W2/R2 to get close to target"},
+                {"SwapKillable", "Use W2 if target is killable"},
+                {"SwapHP", "Use W2/R2 if my % of health is less than {0}"},
+                {"Line", "Line"},
+                {"Triangle", "Triangle"},
+                {"MousePos", "MousePos"},
+                {"IsDead", "Is Dead"},
+                {"Passive", "Passive"},
+                {"Draw.WShadow", "Draw W shadow circle"},
+                {"Draw.RShadow", "Draw R shadow circle"},
+                {"Draw.TargetIsDead", "Draw text if target will die"},
+                {"Draw.PassiveIsReady", "Draw text when passive is available"},
+                /* Cassiopeia */
+                {"Poisoned", "If Poisoned"},
+                {"AssistedUltimate", "Assisted Ultimate"},
+                /* Diana */
+                {"UseQR", "Use QR on minion to gapclose"},
+                {"R.2nd", "Use always second r"},
+                /* Orianna */
+                {"TeamFight.Count", "Use TeamFight logic if enemies near is greater than {0}"},
+                {"Common.Logic", "Common logic"},
+                {"1vs1.Logic", "1 vs 1 logic"},
+                {"TeamFight.Logic", "TeamFight logic"},
+                {"UseE.HealthPercent", "Use E if my % of health is less than {0}"},
+                {"UseE.Spells", "Use E on enemy spells"},
+                {"Draw.Ball", "Draw ball position"},
+                {"R.Block", "Block R if will not hit"},
+                /* Drawings */
+                {"Draw.Disable", "Disable all drawings"},
+                {"Draw.DamageIndicator", "Draw damage indicator"},
+                {"Draw.Target", "Draw circle on target"},
+                {"Draw.Q", "Draw Q range"},
+                {"Draw.W", "Draw W range"},
+                {"Draw.E", "Draw E range"},
+                {"Draw.R", "Draw R range"},
+                {"Draw.Toggles", "Draw toggles status"},
+                /* Prediction*/
+                {"Q.HitChancePercent", "Q: HitChancePercent"},
+                {"W.HitChancePercent", "W: HitChancePercent"},
+                {"E.HitChancePercent", "E: HitChancePercent"},
+                {"QE.HitChancePercent", "QE: HitChancePercent"},
+                {"R.HitChancePercent", "R: HitChancePercent"}
+            };
         }
 
         public static Language CurrentLanguage
