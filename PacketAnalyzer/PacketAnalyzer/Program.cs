@@ -26,8 +26,8 @@ namespace PacketAnalyzer
             {
                 Directory.CreateDirectory(ResultPath);
             }
-            PacketsSentWriter = File.CreateText(Path.Combine(ResultPath, "PacketsSent: " + Player.Instance.ChampionName + Game.GameId + ", "+ ".txt"));
-            PacketsReceivedWriter = File.CreateText(Path.Combine(ResultPath, "PacketsReceived: " + Player.Instance.ChampionName + Game.GameId + ", " + ".txt"));
+            PacketsSentWriter = File.CreateText(Path.Combine(ResultPath, "PacketsSent: " + Player.Instance.ChampionName + ", " + Game.GameId + ".txt"));
+            PacketsReceivedWriter = File.CreateText(Path.Combine(ResultPath, "PacketsReceived: " + Player.Instance.ChampionName + ", " + Game.GameId + ".txt"));
             Game.OnSendPacket += GameOnOnSendPacket;
             Game.OnProcessPacket += GameOnOnProcessPacket;
         }
