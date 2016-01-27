@@ -222,6 +222,7 @@ namespace KoreanAIO.Champions
             MenuManager.AddSubMenu("Harass");
             {
                 HarassMenu.AddValue("Collision", new CheckBox("Check collision when casting Q (more damage)", false));
+                HarassMenu.AddValue("WE", new CheckBox("Only harass when combo WE will hit", false));
                 HarassMenu.AddValue("SwapGapclose", new CheckBox("Use W2 if target is killable"));
                 HarassMenu.AddValue("ManaPercent", new Slider("Minimum Mana Percent", 20));
             }
@@ -601,6 +602,10 @@ namespace KoreanAIO.Champions
                 if (IsHarass2)
                 {
                     if (ShouldWaitMana)
+                    {
+                        return;
+                    }
+                    if (HarassMenu.CheckBox("WE") && W.IsReady && IsW1 && E.IsReady && !MyHero.IsInRange(Target, WRange + E.Radius))
                     {
                         return;
                     }
