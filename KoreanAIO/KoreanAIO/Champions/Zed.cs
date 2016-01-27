@@ -733,6 +733,7 @@ namespace KoreanAIO.Champions
                     {
                         wPos = MyHero.ServerPosition + (r.CastPosition - MyHero.ServerPosition).Normalized() * WRange;
                     }
+                    wPos = wPos + (wPos - MyHero.ServerPosition).Normalized() * Math.Min(WRange, MyHero.Distance(wPos));
                     if (MyHero.Spellbook.CastSpell(SpellSlot.W, wPos))
                     {
                         W.LastSentTime = Core.GameTickCount;
