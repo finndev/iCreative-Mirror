@@ -708,7 +708,7 @@ namespace KoreanAIO.Champions
                 var r = Q.GetPrediction(target, new CustomSettings { Range = Q.Range + W.Range });
                 if (r.HitChancePercent >= Q.HitChancePercent / 2 && Core.GameTickCount - W.LastSentTime > 175)
                 {
-                    Vector3 wPos;
+                    var wPos = r.CastPosition;
                     if (RShadowIsValid)
                     {
                         switch (ComboMenu.Slider("Mode"))
@@ -729,7 +729,7 @@ namespace KoreanAIO.Champions
                                 break;
                         }
                     }
-                    else
+                    else if (ModeManager.Combo)
                     {
                         wPos = MyHero.ServerPosition + (r.CastPosition - MyHero.ServerPosition).Normalized() * WRange;
                     }
