@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
-using EloBuddy.SDK.Enumerations;
 
 namespace LeeSin
 {

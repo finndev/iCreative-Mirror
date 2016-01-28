@@ -15,10 +15,10 @@ namespace LeeSin
         {
             new Item(ItemId.Ruby_Sightstone, WardRange),
             new Item(ItemId.Sightstone, WardRange),
-            new Item(2301, WardRange), new Item(2302, WardRange), new Item(2303, WardRange),
-            new Item(3711, WardRange), new Item(1408, WardRange), new Item(1409, WardRange), new Item(1410, WardRange), new Item(1411, WardRange),
+            new Item(ItemId.Eye_of_the_Watchers, WardRange), new Item(ItemId.Eye_of_the_Oasis, WardRange), new Item(ItemId.Eye_of_the_Equinox, WardRange),
+            new Item(ItemId.Trackers_Knife, WardRange), new Item(ItemId.Trackers_Knife_Enchantment_Cinderhulk, WardRange), new Item(ItemId.Trackers_Knife_Enchantment_Devourer, WardRange), new Item(ItemId.Trackers_Knife_Enchantment_Runic_Echoes, WardRange), new Item(ItemId.Trackers_Knife_Enchantment_Sated_Devourer, WardRange), new Item(ItemId.Trackers_Knife_Enchantment_Warrior, WardRange),
             new Item(ItemId.Warding_Totem_Trinket, WardRange),
-            new Item(ItemId.Greater_Stealth_Totem_Trinket, WardRange), new Item(ItemId.Stealth_Ward, WardRange),
+            new Item(ItemId.Greater_Stealth_Totem_Trinket, WardRange), new Item(ItemId.Explorers_Ward, WardRange),
             new Item(ItemId.Greater_Vision_Totem_Trinket, WardRange), new Item(ItemId.Vision_Ward, WardRange),
         };
 
