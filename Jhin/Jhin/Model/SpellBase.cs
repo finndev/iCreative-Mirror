@@ -62,10 +62,10 @@ namespace Jhin.Model
         public readonly Dictionary<int, Dictionary<int, PredictionResult>> CachedPredictions =
             new Dictionary<int, Dictionary<int, PredictionResult>>();
 
-        private bool _enemyHeroesCanBeCalculated;
+        public bool EnemyHeroesCanBeCalculated;
         public bool EnemyMinionsCanBeCalculated;
         public bool LaneClearMinionsCanBeCalculated;
-        private bool _monstersCanBeCalculated;
+        public bool MonstersCanBeCalculated;
 
         private string _name;
         private int _speed;
@@ -127,10 +127,10 @@ namespace Jhin.Model
                 {
                     pair.Value.Clear();
                 }
-                _enemyHeroesCanBeCalculated = true;
+                EnemyHeroesCanBeCalculated = true;
                 LaneClearMinionsCanBeCalculated = true;
                 EnemyMinionsCanBeCalculated = true;
-                _monstersCanBeCalculated = true;
+                MonstersCanBeCalculated = true;
                 _bestObjectInLine.Hits = 0;
                 _bestCircularObject.Hits = 0;
             };
@@ -145,9 +145,9 @@ namespace Jhin.Model
         {
             get
             {
-                if (_enemyHeroesCanBeCalculated)
+                if (EnemyHeroesCanBeCalculated)
                 {
-                    _enemyHeroesCanBeCalculated = false;
+                    EnemyHeroesCanBeCalculated = false;
                     _enemyHeroes.Clear();
                     _enemyHeroes.AddRange(UnitManager.ValidEnemyHeroes.Where(InRange));
                 }
@@ -188,9 +188,9 @@ namespace Jhin.Model
         {
             get
             {
-                if (_monstersCanBeCalculated)
+                if (MonstersCanBeCalculated)
                 {
-                    _monstersCanBeCalculated = false;
+                    MonstersCanBeCalculated = false;
                     _monsters.Clear();
                     _monsters.AddRange(
                         EntityManager.MinionsAndMonsters.Monsters.Where(InRange).OrderByDescending(m => m.MaxHealth));
