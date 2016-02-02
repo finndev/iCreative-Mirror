@@ -288,7 +288,7 @@ namespace Jhin.Champions
 
         protected override void KillSteal()
         {
-            foreach (var enemy in UnitManager.ValidEnemyHeroesInRange.Where(h => h.HealthPercent <= 40f))
+            foreach (var enemy in UnitManager.ValidEnemyHeroes.Where(h => h.HealthPercent <= 40f))
             {
                 var result = GetBestCombo(enemy);
                 if (KillStealMenu.CheckBox("Q") && (result.Q || Q.IsKillable(enemy)))
