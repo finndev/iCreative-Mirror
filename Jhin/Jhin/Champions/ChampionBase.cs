@@ -27,7 +27,7 @@ namespace Jhin.Champions
         public AIHeroClient Target;
         public SpellBase W;
         public SpellBase W2;
-
+        public bool ReturnOnTick = false;
         public ChampionBase()
         {
             MenuManager.Initialize();
@@ -38,6 +38,10 @@ namespace Jhin.Champions
                     return;
                 }
                 PermaActive();
+                if (ReturnOnTick)
+                {
+                    return;
+                }
                 KillSteal();
                 /*
                 if (Orbwalker.GotAutoAttackReset && Orbwalker.GetTarget() != null)

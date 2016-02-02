@@ -242,6 +242,7 @@ namespace Jhin.Champions
 
         protected override void PermaActive()
         {
+            ReturnOnTick = false;
             if (IsCastingR)
             {
                 IsCastingR = R.Instance.SData.Name == "JhinRShot"; //MyHero.Spellbook.IsChanneling;
@@ -257,6 +258,7 @@ namespace Jhin.Champions
             Q.Type = SpellType.Targeted;
             if (IsCastingR)
             {
+                ReturnOnTick = true;
                 if (TapKeyPressed || UltimateMenu.Slider("Mode") == 2)
                 {
                     CastR();
