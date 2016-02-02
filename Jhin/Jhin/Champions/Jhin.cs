@@ -35,7 +35,7 @@ namespace Jhin.Champions
         {
             foreach (var enemy in EntityManager.Heroes.Enemies)
             {
-                TextsDictionary.Add(enemy.NetworkId, new Text(enemy.ChampionName + " Is R Killable", new Font("Arial", 30F, FontStyle.Bold)));
+                TextsDictionary.Add(enemy.NetworkId, new Text(enemy.ChampionName + " is R Killable", new Font("Arial", 30F, FontStyle.Bold)));
             }
             Q = new SpellBase(SpellSlot.Q, SpellType.Targeted, 550)
             {
@@ -490,7 +490,7 @@ namespace Jhin.Champions
                 {
                     case SpellSlot.Q:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Physical,
-                            25f * level + 35f + (0.25f + 5f * level) * MyHero.TotalAttackDamage + 0.6f * MyHero.FlatMagicDamageMod);
+                            25f * level + 35f + (0.25f + 0.05f * level) * MyHero.TotalAttackDamage + 0.6f * MyHero.FlatMagicDamageMod);
                     case SpellSlot.W:
                         return 3 * MyHero.CalculateDamageOnUnit(target, DamageType.Physical,
                             (target is AIHeroClient ? 1f : 0.65f) * (35f * level + 15f + 0.7f * MyHero.TotalAttackDamage));
