@@ -490,9 +490,12 @@ namespace Jhin.Champions
                 var hero = target as AIHeroClient;
                 if (hero != null)
                 {
-                    if (MyHero.IsInAutoAttackRange(target) && !TargetHaveEBuff(hero))
+                    if (!TargetHaveEBuff(hero))
                     {
-                        return;
+                        if ((Orbwalker.CanAutoAttack && MyHero.IsInAutoAttackRange(target)) || (E.IsReady && E.InRange(hero)))
+                        {
+                            return;
+                        }
                     }
                 }
                 W.Cast(target);
