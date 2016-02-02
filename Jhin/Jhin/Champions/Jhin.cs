@@ -466,7 +466,6 @@ namespace Jhin.Champions
                 if (target != null)
                 {
                     var pred = R.GetPrediction(target);
-                    Chat.Print(pred.HitChancePercent);
                     if (pred.HitChancePercent >= R.HitChancePercent)
                     {
                         MyHero.Spellbook.CastSpell(SpellSlot.R, pred.CastPosition);
