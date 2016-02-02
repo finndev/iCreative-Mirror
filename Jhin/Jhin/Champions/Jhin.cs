@@ -457,7 +457,7 @@ namespace Jhin.Champions
         {
             if (!IsR1 && Core.GameTickCount - R.LastCastTime >= UltimateMenu.Slider("Delay"))
             {
-                var rTargets = UnitManager.ValidEnemyHeroes.Where(h =>  R.InRange(h) && (!AutomaticMenu.CheckBox("OnlyKillable") || R.IsKillable(h)) && LastRCone.IsInside(h)).ToList();
+                var rTargets = UnitManager.ValidEnemyHeroes.Where(h => R.InRange(h) && (!UltimateMenu.CheckBox("OnlyKillable") || R.IsKillable(h)) && LastRCone.IsInside(h)).ToList();
                 var targets = UltimateMenu.CheckBox("NearMouse.Enabled")
                     ? rTargets.Where(
                         h => h.IsInRange(MousePos, UltimateMenu.Slider("NearMouse.Radius"))).ToList()
