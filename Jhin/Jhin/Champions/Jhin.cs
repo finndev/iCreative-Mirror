@@ -49,7 +49,7 @@ namespace Jhin.Champions
                 Speed = 1800,
                 CastDelay = 250,
             };
-            W = new SpellBase(SpellSlot.W, SpellType.Linear, 3000)
+            W = new SpellBase(SpellSlot.W, SpellType.Linear, 2500)
             {
                 Width = 40,
                 CastDelay = 750,
