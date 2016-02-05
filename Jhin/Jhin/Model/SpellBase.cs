@@ -294,7 +294,7 @@ namespace Jhin.Model
 
         public float GetDamage(Obj_AI_Base target)
         {
-            if (!IsReady)
+            if (!IsReady && Slot != SpellSlot.R)
             {
                 return 0f;
             }

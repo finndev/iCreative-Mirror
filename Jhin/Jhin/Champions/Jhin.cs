@@ -20,6 +20,7 @@ namespace Jhin.Champions
         //Jhin Q: CastDelay: 250, Range: 550, CastRadius: 450, MissileSpeed: 600
         //Jhin E: CastDelay = 500, Radius: 135, Range: 750
         public bool IsCastingR;
+        public bool IsCharging;
         public bool TapKeyPressed;
         public int Stacks;
         public int LastBlockTick;
@@ -29,6 +30,7 @@ namespace Jhin.Champions
         public Dictionary<int, Text> TextsInHeroPosition = new Dictionary<int, Text>();
         public Dictionary<int, Text> LastPredictedPositionText = new Dictionary<int, Text>();
         public Dictionary<int, Tuple<Vector3, bool>> LastPredictedPosition = new Dictionary<int, Tuple<Vector3, bool>>();
+        public Geometry.Polygon.Sector RPolygon;
 
         public bool IsR1
         {
@@ -43,7 +45,7 @@ namespace Jhin.Champions
                 TextsInHeroPosition.Add(enemy.NetworkId, new Text("R killable", new Font("Arial", 23F, FontStyle.Bold)) { Color = Color.Red });
                 LastPredictedPositionText.Add(enemy.NetworkId, new Text(enemy.ChampionName + " last predicted position", new Font("Arial", 23F, FontStyle.Bold)) { Color = Color.Red });
             }
-            Q = new SpellBase(SpellSlot.Q, SpellType.Targeted, 550)
+            Q = new SpellBase(SpellSlot.Q, SpellType.Targeted, 600)
             {
                 Width = 450,
                 Speed = 1800,
@@ -106,6 +108,7 @@ namespace Jhin.Champions
                             else if (args.SData.Name == "JhinRShot")
                             {
                                 R.LastCastTime = Core.GameTickCount;
+                                TapKeyPressed = false;
                                 Stacks--;
                             }
                             break;
@@ -140,6 +143,19 @@ namespace Jhin.Champions
                             TapKeyPressed = true;
                         }
                     };
+                ToggleManager.RegisterToggle(
+                    KeysMenu.AddValue("AutoW",
+                        new KeyBind("AutoW Toggle", true, KeyBind.BindTypes.PressToggle, 'K')),
+                    delegate
+                    {
+                        foreach (var enemy in UnitManager.ValidEnemyHeroes.Where(TargetHaveEBuff))
+                        {
+                            if (MiscMenu.CheckBox("AutoW." + enemy.ChampionName))
+                            {
+                                CastW(enemy);
+                            }
+                        }
+                    });
             }
 
             W.AddConfigurableHitChancePercent();
@@ -188,7 +204,7 @@ namespace Jhin.Champions
                 {
                     ClearMenu.AddValue("JungleClear.Q", new CheckBox("Use Q"));
                     ClearMenu.AddValue("JungleClear.W", new CheckBox("Use W"));
-                    ClearMenu.AddValue("JungleClear.E", new CheckBox("Use W"));
+                    ClearMenu.AddValue("JungleClear.E", new CheckBox("Use E"));
                     ClearMenu.AddValue("JungleClear.ManaPercent", new Slider("Minimum Mana Percent", 20));
                 }
             }
@@ -205,7 +221,6 @@ namespace Jhin.Champions
             {
                 AutomaticMenu.AddValue("E.Gapcloser", new CheckBox("Use E on hero gapclosing / dashing"));
                 AutomaticMenu.AddValue("Immobile", new CheckBox("Use E on hero immobile"));
-                AutomaticMenu.AddValue("Buffed", new CheckBox("Use W on hero with buff"));
             }
             MenuManager.AddSubMenu("Evader");
             {
@@ -214,20 +229,29 @@ namespace Jhin.Champions
             Evader.Initialize();
             Evader.AddCrowdControlSpells();
             Evader.AddDangerousSpells();
+            MenuManager.AddSubMenu("Misc");
+            {
+                MiscMenu.AddValue("Champions", new GroupLabel("Allowed champions to use Auto W"));
+                foreach (var enemy in EntityManager.Heroes.Enemies)
+                {
+                    MiscMenu.AddValue("AutoW." + enemy.ChampionName, new CheckBox(enemy.ChampionName));
+                }
+            }
             MenuManager.AddDrawingsMenu();
             {
-                Q.AddDrawings();
+                Q.AddDrawings(false);
                 W.AddDrawings();
                 E.AddDrawings(false);
                 R.AddDrawings();
-                DrawingsMenu.Add("R.Killable", new CheckBox("Draw text if target is r killable"));
-                DrawingsMenu.Add("R.LastPredictedPosition", new CheckBox("Draw last predicted position"));
+                DrawingsMenu.AddValue("Toggles", new CheckBox("Draw toggles status"));
+                DrawingsMenu.AddValue("R.Killable", new CheckBox("Draw text if target is r killable"));
+                DrawingsMenu.AddValue("R.LastPredictedPosition", new CheckBox("Draw last predicted position"));
             }
         }
 
         public override void OnEndScene()
         {
-            if (R.IsReady)
+            if (R.IsReady || IsCastingR)
             {
                 var count = 0;
                 foreach (var enemy in R.EnemyHeroes.Where(h => R.IsKillable(h) && TextsInScreen.ContainsKey(h.NetworkId)))
@@ -253,7 +277,7 @@ namespace Jhin.Champions
             }
             if (DrawingsMenu.CheckBox("R.LastPredictedPosition") && (R.IsReady || IsCastingR))
             {
-                foreach (var enemy in EntityManager.Heroes.Enemies.Where(h => !h.IsValidTarget() && !h.IsDead && LastPredictedPosition.ContainsKey(h.NetworkId)))
+                foreach (var enemy in EntityManager.Heroes.Enemies.Where(h => !h.IsValidTarget() && !h.IsDead && h.Health > 0 && LastPredictedPosition.ContainsKey(h.NetworkId)))
                 {
                     var tuple = LastPredictedPosition[enemy.NetworkId];
                     if (tuple.Item1.IsOnScreen() && tuple.Item2)
@@ -269,11 +293,11 @@ namespace Jhin.Champions
 
         protected override void PermaActive()
         {
-            ReturnOnTick = false;
             if (IsCastingR)
             {
-                IsCastingR = R.Instance.SData.Name == "JhinRShot"; //MyHero.Spellbook.IsChanneling;
+                IsCastingR = R.Instance.Name == "JhinRShot"; //MyHero.Spellbook.IsChanneling;
             }
+            IsCharging = MyHero.HasBuff("JhinPassiveReload");
             Orbwalker.DisableAttacking = IsCastingR;
             Orbwalker.DisableMovement = IsCastingR;
             if (R.IsReady && !IsCastingR)
@@ -289,19 +313,11 @@ namespace Jhin.Champions
             Q.Type = SpellType.Targeted;
             if (IsCastingR)
             {
-                ReturnOnTick = true;
                 if (TapKeyPressed || UltimateMenu.Slider("Mode") == 2)
                 {
                     CastR();
                 }
                 return;
-            }
-            if (AutomaticMenu.CheckBox("Buffed"))
-            {
-                foreach (var enemy in UnitManager.ValidEnemyHeroes.Where(TargetHaveEBuff))
-                {
-                    CastW(enemy);
-                }
             }
             if (AutomaticMenu.CheckBox("Immobile"))
             {
@@ -346,15 +362,15 @@ namespace Jhin.Champions
         {
             if (Target != null)
             {
-                if (ComboMenu.CheckBox("E"))
+                if (ComboMenu.CheckBox("E") && MyHero.Mana >= E.Mana + R.Mana)
                 {
                     CastE(Target);
                 }
-                if (ComboMenu.CheckBox("W"))
+                if (ComboMenu.CheckBox("W") && MyHero.Mana >= W.Mana + E.Mana + R.Mana)
                 {
                     CastW(Target);
                 }
-                if (ComboMenu.CheckBox("Q"))
+                if (ComboMenu.CheckBox("Q") && MyHero.Mana >= Q.Mana + R.Mana)
                 {
                     CastQ(Target);
                 }
@@ -368,7 +384,7 @@ namespace Jhin.Champions
             {
                 if (Target != null)
                 {
-                    if (HarassMenu.CheckBox("Q"))
+                    if (HarassMenu.CheckBox("Q") && MyHero.Mana >= E.Mana + R.Mana + W.Mana + E.Mana)
                     {
                         CastQ(Target);
                     }
@@ -429,7 +445,11 @@ namespace Jhin.Champions
 
         public void CastQ(Obj_AI_Base target)
         {
-            if (Q.IsReady && target != null)
+            if (IsCastingR)
+            {
+                return;
+            }
+            if (Q.IsReady && target != null && !Orbwalker.CanAutoAttack)
             {
                 if (target is AIHeroClient)
                 {
@@ -440,6 +460,20 @@ namespace Jhin.Champions
                     var best = Q.GetBestCircularObject(Q.EnemyMinions.Concat(Q.EnemyHeroes).ToList());
                     if (best.Hits > 0 && best.Target.IsInRange(target, Q.Width))
                     {
+                        /*
+                        if (best.Target.IdEquals(target))
+                        {
+                            if (IsCharging)
+                            {
+                                Q.Type = SpellType.Targeted;
+                                Q.Cast(target);
+                            }
+                        }
+                        else
+                        {
+                            Q.Type = SpellType.Targeted;
+                            Q.Cast(target);
+                        }*/
                         Q.Type = SpellType.Targeted;
                         Q.Cast(target);
                     }
@@ -473,6 +507,10 @@ namespace Jhin.Champions
         }
         public void CastW(Obj_AI_Base target)
         {
+            if (IsCastingR)
+            {
+                return;
+            }
             if (W.IsReady && target != null)
             {
                 if (Core.GameTickCount - LastBlockTick < 750)
@@ -503,6 +541,10 @@ namespace Jhin.Champions
         }
         public void CastE(Obj_AI_Base target)
         {
+            if (IsCastingR)
+            {
+                return;
+            }
             if (E.IsReady && target != null)
             {
                 E.Cast(target);
@@ -521,7 +563,7 @@ namespace Jhin.Champions
                 if (target != null)
                 {
                     var pred = R.GetPrediction(target);
-                    if (pred.HitChancePercent >= R.HitChancePercent)
+                    if (pred.HitChancePercent >= R.HitChancePercent && !R.WillHitYasuoWall(pred.CastPosition))
                     {
                         MyHero.Spellbook.CastSpell(SpellSlot.R, pred.CastPosition);
                     }
