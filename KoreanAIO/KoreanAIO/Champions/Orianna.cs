@@ -120,7 +120,7 @@ namespace KoreanAIO.Champions
                     {
                         if (Target != null && AutomaticMenu.CheckBox("Gapcloser") &&
                             Ball.GetDistanceSqr(Target) > args.End.Distance(Target, true) &&
-                            args.End.Distance(Target, true) < args.Sender.GetDistanceSqr(Target))
+                            args.End.Distance(Target, true) < args.Sender.GetDistanceSqr(Target) && (!Q.IsReady || !args.End.IsInRange(Ball.Position, Q.Range)))
                         {
                             CastE(sender);
                         }
@@ -132,7 +132,7 @@ namespace KoreanAIO.Champions
                     {
                         if (Target != null && AutomaticMenu.CheckBox("Gapcloser") &&
                             Ball.GetDistanceSqr(Target) > args.EndPos.Distance(Target, true) &&
-                            args.EndPos.Distance(Target, true) < sender.GetDistanceSqr(Target))
+                            args.EndPos.Distance(Target, true) < sender.GetDistanceSqr(Target) && (!Q.IsReady || !args.EndPos.IsInRange(Ball.Position, Q.Range)))
                         {
                             CastE(sender);
                         }
@@ -677,19 +677,20 @@ namespace KoreanAIO.Champions
 
         private void ThrowBall(AIHeroClient target)
         {
-            var bestAllyNear =
-                UnitManager.ValidAllyHeroesInRange.Where(
-                    h => h.InRange(target, R.Range * 1.5f) && Ball.GetDistanceSqr(target) > h.GetDistanceSqr(target))
-                    .OrderBy(h => h.GetDistanceSqr(target))
-                    .FirstOrDefault();
-            if (E.IsReady && bestAllyNear != null)
+            if ((!Q.IsReady || !Q.InRange(target)) && E.IsReady)
             {
-                CastE(bestAllyNear);
+                var bestAllyNear =
+                    UnitManager.ValidAllyHeroesInRange.Where(
+                        h => h.InRange(target, R.Range * 1.5f) && Ball.GetDistanceSqr(target) > h.GetDistanceSqr(target))
+                        .OrderBy(h => h.GetDistanceSqr(target))
+                        .FirstOrDefault();
+                if (bestAllyNear != null)
+                {
+                    CastE(bestAllyNear);
+                }
+                return;
             }
-            else
-            {
-                CastQ(target);
-            }
+            CastQ(target);
         }
 
         private void CastQr()

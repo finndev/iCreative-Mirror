@@ -21,7 +21,7 @@ namespace KoreanAIO.Utilities
     {
         private const int BarWidth = 104;
         private const int BarHeight = 9;
-        private static readonly Vector2 BarOffset = new Vector2(1, -5.8f);
+        private static readonly Vector2 BarOffset = new Vector2(1, 9.2f);
         private static readonly Vector2 TextOffset = new Vector2(1, -15);
         public static List<DamageSource> DamageSources = new List<DamageSource>();
 

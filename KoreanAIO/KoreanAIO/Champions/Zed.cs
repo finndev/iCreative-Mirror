@@ -29,6 +29,10 @@ namespace KoreanAIO.Champions
         public Obj_AI_Minion RShadow;
 
         public Obj_AI_Minion WShadow;
+        public float MarkedDamageReceived;
+        public bool EnemyIsDead;
+        public bool EnemyWillDie;
+
 
         public Zed()
         {
@@ -130,6 +134,7 @@ namespace KoreanAIO.Champions
                         case SpellSlot.R:
                             if (args.SData.Name == "ZedR")
                             {
+                                MarkedDamageReceived = 0;
                             }
                             break;
                     }
@@ -176,6 +181,18 @@ namespace KoreanAIO.Champions
                                        .Perpendicular()
                                        .To3DWorld();
                         W.Cast(wPos);
+                    }
+                }
+            };
+
+            AttackableUnit.OnDamage += delegate (AttackableUnit sender, AttackableUnitDamageEventArgs args)
+            {
+                if (args.Source.IsMe)
+                {
+                    var hero = args.Target as AIHeroClient;
+                    if (hero != null && TargetHaveR(hero))
+                    {
+                        MarkedDamageReceived += args.Damage;
                     }
                 }
             };
@@ -349,7 +366,7 @@ namespace KoreanAIO.Champions
         {
             if (DrawingsMenu.CheckBox("IsDead"))
             {
-                if (IsDeadObject != null)
+                if (EnemyIsDead)
                 {
                     var enemyDead = UnitManager.ValidEnemyHeroes.FirstOrDefault(IsDead);
                     if (enemyDead != null)
@@ -402,7 +419,15 @@ namespace KoreanAIO.Champions
             UnitManager.ValidEnemyHeroesInRange.Clear();
             UnitManager.ValidEnemyHeroesInRange.AddRange(currentList.Where(h => !IsDead(h)));
             Target = TargetSelector.GetTarget(UnitManager.ValidEnemyHeroesInRange, DamageType.Physical);
-            var target = UnitManager.ValidEnemyHeroes.FirstOrDefault(h => TargetHaveR(h) && !IsDead(h));
+            EnemyIsDead = false;
+            foreach (var enemy in UnitManager.ValidEnemyHeroes)
+            {
+                if (IsDead(enemy))
+                {
+                    EnemyIsDead = true;
+                }
+            }
+            var target = UnitManager.ValidEnemyHeroesInRange.FirstOrDefault(h => TargetHaveR(h) && !IsDead(h));
             if (target != null)
             {
                 Target = target;
@@ -466,7 +491,7 @@ namespace KoreanAIO.Champions
                 var distanceSqr = MyHero.GetDistanceSqr(Target);
                 var health = Target.TotalShieldHealth();
                 var result = GetBestCombo(Target);
-                if (IsDeadObject != null &&
+                if (EnemyIsDead &&
                     (AutomaticMenu.CheckBox("SwapDead") || (ComboMenu.CheckBox("SwapDead") && ModeManager.Combo)))
                 {
                     SwapByCountingEnemies();
@@ -700,7 +725,20 @@ namespace KoreanAIO.Champions
                 {
                     Q.Range = Q.Range + (int)W.LastEndPosition.Distance(Q.Source);
                 }
-                Q.Cast(target);
+                var hero = target as AIHeroClient;
+                var pred = Q.GetPrediction(target);
+                if (pred.HitChancePercent >= Q.HitChancePercent)
+                {
+                    if (hero != null)
+                    {
+                        if (WillDie(hero, Q.GetDamage(target)))
+                        {
+                            SwapByCountingEnemies();
+                            return;
+                        }
+                    }
+                    Q.Cast(pred.CastPosition);
+                }
                 Q.Range = qRange;
             }
         }
@@ -767,7 +805,20 @@ namespace KoreanAIO.Champions
                     E.SourceObject = MyHero;
                 }
                 E.RangeCheckSourceObject = E.Source;
-                E.Cast(target);
+                var hero = target as AIHeroClient;
+                var pred = E.GetPrediction(target);
+                if (pred.HitChancePercent >= E.HitChancePercent)
+                {
+                    if (hero != null)
+                    {
+                        if (WillDie(hero, E.GetDamage(target)))
+                        {
+                            SwapByCountingEnemies();
+                            return;
+                        }
+                    }
+                    E.Cast();
+                }
             }
         }
 
@@ -792,9 +843,9 @@ namespace KoreanAIO.Champions
             return true;
         }
 
-        public bool IsDead(AIHeroClient target)
+        public bool IsDead(Obj_AI_Base target)
         {
-            return IsDeadObject != null && TargetHaveR(target) && IsDeadObject.IsInRange(target, 200);
+            return (TargetHaveR(target) && ((IsDeadObject != null && IsDeadObject.IsInRange(target, 200)) || EnemyWillDie) || target.HasIgnite());
         }
 
         private float GetPassiveDamage(Obj_AI_Base target, float health = 0)
@@ -815,9 +866,23 @@ namespace KoreanAIO.Champions
             return 0;
         }
 
-        public bool TargetHaveR(AIHeroClient target)
+        public bool TargetHaveR(Obj_AI_Base target)
         {
             return target.TargetHaveBuff("zedrtargetmark");
+        }
+
+        public bool WillDie(Obj_AI_Base target, float damage = 0)
+        {
+            if (TargetHaveR(target))
+            {
+                if ((MarkedDamageReceived + damage) * (20f + R.Level * 10) / 100f >= target.TotalShieldHealth())
+                {
+                    EnemyWillDie = true;
+                    return true;
+                }
+                return false;
+            }
+            return false;
         }
 
         protected override float GetComboDamage(Obj_AI_Base target, IEnumerable<SpellBase> list)

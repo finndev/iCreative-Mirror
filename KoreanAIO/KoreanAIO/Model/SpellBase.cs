@@ -728,7 +728,7 @@ namespace KoreanAIO.Model
                     GetPrediction(point)
                         .CastPosition.To2D()
                         .Distance(startPoint.Position.To2D(), GetPrediction(endPoint).CastPosition.To2D(), true, true) <=
-                    (Width + point.BoundingRadius).Pow());
+                    (Radius + point.BoundingRadius).Pow());
             }
             if (!_cachedIsOnSegment[point.NetworkId].ContainsKey(endPoint.NetworkId))
             {

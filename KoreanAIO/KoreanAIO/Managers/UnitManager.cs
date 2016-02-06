@@ -36,7 +36,7 @@ namespace KoreanAIO.Managers
             };
         }
 
-        public static bool HasIgnite(this AIHeroClient hero)
+        public static bool HasIgnite(this Obj_AI_Base hero)
         {
             return hero.TargetHaveBuff("summonerdot") &&
                    hero.TotalShieldHealth() + hero.HPRegenRate*2 <=
