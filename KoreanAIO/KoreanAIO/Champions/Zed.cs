@@ -339,7 +339,7 @@ namespace KoreanAIO.Champions
             {
                 return WShadow == null && W.LastCastTime > 0 &&
                        Core.GameTickCount - W.LastCastTime <=
-                       W.GetArrivalTime(W.LastEndPosition) + Game.Ping / 2 - Q.CastDelay - 80;
+                       W.GetArrivalTime(W.LastEndPosition) - Q.CastDelay - 80;
             }
         }
 
