@@ -687,8 +687,8 @@ namespace KoreanAIO.Champions
                 if (bestAllyNear != null)
                 {
                     CastE(bestAllyNear);
+                    return;
                 }
-                return;
             }
             CastQ(target);
         }
