@@ -135,6 +135,7 @@ namespace KoreanAIO.Champions
                             if (args.SData.Name == "ZedR")
                             {
                                 MarkedDamageReceived = 0;
+                                EnemyWillDie = false;
                             }
                             break;
                     }
@@ -415,10 +416,6 @@ namespace KoreanAIO.Champions
             {
                 Range = Q.Range + WRange;
             }
-            var currentList = UnitManager.ValidEnemyHeroesInRange.ToList();
-            UnitManager.ValidEnemyHeroesInRange.Clear();
-            UnitManager.ValidEnemyHeroesInRange.AddRange(currentList.Where(h => !IsDead(h)));
-            Target = TargetSelector.GetTarget(UnitManager.ValidEnemyHeroesInRange, DamageType.Physical);
             EnemyIsDead = false;
             foreach (var enemy in UnitManager.ValidEnemyHeroes)
             {
@@ -427,6 +424,10 @@ namespace KoreanAIO.Champions
                     EnemyIsDead = true;
                 }
             }
+            var currentList = UnitManager.ValidEnemyHeroesInRange.ToList();
+            UnitManager.ValidEnemyHeroesInRange.Clear();
+            UnitManager.ValidEnemyHeroesInRange.AddRange(currentList.Where(h => !IsDead(h)));
+            Target = TargetSelector.GetTarget(UnitManager.ValidEnemyHeroesInRange, DamageType.Physical);
             var target = UnitManager.ValidEnemyHeroesInRange.FirstOrDefault(h => TargetHaveR(h) && !IsDead(h));
             if (target != null)
             {
