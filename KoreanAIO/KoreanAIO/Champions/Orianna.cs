@@ -43,7 +43,7 @@ namespace KoreanAIO.Champions
                 W = new SpellBase(SpellSlot.W, SpellType.Self, 255);
                 W.SetSourceFunction(() => Ball);
                 W.SetRangeCheckSourceFunction(() => Ball);
-                E = new SpellBase(SpellSlot.E, SpellType.Circular, 1095)
+                E = new SpellBase(SpellSlot.E, SpellType.Linear, 1095)
                 {
                     Speed = 1800,
                     Width = 85,
@@ -836,10 +836,10 @@ namespace KoreanAIO.Champions
                     if (pred.HitChancePercent >= E.HitChancePercent / 3)
                     {
                         var res = E.ObjectsInLine(objAiBases, ally);
-                        var count = res.Count + 1;
+                        var count = res.Count;
                         if (bestResult.Hits < count)
                         {
-                            bestResult.Hits = res.Count + 1;
+                            bestResult.Hits = count;
                             bestResult.Position = pred.CastPosition;
                             bestResult.Target = ally;
                             if (bestResult.Hits == objAiBases.Count)
