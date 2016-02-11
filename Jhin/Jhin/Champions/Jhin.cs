@@ -102,7 +102,7 @@ namespace Jhin.Champions
                             if (args.SData.Name == "JhinR")
                             {
                                 IsCastingR = true;
-                                LastRCone = new Geometry.Polygon.Sector(sender.Position, args.End, (float)(45 * 2f * Math.PI / 180f), R.Range);
+                                LastRCone = new Geometry.Polygon.Sector(sender.Position, args.End, (float)(60f * Math.PI / 180f), R.Range);
                                 Stacks = 4;
                             }
                             else if (args.SData.Name == "JhinRShot")
@@ -135,24 +135,27 @@ namespace Jhin.Champions
 
             MenuManager.AddSubMenu("Keys");
             {
-                KeysMenu.AddValue("TapKey", new KeyBind("R Tap Key", false, KeyBind.BindTypes.HoldActive, 'T')).OnValueChange +=
+                KeysMenu.AddValue("TapKey", new KeyBind("R Tap Key", false, KeyBind.BindTypes.HoldActive, 32)).OnValueChange +=
                     delegate (ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
                     {
-                        if (args.NewValue && R.IsLearned && (R.IsReady || IsCastingR) && R.EnemyHeroes.Count > 0)
+                        if (args.NewValue && R.IsLearned && IsCastingR)
                         {
                             TapKeyPressed = true;
                         }
                     };
                 ToggleManager.RegisterToggle(
                     KeysMenu.AddValue("AutoW",
-                        new KeyBind("AutoW Toggle", true, KeyBind.BindTypes.PressToggle, 'K')),
+                        new KeyBind("Auto W Toggle", true, KeyBind.BindTypes.PressToggle, 'K')),
                     delegate
                     {
                         foreach (var enemy in UnitManager.ValidEnemyHeroes.Where(TargetHaveEBuff))
                         {
-                            if (MiscMenu.CheckBox("AutoW." + enemy.ChampionName))
+                            if (MyHero.ManaPercent >= MiscMenu.Slider("W.ManaPercent"))
                             {
-                                CastW(enemy);
+                                if (MiscMenu.CheckBox("AutoW." + enemy.ChampionName))
+                                {
+                                    CastW(enemy);
+                                }
                             }
                         }
                     });
@@ -164,9 +167,9 @@ namespace Jhin.Champions
             MenuManager.AddSubMenu("Combo");
             {
                 ComboMenu.AddValue("Q", new CheckBox("Use Q"));
-                ComboMenu.AddValue("W", new CheckBox("Use W"));
                 ComboMenu.AddValue("E", new CheckBox("Use E"));
                 ComboMenu.AddValue("Items", new CheckBox("Use offensive items"));
+                ComboMenu.AddStringList("W", "Use W", new[] { "Never", "Only buffed enemies", "Always" }, 2);
             }
             MenuManager.AddSubMenu("Ultimate");
             {
@@ -231,6 +234,7 @@ namespace Jhin.Champions
             Evader.AddDangerousSpells();
             MenuManager.AddSubMenu("Misc");
             {
+                MiscMenu.AddValue("W.ManaPercent", new Slider("Auto W Minimum Mana Percent", 10));
                 MiscMenu.AddValue("Champions", new GroupLabel("Allowed champions to use Auto W"));
                 foreach (var enemy in EntityManager.Heroes.Enemies)
                 {
@@ -366,9 +370,19 @@ namespace Jhin.Champions
                 {
                     CastE(Target);
                 }
-                if (ComboMenu.CheckBox("W") && MyHero.Mana >= W.Mana + E.Mana + R.Mana)
+                if (ComboMenu.Slider("W") > 0 && MyHero.Mana >= W.Mana + E.Mana + R.Mana)
                 {
-                    CastW(Target);
+                    if (ComboMenu.Slider("W") == 2)
+                    {
+                        if (TargetHaveEBuff(Target))
+                        {
+                            CastW(Target);
+                        }
+                    }
+                    else if (ComboMenu.Slider("W") == 3)
+                    {
+                        CastW(Target);
+                    }
                 }
                 if (ComboMenu.CheckBox("Q") && MyHero.Mana >= Q.Mana + R.Mana)
                 {
@@ -384,7 +398,7 @@ namespace Jhin.Champions
             {
                 if (Target != null)
                 {
-                    if (HarassMenu.CheckBox("Q") && MyHero.Mana >= E.Mana + R.Mana + W.Mana + E.Mana)
+                    if (HarassMenu.CheckBox("Q") && MyHero.Mana >= E.Mana + R.Mana + W.Mana)
                     {
                         CastQ(Target);
                     }
