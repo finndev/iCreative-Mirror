@@ -383,12 +383,12 @@ namespace KoreanAIO.Model
                     return RangeCheckSourceObject.InRange(target,
                         Range + AIO.MyHero.BoundingRadius + target.BoundingRadius - 65);
                 case SpellType.Circular:
-                    return RangeCheckSourceObject.InRange(target, Range + Radius + target.BoundingRadius);
+                    return RangeCheckSourceObject.InRange(target, Range + Radius + target.BoundingRadius / 2f);
                 case SpellType.Linear:
-                    return RangeCheckSourceObject.InRange(target, Range + Width + target.BoundingRadius);
+                    return RangeCheckSourceObject.InRange(target, Range + Width);
             }
             //Self
-            return RangeCheckSourceObject.InRange(target, Range + target.BoundingRadius);
+            return RangeCheckSourceObject.InRange(target, Range + target.BoundingRadius / 2f);
         }
 
         public bool PredictedPosInRange(Obj_AI_Base target, GameObject sourceObj = null)
@@ -401,12 +401,12 @@ namespace KoreanAIO.Model
                     return RangeCheckSource.IsInRange(pred.CastPosition,
                         Range + AIO.MyHero.BoundingRadius + target.BoundingRadius - 65);
                 case SpellType.Circular:
-                    return source.IsInRange(pred.CastPosition, Range + Radius);
+                    return source.IsInRange(pred.CastPosition, Range + Radius + target.BoundingRadius / 2f);
                 case SpellType.Linear:
                     return source.IsInRange(pred.CastPosition, Range);
             }
             //Self
-            return source.IsInRange(pred.CastPosition, Range + target.BoundingRadius / 2);
+            return source.IsInRange(pred.CastPosition, Range + target.BoundingRadius / 2f);
         }
 
         public PredictionResult GetPrediction(Obj_AI_Base target, CustomSettings custom = null)

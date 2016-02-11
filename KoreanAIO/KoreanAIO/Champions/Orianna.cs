@@ -185,6 +185,8 @@ namespace KoreanAIO.Champions
                 };
 
                 Q.AddConfigurableHitChancePercent();
+                W.AddConfigurableHitChancePercent(65);
+                E.AddConfigurableHitChancePercent(65);
                 R.AddConfigurableHitChancePercent();
 
                 MenuManager.AddSubMenu("Combo");
@@ -574,7 +576,7 @@ namespace KoreanAIO.Champions
                 var pred = Q.GetPrediction(target);
                 if (E.IsReady && MyHero.Mana >= Q.Mana + E.Mana && target.Type == GameObjectType.AIHeroClient &&
                     pred.HitChancePercent <= 5 &&
-                    !Q.Source.IsInRange(pred.CastPosition, Q.Range * 1.2f))
+                    !Q.Source.IsInRange(pred.CastPosition, Q.Range * 1.2f) && Player.Instance.InRange(target, Q.Range + Q.Width + target.BoundingRadius / 2f))
                 {
                     var pred2 = Q.GetPrediction(target, new CustomSettings { Source = MyHero });
                     if (pred2.HitChancePercent >= Q.HitChancePercent)
@@ -707,17 +709,21 @@ namespace KoreanAIO.Champions
                     into pred
                             where pred.HitChancePercent >= R.HitChancePercent / 2f
                             select pred.CastPosition.To2D()).ToList();
-                if (list.Count > 0)
+                if (list.Count >= ComboMenu.Slider("R.Hit"))
                 {
                     var bestCount = -1;
                     var bestPoint = new Vector2(0, 0);
-                    foreach (var point in list)
+                    var result = Enumerable.Range(1, (1 << list.Count) - 1).Select(index => list.Where((item, idx) => ((1 << idx) & index) != 0).ToList()).ToList();
+                    foreach (var points in result)
                     {
-                        var count = list.Count(v => point.Distance(v, true) <= (R.Range * 1.4f).Pow());
+                        var polygon = new Geometry.Polygon();
+                        polygon.Points.AddRange(points);
+                        var center = polygon.CenterOfPolygon();
+                        var count = list.Count(v => center.IsInRange(v, R.Range * 1.4f));
                         if (count > bestCount)
                         {
                             bestCount = count;
-                            bestPoint = point;
+                            bestPoint = center;
                         }
                     }
                     if (bestCount >= ComboMenu.Slider("R.Hit"))
@@ -746,20 +752,24 @@ namespace KoreanAIO.Champions
                     into pred
                                  where pred.HitChancePercent >= R.HitChancePercent / 2f
                                  select pred.CastPosition).ToList();
-                if (enemyList.Count > 0)
+                if (enemyList.Count >= ComboMenu.Slider("R.Hit"))
                 {
                     var allyList =
                         UnitManager.ValidAllyHeroesInRange.Select(ally => E.GetPrediction(ally))
-                            .Select(pred => pred.CastPosition);
+                            .Select(pred => pred.CastPosition.To2D()).ToList();
                     var bestCount = -1;
-                    var bestPoint = new Vector3(0, 0, 0);
-                    foreach (var ally in allyList)
+                    var bestPoint = default(Vector2);
+                    var result = Enumerable.Range(1, (1 << allyList.Count) - 1).Select(index => allyList.Where((item, idx) => ((1 << idx) & index) != 0).ToList()).ToList();
+                    foreach (var points in result)
                     {
-                        var count = enemyList.Count(v => ally.IsInRange(v, R.Range * 1.4f));
+                        var polygon = new Geometry.Polygon();
+                        polygon.Points.AddRange(points);
+                        var center = polygon.CenterOfPolygon();
+                        var count = enemyList.Count(v => center.IsInRange(v, R.Range * 1.4f));
                         if (count > bestCount)
                         {
                             bestCount = count;
-                            bestPoint = ally;
+                            bestPoint = center;
                         }
                     }
                     if (bestCount >= ComboMenu.Slider("R.Hit"))
