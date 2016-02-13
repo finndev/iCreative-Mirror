@@ -9,8 +9,8 @@ namespace MaddeningJinx
 {
     public static class DamageIndicator
     {
-        private static readonly Vector2 BarOffset = new Vector2(2, -5.5f);
-        private static readonly Vector2 TextOffset = new Vector2(2, -15);
+        private static readonly Vector2 BarOffset = new Vector2(1, 9.2f);
+        private static readonly Vector2 TextOffset = new Vector2(1, -15);
         private static readonly Color SelectedColor = Color.FromArgb(170, Color.White);
         private const int BarWidth = 104;
         private const int BarHeight = 9;
