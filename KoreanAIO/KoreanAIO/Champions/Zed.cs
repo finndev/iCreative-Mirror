@@ -206,6 +206,7 @@ namespace KoreanAIO.Champions
                 Orbwalker.RegisterKeyBind(
                     KeysMenu.AddValue("Harass2", new KeyBind("Harass WEQ", false, KeyBind.BindTypes.HoldActive, 'S')),
                     Orbwalker.ActiveModes.Harass);
+               KeysMenu.AddValue("Note", new GroupLabel("NOTE: DO NOT USE THE SAME KEYS AS THE ORBWALKER!!!!"));
             }
 
             Q.AddConfigurableHitChancePercent();
