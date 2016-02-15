@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -17,8 +17,6 @@ namespace Jhin.Champions
 {
     public class Jhin : ChampionBase
     {
-        //Jhin Q: CastDelay: 250, Range: 550, CastRadius: 450, MissileSpeed: 600
-        //Jhin E: CastDelay = 500, Radius: 135, Range: 750
         public bool IsCastingR;
         public bool IsCharging;
         public bool TapKeyPressed;
@@ -535,7 +533,7 @@ namespace Jhin.Champions
                 {
                     return;
                 }
-                if (MyHero.CountEnemiesInRange(400) != 0)
+                if (UnitManager.ValidEnemyHeroesInRange.Any(h => MyHero.InRange(h, 400) && !TargetHaveEBuff(h)))
                 {
                     return;
                 }
