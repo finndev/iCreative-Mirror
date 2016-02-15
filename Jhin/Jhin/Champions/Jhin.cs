@@ -525,14 +525,6 @@ namespace Jhin.Champions
             }
             if (W.IsReady && target != null)
             {
-                if (Core.GameTickCount - LastBlockTick < 750)
-                {
-                    return;
-                }
-                if (Core.GameTickCount - WShouldWaitTick < 750)
-                {
-                    return;
-                }
                 if (UnitManager.ValidEnemyHeroesInRange.Any(h => MyHero.InRange(h, 400) && !TargetHaveEBuff(h)))
                 {
                     return;
@@ -542,6 +534,14 @@ namespace Jhin.Champions
                 {
                     if (!TargetHaveEBuff(hero))
                     {
+                        if (Core.GameTickCount - LastBlockTick < 750)
+                        {
+                            return;
+                        }
+                        if (Core.GameTickCount - WShouldWaitTick < 750)
+                        {
+                            return;
+                        }
                         if ((Orbwalker.CanAutoAttack && MyHero.IsInAutoAttackRange(target)) || (E.IsReady && E.InRange(hero)))
                         {
                             return;
