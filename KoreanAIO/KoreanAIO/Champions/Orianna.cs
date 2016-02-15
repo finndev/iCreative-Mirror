@@ -307,7 +307,7 @@ namespace KoreanAIO.Champions
         {
             _hitR = R.IsReady ? R.ObjectsInRange(R.EnemyHeroes).Count : 0;
             _hitW = W.IsReady ? W.ObjectsInRange(W.EnemyHeroes).Count : 0;
-            Range = Q.Range + Q.Width;
+            Range = Q.Range + R.Width;
             _canShield = AutomaticMenu.CheckBox("E.Shield") || (ModeManager.Combo && ComboMenu.CheckBox("E.Shield")) ||
                          (ModeManager.Harass && HarassMenu.CheckBox("E.Shield"));
             _ballIsMissile = _ballObject != null && _ballObject.IsValid &&
