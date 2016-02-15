@@ -704,7 +704,7 @@ namespace KoreanAIO.Champions
                 var qCastDelay = Q.CastDelay;
                 Q.CastDelay = R.CastDelay + qCastDelay;
                 Q.Width = R.Range;
-                var list = (from enemy in UnitManager.ValidEnemyHeroesInRange
+                var list = (from enemy in UnitManager.ValidEnemyHeroes
                             select Q.GetPrediction(enemy)
                     into pred
                             where pred.HitChancePercent >= R.HitChancePercent / 2f
@@ -747,7 +747,7 @@ namespace KoreanAIO.Champions
                 E.CastDelay = R.CastDelay + eCastDelay;
                 E.Width = R.Range;
                 E.Type = SpellType.Circular;
-                var enemyList = (from enemy in UnitManager.ValidEnemyHeroesInRange
+                var enemyList = (from enemy in UnitManager.ValidEnemyHeroes
                                  select E.GetPrediction(enemy)
                     into pred
                                  where pred.HitChancePercent >= R.HitChancePercent / 2f
