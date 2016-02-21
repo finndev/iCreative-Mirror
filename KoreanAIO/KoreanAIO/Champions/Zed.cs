@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -206,7 +206,7 @@ namespace KoreanAIO.Champions
                 Orbwalker.RegisterKeyBind(
                     KeysMenu.AddValue("Harass2", new KeyBind("Harass WEQ", false, KeyBind.BindTypes.HoldActive, 'S')),
                     Orbwalker.ActiveModes.Harass);
-               KeysMenu.AddValue("Note", new GroupLabel("NOTE: DO NOT USE THE SAME KEYS AS THE ORBWALKER!!!!"));
+                KeysMenu.AddValue("Note", new GroupLabel("NOTE: DO NOT USE THE SAME KEYS AS THE ORBWALKER!!!!"));
             }
 
             Q.AddConfigurableHitChancePercent();
@@ -739,7 +739,7 @@ namespace KoreanAIO.Champions
                             return;
                         }
                     }
-                    Q.Cast(pred.CastPosition);
+                    Q.Cast(target);
                 }
                 Q.Range = qRange;
             }
@@ -819,7 +819,7 @@ namespace KoreanAIO.Champions
                             return;
                         }
                     }
-                    E.Cast();
+                    E.Cast(target);
                 }
             }
         }
