@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
@@ -155,17 +155,13 @@ namespace Thresh
 
         public static void CastQ1(Obj_AI_Base target)
         {
-            if (SpellSlot.Q.IsReady() && IsQ1 && target.IsValidTarget() && target.IsEnemy)
+            if (SpellSlot.Q.IsReady() && IsQ1 && target.IsValidTarget(Q.Range) && target.IsEnemy)
             {
                 Q.Width = 70;
                 var pred = Q.GetPrediction(target);
                 if (pred.HitChancePercent >= Q.Slot.HitChancePercent())
                 {
-                    Q.Width = 70;
                     Q.Cast(pred.CastPosition);
-                    if (!Q.GetPrediction(target).CollisionObjects.Any())
-                    {
-                    }
                 }
             }
         }
@@ -193,7 +189,7 @@ namespace Thresh
 
         public static void Push(Obj_AI_Base target)
         {
-            if (SpellSlot.E.IsReady() && target.IsValidTarget() && target.IsEnemy)
+            if (SpellSlot.E.IsReady() && target.IsValidTarget(E.Range) && target.IsEnemy)
             {
                 var pred = E.GetPrediction(target);
                 if (pred.HitChancePercent >= E.Slot.HitChancePercent())
@@ -205,7 +201,7 @@ namespace Thresh
 
         public static void Pull(Obj_AI_Base target)
         {
-            if (SpellSlot.E.IsReady() && target.IsValidTarget() && target.IsEnemy)
+            if (SpellSlot.E.IsReady() && target.IsValidTarget(E.Range) && target.IsEnemy)
             {
                 var pred = E.GetPrediction(target);
                 if (pred.HitChancePercent >= E.Slot.HitChancePercent())
