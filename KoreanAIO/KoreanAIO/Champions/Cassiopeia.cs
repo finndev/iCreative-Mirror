@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
@@ -352,13 +352,13 @@ namespace KoreanAIO.Champions
         {
             if (Q.IsReady && target != null)
             {
-                if (IsPoisoned(target))
+                if (IsPoisoned(target) && E.IsReady)
                 {
                     return;
                 }
                 if (W.LastSentTime > 0)
                 {
-                    var arrivalTime = W.GetArrivalTime(W.LastEndPosition) + 100;
+                    var arrivalTime = W.GetArrivalTime(W.LastEndPosition);
                     if (Core.GameTickCount - W.LastSentTime <= arrivalTime)
                     {
                         return;
@@ -376,13 +376,13 @@ namespace KoreanAIO.Champions
         {
             if (W.IsReady && target != null)
             {
-                if (IsPoisoned(target))
+                if (IsPoisoned(target) && E.IsReady)
                 {
                     return;
                 }
                 if (Q.LastSentTime > 0)
                 {
-                    var arrivalTime = Q.GetArrivalTime(Q.LastEndPosition) + 100;
+                    var arrivalTime = Q.GetArrivalTime(Q.LastEndPosition);
                     if (Core.GameTickCount - Q.LastSentTime <= arrivalTime)
                     {
                         return;
@@ -414,7 +414,7 @@ namespace KoreanAIO.Champions
                             var pred = W.GetPrediction(target);
                             if (pred.HitChancePercent >= W.HitChancePercent &&
                                 W.LastEndPosition.Distance(pred.CastPosition, true) <=
-                                (target.BoundingRadius + W.Radius).Pow())
+                                (target.BoundingRadius / 2f + W.Radius).Pow())
                             {
                                 canCast = true;
                             }
@@ -427,7 +427,7 @@ namespace KoreanAIO.Champions
                             var pred = Q.GetPrediction(target);
                             if (pred.HitChancePercent >= Q.HitChancePercent &&
                                 Q.LastEndPosition.Distance(pred.CastPosition, true) <=
-                                (target.BoundingRadius + Q.Radius).Pow())
+                                (target.BoundingRadius / 2f + Q.Radius).Pow())
                             {
                                 canCast = true;
                             }
