@@ -16,12 +16,12 @@ namespace KoreanAIO.Champions
         {
             Q = new SpellBase(SpellSlot.Q, SpellType.Circular, 850)
             {
-                Width = 75,
+                Width = 130,
                 CastDelay = 400
             };
             W = new SpellBase(SpellSlot.W, SpellType.Circular, 850)
             {
-                Width = 90,
+                Width = 106,
                 CastDelay = 250,
                 Speed = 2500
             };
