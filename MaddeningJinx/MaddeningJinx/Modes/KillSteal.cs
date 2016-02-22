@@ -13,7 +13,6 @@ namespace MaddeningJinx
         public static readonly List<Obj_AI_Base> RKillableBases = new List<Obj_AI_Base>();
         public static readonly List<Vector3> RHittableBases = new List<Vector3>();
         public static readonly Dictionary<int, float> RDamageOnEnemies = new Dictionary<int, float>();
-        public static bool UsingQ;
         public static Menu Menu
         {
             get
@@ -27,7 +26,6 @@ namespace MaddeningJinx
             RKillableBases.Clear();
             RHittableBases.Clear();
             RDamageOnEnemies.Clear();
-            UsingQ = false;
             if (SpellSlot.R.IsReady() && Util.MyHero.Mana >= SpellSlot.R.Mana())
             {
                 foreach (var killableEnemy in MyTargetSelector.ValidEnemies)
@@ -43,20 +41,19 @@ namespace MaddeningJinx
                     SpellManager.R.Cast(bestKillable);
                 }
             }
-            if (MenuManager.Menu.GetCheckBoxValue("KillSteal"))
+            foreach (var enemy in MyTargetSelector.ValidEnemiesInRange.Where(m => m.HealthPercent < 40))
             {
-                foreach (var enemy in MyTargetSelector.ValidEnemiesInRange.Where(m => m.HealthPercent < 40))
+                var result = enemy.GetBestCombo();
+                if (result.IsKillable)
                 {
-                    var result = enemy.GetBestCombo();
-                    if (result.IsKillable)
+                    if (Menu.CheckBox("W") && result.CanKillWith(SpellSlot.W) && MyTargetSelector.PowPowTarget == null)
                     {
-                        if (result.CanKillWith(SpellSlot.Q) && enemy.IsInFishBonesRange())
-                        {
-                            UsingQ = true;
-                            Champion.EnableFishBones(enemy);
-                        }
-                        else if (result.CanKillWith(SpellSlot.W)) { SpellManager.CastW(enemy); }
-                        if (result.CanKillWith(SpellSlot.E)) { SpellManager.CastESlowed(enemy); }
+                        SpellManager.CastW(enemy);
+                    }
+                    if (Menu.CheckBox("E") && result.CanKillWith(SpellSlot.E)) 
+                    {
+                        SpellManager.CastE(enemy);
+                        SpellManager.CastESlowed(enemy);
                     }
                 }
             }

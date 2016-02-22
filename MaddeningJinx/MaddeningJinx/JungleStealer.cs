@@ -113,7 +113,7 @@ namespace MaddeningJinx
                     {
                         KillSteal.RKillableBases.Add(monster);
                         DrawManager.JungleStealText.TextValue = "";
-                        if (MenuManager.Menu.GetCheckBoxValue("R.JungleSteal") || MenuManager.TapKeyPressed)
+                        if (MenuManager.GetSubMenu("Automatic").CheckBox("R.JungleSteal") || MenuManager.TapKeyPressed)
                         {
                             KillSteal.RHittableBases.Add(heroNear.ServerPosition);
                         }

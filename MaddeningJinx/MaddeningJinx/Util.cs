@@ -79,8 +79,8 @@ namespace MaddeningJinx
         {
             var slot = s.ToString().Trim();
             return Harass.IsActive
-                ? MenuManager.PredictionMenu.GetSliderValue(slot + ".Harass")
-                : MenuManager.PredictionMenu.GetSliderValue(slot + ".Combo");
+                ? MenuManager.PredictionMenu.Slider(slot + ".Harass")
+                : MenuManager.PredictionMenu.Slider(slot + ".Combo");
         }
 
         public static bool IsReady(this SpellSlot slot)

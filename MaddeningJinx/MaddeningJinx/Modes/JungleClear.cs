@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
-using EloBuddy.SDK.Enumerations;
-using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
-using EloBuddy.SDK.Menu.Values;
-using EloBuddy.SDK.Rendering;
-using SharpDX;
 
 namespace MaddeningJinx
 {
@@ -25,18 +19,18 @@ namespace MaddeningJinx
         {
             get
             {
-                return MenuManager.GetSubMenu("JungleClear");
+                return MenuManager.GetSubMenu("Clear");
             }
         }
 
         public static IEnumerable<Obj_AI_Base> Minions
         {
-            get { return EntityManager.MinionsAndMonsters.Monsters.Where(m => m.IsInFishBonesRange()); }
+            get { return EntityManager.MinionsAndMonsters.Monsters.Where(m => m.IsInFishBonesRange()).OrderByDescending(o => o.MaxHealth); }
         }
 
         public static void Execute()
         {
-            if (MenuManager.Menu.GetCheckBoxValue("Farming.Q"))
+            if (Menu.Slider("JungleClear.Q") > 0)
             {
                 if (!Combo.CanUseQ)
                 {
@@ -44,7 +38,7 @@ namespace MaddeningJinx
                     return;
                 }
                 var t = Minions.GetBestFishBonesTarget();
-                if (t.List.Count > 1)
+                if (t.List.Count >= Menu.Slider("JungleClear.Q"))
                 {
                     Champion.EnableFishBones(t.Target);
                 }

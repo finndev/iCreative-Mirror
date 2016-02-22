@@ -10,7 +10,7 @@ namespace MaddeningJinx
     {
         public static Menu Menu
         {
-            get { return MenuManager.GetSubMenu("LaneClear"); }
+            get { return MenuManager.GetSubMenu("Clear"); }
         }
 
         public static bool IsActive
@@ -40,7 +40,7 @@ namespace MaddeningJinx
 
         public static void Execute()
         {
-            if (MenuManager.Menu.GetCheckBoxValue("Farming.Q"))
+            if (Menu.Slider("LaneClear.Q") > 0)
             {
                 if (!Combo.CanUseQ || (MyTargetSelector.Target.IsInEnemyTurret() && Util.MyHero.IsInEnemyTurret()))
                 {
@@ -48,14 +48,14 @@ namespace MaddeningJinx
                     return;
                 }
                 var t = LastHit.AttackableUnits.GetBestFishBonesTarget();
-                if (t.List.Count > 1)
+                if (t.List.Count >= Menu.Slider("LastHit.Q"))
                 {
                     Champion.EnableFishBones(t.Target);
                 }
                 else
                 {
                     t = AttackableUnits.GetBestFishBonesTarget();
-                    if (t.List.Count > 2 && t.CanAutoAttack())
+                    if (t.List.Count >= Menu.Slider("LaneClear.Q") && t.CanAutoAttack())
                     {
                         Champion.EnableFishBones(t.Target);
                     }

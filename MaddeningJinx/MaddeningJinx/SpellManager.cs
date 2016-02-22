@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
@@ -10,10 +9,9 @@ namespace MaddeningJinx
 {
     public static class SpellManager
     {
-        private const int InitialSpeed = 1700;
-        private const int ChangerSpeedDistance = 1350;
-        private const int FinalSpeed = 2200;
-        private const float Accelerationrate = 0.3f;
+        private const float InitialSpeed = 1700;
+        private const float ChangerSpeedDistance = 1350;
+        private const float FinalSpeed = 2200;
         public static Spell.Skillshot W;
         public static Spell.Skillshot E;
         public static Spell.Skillshot R;
@@ -35,15 +33,15 @@ namespace MaddeningJinx
 
         public static void Initialize()
         {
-            W = new Spell.Skillshot(SpellSlot.W, 1500, SkillShotType.Linear, 600, 3300, 60)
+            W = new Spell.Skillshot(SpellSlot.W, 1500, SkillShotType.Linear, 600, 3300, 60 * 2)
             {
                 AllowedCollisionCount = 0
             };
-            E = new Spell.Skillshot(SpellSlot.E, 900, SkillShotType.Circular, 1200, int.MaxValue, 100)
+            E = new Spell.Skillshot(SpellSlot.E, 900, SkillShotType.Circular, 1200, int.MaxValue, 120)
             {
                 AllowedCollisionCount = int.MaxValue
             };
-            R = new Spell.Skillshot(SpellSlot.R, 20000, SkillShotType.Linear, 600, 1700, 140)
+            R = new Spell.Skillshot(SpellSlot.R, 20000, SkillShotType.Linear, 600, 1700, 140 * 2)
             {
                 AllowedCollisionCount = int.MaxValue
             };
@@ -60,7 +58,6 @@ namespace MaddeningJinx
             {
                 if (args.Slot == SpellSlot.Q)
                 {
-                    args.Process = Orbwalker.CanMove;
                     QCastSpellTime = Core.GameTickCount;
                 }
                 else if (args.Slot == SpellSlot.W)
@@ -91,7 +88,7 @@ namespace MaddeningJinx
 
         internal static void CastW(Obj_AI_Base target)
         {
-            if (W.IsReady() && Orbwalker.CanMove)
+            if (W.IsReady() && Orbwalker.CanMove && Util.MyHero.IsInRange(target, W.Range + W.Width))
             {
                 if (Core.GameTickCount - RLastCastTime <= R.CastDelay || Core.GameTickCount - RCastSpellTime < 100 || (RMissile != null && Util.MyHero.Distance(RMissile, true) <= Util.MyHero.Distance(target, true)))
                 {
@@ -102,7 +99,7 @@ namespace MaddeningJinx
                     return;
                 }
                 var pred = W.GetPrediction(target);
-                if (pred.HitChancePercent >= MenuManager.Menu.GetSliderValue("Prediction.W"))
+                if (pred.HitChancePercent >= MenuManager.Menu.Slider("Prediction.W"))
                 {
                     W.Cast(pred.CastPosition);
                 }
@@ -123,17 +120,18 @@ namespace MaddeningJinx
         }
         internal static void CastESlowed(Obj_AI_Base target)
         {
-            if (E.IsReady() && target.GetMovementReducedDebuffDuration() > 0f)
+            if (E.IsReady() && Util.MyHero.IsInRange(target, E.Range + E.Width + target.BoundingRadius / 2f))
             {
-                E.CastDelay = 1200;
-                var pred = E.GetPrediction(target);
-                if (pred.HitChance >= HitChance.High)
+                var debuffTime = target.GetMovementReducedDebuffDuration();
+                if (debuffTime >= E.CastDelay / 1000f)
                 {
-                    E.CastDelay = 600;
-                    var pred2 = E.GetPrediction(target);
-                    if (pred2.HitChance >= HitChance.High && pred.CastPosition.Distance(pred2.CastPosition, true) <= (E.Width).Pow())
+                    var pred = E.GetPrediction(target);
+                    if (pred.HitChance >= HitChance.High)
                     {
-                        E.Cast(pred.CastPosition);
+                        if (target.MoveSpeed * E.CastDelay / 1000f <= E.Width + target.BoundingRadius / 2f)
+                        {
+                            E.Cast(pred.CastPosition);
+                        }
                     }
                 }
             }
@@ -150,8 +148,7 @@ namespace MaddeningJinx
             {
                 return;
             }
-            E.CastDelay = 1200;
-            var points = (from enemy in enemiesInRange let pred = E.GetPrediction(enemy) where pred.HitChancePercent >= 65 select new Tuple<Vector2, float>(pred.CastPosition.To2D(), enemy.BoundingRadius)).ToList();
+            var points = (from enemy in enemiesInRange let pred = E.GetPrediction(enemy) where pred.HitChance >= HitChance.High select new Tuple<Vector2, float>(pred.CastPosition.To2D(), enemy.BoundingRadius)).ToList();
             if (points.Count < minHit)
             {
                 return;
@@ -191,7 +188,7 @@ namespace MaddeningJinx
                 missilespeed = (1350f * InitialSpeed + acceldifference * (InitialSpeed + Accelerationrate * acceldifference) +
                                 difference * FinalSpeed) / distance;
                 */
-                return InitialSpeed * ChangerSpeedDistance + (distance - ChangerSpeedDistance) * FinalSpeed +
+                return ChangerSpeedDistance / InitialSpeed + (distance - ChangerSpeedDistance) / FinalSpeed +
                        R.CastDelay / 1000f;
             }
             return InitialSpeed * distance + R.CastDelay / 1000f;
@@ -202,11 +199,11 @@ namespace MaddeningJinx
             KillSteal.RDamageOnEnemies[target.NetworkId] = SpellSlot.R.GetSpellDamage(target);
             if (target.TotalShieldHealth() + target.HPRegenRate * 2 <= KillSteal.RDamageOnEnemies[target.NetworkId])
             {
-                var distance = Vector3.Distance(Util.MyHero.ServerPosition, target.ServerPosition);
-                R.Speed = InitialSpeed;
+                var distance = Vector3.Distance(Util.MyHero.Position, target.Position);
+                R.Speed = (int)InitialSpeed;
                 if (distance >= ChangerSpeedDistance)
                 {
-                    var travelTime = InitialSpeed * ChangerSpeedDistance + (distance - ChangerSpeedDistance) * FinalSpeed;
+                    var travelTime = ChangerSpeedDistance / InitialSpeed +  (distance - ChangerSpeedDistance) / FinalSpeed;
                     R.Speed = (int)(distance / travelTime);
                 }
                 var pred = R.GetPrediction(target);
@@ -222,7 +219,7 @@ namespace MaddeningJinx
                     if (pred.HitChance >= HitChance.High &&
                         firstHit.Distance(target, true) <= (225 + target.BoundingRadius).Pow())
                     {
-                        if ((MenuManager.Menu.GetCheckBoxValue("R.KillSteal") && target.WillBeHittedByR() &&
+                        if ((KillSteal.Menu.CheckBox("R") && target.WillBeHittedByR() &&
                              !MyTargetSelector.PowPowTarget.IdEquals(target) && target.CountAlliesInRange(500) == 0) || MenuManager.TapKeyPressed)
                         {
                             KillSteal.RHittableBases.Add(pred.CastPosition);

@@ -91,7 +91,7 @@ namespace MaddeningJinx
                             if (rObjectTime > 0 && Core.GameTickCount - rObjectTime >= timeToWait &&
                                 Core.GameTickCount - rObjectTime <= 4000)
                             {
-                                if (MenuManager.Menu.GetCheckBoxValue("E.Spells") || Combo.IsActive)
+                                if (MenuManager.GetSubMenu("Automatic").CheckBox("E.Spells") || Combo.IsActive)
                                 {
                                     SpellManager.E.Cast(rObject.Position);
                                 }
@@ -162,7 +162,7 @@ namespace MaddeningJinx
                 {
                     ThreshSenders.Remove(b.Key);
                 }
-                if (MenuManager.Menu.GetCheckBoxValue("E.CC") || Combo.IsActive)
+                if (MenuManager.GetSubMenu("Automatic").CheckBox("E.CC") || Combo.IsActive)
                 {
                     foreach (
                         var enemy in
@@ -189,7 +189,7 @@ namespace MaddeningJinx
                         SpellManager.E.Cast(castPosition);
                     }
                 }
-                if (MenuManager.Menu.GetCheckBoxValue("E.Spells") || Combo.IsActive)
+                if (MenuManager.GetSubMenu("Automatic").CheckBox("E.Spells") || Combo.IsActive)
                 {
                     foreach (
                         var enemy in
@@ -239,7 +239,7 @@ namespace MaddeningJinx
                 var time = Game.Time + Math.Abs(args.SData.CastTime) +
                            (MenuManager.ImmobileSpellsMenu != null &&
                             MenuManager.ImmobileSpellsHashSet.Contains(hero.ChampionName + args.Slot) &&
-                            MenuManager.ImmobileSpellsMenu.GetCheckBoxValue(hero.ChampionName + args.Slot)
+                            MenuManager.ImmobileSpellsMenu.CheckBox(hero.ChampionName + args.Slot)
                                ? 1.2f
                                : 0f);
                 if (time - Game.Time > 0)
@@ -378,7 +378,7 @@ namespace MaddeningJinx
                 var pred = SpellManager.W.GetPrediction(target);
                 var timeToArriveW = (pred.CastPosition.Distance(SpellManager.W.Source()) - target.BoundingRadius) /
                                     SpellManager.W.Speed + SpellManager.W.CastDelay / 1000f;
-                return timeToArriveW <= time && pred.HitChancePercent >= MenuManager.Menu.GetSliderValue("Prediction.W") &&
+                return timeToArriveW <= time && pred.HitChancePercent >= MenuManager.Menu.Slider("Prediction.W") &&
                        pred.CastPosition.To2D()
                            .Distance(SpellManager.WStartPosition.To2D(), SpellManager.WEndPosition.To2D(), false, true) <=
                        (SpellManager.W.Width + target.BoundingRadius).Pow();

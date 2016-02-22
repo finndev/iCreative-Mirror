@@ -23,7 +23,7 @@ namespace MaddeningJinx
 
         public static Menu Menu
         {
-            get { return MenuManager.Menu; }
+            get { return MenuManager.GetSubMenu("Drawings"); }
         }
 
         public static void Initialize()
@@ -48,15 +48,15 @@ namespace MaddeningJinx
             {
                 return;
             }
-            if (Menu.GetCheckBoxValue("Drawings.Disable"))
+            if (Menu.CheckBox("Disable"))
             {
                 return;
             }
-            if (Menu.GetCheckBoxValue("Drawings.DamageIndicator"))
+            if (Menu.CheckBox("DamageIndicator"))
             {
                 DamageIndicator.Draw();
             }   
-            if (Menu.GetCheckBoxValue("Drawings.R.Killable"))
+            if (Menu.CheckBox("R.Killable"))
             {
                 var count = 0;
                 foreach (var killable in KillSteal.RKillableBases)
@@ -106,12 +106,12 @@ namespace MaddeningJinx
             {
                 return;
             }
-            if (Menu.GetCheckBoxValue("Drawings.Disable"))
+            if (Menu.CheckBox("Disable"))
             {
                 return;
             }
             var target = MyTargetSelector.Target;
-            if (Menu.GetCheckBoxValue("Drawings.Target") && target != null)
+            if (Menu.CheckBox("Target") && target != null)
             {
                 Circle.Draw(SharpDX.Color.Red, 120f, 5, target);
             }
@@ -120,7 +120,7 @@ namespace MaddeningJinx
                 Circle.Draw(WhiteColor,
                     Champion.HasFishBonesActive ? Champion.GetPowPowRange() : Champion.GetFishBonesRange(), Util.MyHero);
             }
-            if (Menu.GetCheckBoxValue("Drawings.W") && SpellSlot.W.IsReady())
+            if (Menu.CheckBox("W") && SpellSlot.W.IsReady())
             {
                 Circle.Draw(WhiteColor, SpellManager.W.Range, Util.MyHero);
             }

@@ -76,7 +76,7 @@ namespace MaddeningJinx
             var aiBases = list as Obj_AI_Base[] ?? list.ToArray();
             foreach (var target in aiBases)
             {
-                var objAiBases = aiBases.Where(@base => target.Distance(@base, true) <= (SpellManager.QWidth + @base.BoundingRadius).Pow()).ToList();
+                var objAiBases = aiBases.Where(@base => target.Distance(@base, true) <= (SpellManager.QWidth + @base.BoundingRadius / 2f).Pow()).ToList();
                 if (objAiBases.Count > bestList.Count)
                 {
                     bestTarget = target;
@@ -117,7 +117,7 @@ namespace MaddeningJinx
             {
                 if (Util.MyHero.Distance(e.Start, true) < Util.MyHero.Distance(e.SenderMousePos, true))
                 {
-                    if (MenuManager.Menu.GetCheckBoxValue("W.Spells"))
+                    if (MenuManager.GetSubMenu("Automatic").CheckBox("W.Spells"))
                     {
                         SpellManager.CastW(sender);
                     }
@@ -128,7 +128,7 @@ namespace MaddeningJinx
                     {
                         ShouldWaitTime = Core.GameTickCount;
                     }
-                    if (MenuManager.Menu.GetCheckBoxValue("E.Antigapcloser") && MenuManager.AntiGapcloserMenu != null && MenuManager.AntiGapcloserHashSet.Contains(sender.ChampionName + e.Slot) && MenuManager.AntiGapcloserMenu.GetCheckBoxValue(sender.ChampionName + e.Slot))
+                    if (MenuManager.GetSubMenu("Automatic").CheckBox("E.Antigapcloser"))
                     {
                         SpellManager.E.Cast(e.End);
                     }
@@ -141,7 +141,7 @@ namespace MaddeningJinx
         {
             if (sender.IsValidTarget() && sender.IsEnemy)
             {
-                if (MenuManager.Menu.GetCheckBoxValue("E.Spells") && ImmobileTracker.GetETime() <= e.EndTime - Game.Time)
+                if (MenuManager.GetSubMenu("Automatic").CheckBox("E.Spells") && ImmobileTracker.GetETime() <= e.EndTime - Game.Time)
                 //TODO
                 {
                     SpellManager.E.Cast(sender.Position);
@@ -155,14 +155,14 @@ namespace MaddeningJinx
             {
                 if (Util.MyHero.Distance(e.StartPos, true) < Util.MyHero.Distance(e.EndPos, true))
                 {
-                    if (MenuManager.Menu.GetCheckBoxValue("W.Spells"))
+                    if (MenuManager.GetSubMenu("Automatic").CheckBox("W.Spells"))
                     {
                         SpellManager.CastW(sender);
                     }
                 }
                 else
                 {
-                    if (MenuManager.Menu.GetCheckBoxValue("E.Antigapcloser"))
+                    if (MenuManager.GetSubMenu("Automatic").CheckBox("E.Antigapcloser"))
                     {
                         //SpellManager.CastE(sender);
                     }

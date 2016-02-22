@@ -33,7 +33,6 @@ namespace MaddeningJinx
         public static bool CanUseQ;
         public static bool CanUseW;
         public static bool CanUseE;
-
         public static void Execute()
         {
             var isValidTarget = MyTargetSelector.Target != null;
@@ -42,34 +41,37 @@ namespace MaddeningJinx
                 CanUseQ = Util.MyHero.Mana >= SpellSlot.W.Mana() + (SpellSlot.E.IsLearned() ? SpellSlot.E.Mana() : 0f) + (SpellSlot.R.IsLearned() ? SpellSlot.R.Mana() : 0f);
                 CanUseW = Util.MyHero.Mana >= (SpellSlot.W.Mana() + (SpellSlot.R.IsLearned() ? SpellSlot.R.Mana() : 0f) + 20);
                 CanUseE = Util.MyHero.Mana >= SpellSlot.E.Mana() + (SpellSlot.R.IsLearned() ? SpellSlot.R.Mana() : 0f);
-                if (MyTargetSelector.PowPowTarget == null && CanUseW)
+                if (MyTargetSelector.PowPowTarget == null && CanUseW && Menu.CheckBox("W"))
                 {
                     SpellManager.CastW(MyTargetSelector.Target);
                 }
                 if (CanUseE)
                 {
-                    SpellManager.CastESlowed(MyTargetSelector.Target);
-                    SpellManager.CastAoeE();
+                    if (Menu.CheckBox("E"))
+                    {
+                        SpellManager.CastESlowed(MyTargetSelector.Target);
+                    }
+                    if (Menu.Slider("E.Aoe") > 0)
+                    {
+                        SpellManager.CastAoeE(Menu.Slider("E.Aoe"));
+                    }
                 }
                 ItemManager.UseOffensiveItems(MyTargetSelector.FishBonesTarget);
             }
             if (!isValidTarget)
             {
-                if (!KillSteal.UsingQ)
-                {
-                    Champion.DisableFishBones();
-                }
+                Champion.DisableFishBones();
                 return;
             }
             var t = HeroesInFishBonesRange.GetBestFishBonesTarget();
-            if (t.List.Count > 1 && t.CanAutoAttack())
+            if (t.List.Count >= Menu.Slider("Q.Aoe") && t.CanAutoAttack())
             {
                 Champion.EnableFishBones(t.Target);
             }
             else
             {
                 //if (!MyTargetSelector.Target.IdEquals(MyTargetSelector.PowPowTarget) || Champion.PowPowBuffCount == 3)
-                if (!MyTargetSelector.Target.IdEquals(MyTargetSelector.PowPowTarget) && CanUseQ)
+                if (!MyTargetSelector.Target.IdEquals(MyTargetSelector.PowPowTarget) && Menu.CheckBox("Q") && CanUseQ)
                 {
                     Champion.EnableFishBones(MyTargetSelector.FishBonesTarget);
                 }
@@ -82,3 +84,4 @@ namespace MaddeningJinx
 
     }
 }
+

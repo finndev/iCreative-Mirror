@@ -10,7 +10,7 @@ namespace MaddeningJinx
     {
         public static Menu Menu
         {
-            get { return MenuManager.GetSubMenu("LastHit"); }
+            get { return MenuManager.GetSubMenu("Clear"); }
         }
 
         public static bool IsActive
@@ -35,7 +35,7 @@ namespace MaddeningJinx
 
         public static void Execute()
         {
-            if (MenuManager.Menu.GetCheckBoxValue("Farming.Q"))
+            if (Menu.Slider("LastHit.Q") > 0)
             {
                 if (!Combo.CanUseQ || (MyTargetSelector.Target.IsInEnemyTurret() && Util.MyHero.IsInEnemyTurret()))
                 {
@@ -43,7 +43,7 @@ namespace MaddeningJinx
                     return;
                 }
                 var t = AttackableUnits.GetBestFishBonesTarget();
-                if (t.List.Count > 1 && t.CanAutoAttack())
+                if (t.List.Count >= Menu.Slider("LastHit.Q") && t.CanAutoAttack())
                 {
                     Champion.EnableFishBones(t.Target);
                 }
