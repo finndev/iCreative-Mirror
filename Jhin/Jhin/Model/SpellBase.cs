@@ -443,7 +443,7 @@ namespace Jhin.Model
                             source.Position);
                         break;
                     default:
-                        result = Prediction.Position.PredictLinearMissile(target, range, 2 * width, castDelay, speed,
+                        result = Prediction.Position.PredictLinearMissile(target, range, width, castDelay, speed,
                             allowedCollisionCount, source.Position);
                         break;
                 }

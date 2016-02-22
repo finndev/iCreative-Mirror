@@ -1507,7 +1507,7 @@ namespace KoreanAIO.Utilities
 
         public static Language CurrentLanguage
         {
-            get { return (Language) MenuManager.Menu["Language"].Cast<Slider>().CurrentValue; }
+            get { return (Language)MenuManager.Menu["Language"].Cast<Slider>().CurrentValue; }
         }
 
         public static Language CurrentCulture
@@ -1524,7 +1524,7 @@ namespace KoreanAIO.Utilities
 
         public static void Initialize()
         {
-            MenuManager.Translate(Language.English, (Language) MenuManager.Menu["Language"].Cast<Slider>().CurrentValue);
+            MenuManager.Translate(Language.English, (Language)MenuManager.Menu["Language"].Cast<Slider>().CurrentValue);
         }
 
         public static string GetTranslationFromId(this string name)
@@ -1550,10 +1550,10 @@ namespace KoreanAIO.Utilities
                 if (Translations.ContainsKey(from))
                 {
                     foreach (var pair in from pair in Translations[@from]
-                        where pair.Value == displayName
-                        where Translations.ContainsKey(to)
-                        where Translations[to].ContainsKey(pair.Key)
-                        select pair)
+                                         where pair.Value == displayName
+                                         where Translations.ContainsKey(to)
+                                         where Translations[to].ContainsKey(pair.Key)
+                                         select pair)
                     {
                         return Translations[to][pair.Key];
                     }
@@ -1561,10 +1561,10 @@ namespace KoreanAIO.Utilities
                 if (Translations.ContainsKey(Language.English))
                 {
                     return (from pair in Translations[Language.English]
-                        where pair.Value == displayName
-                        where Translations.ContainsKey(to)
-                        where Translations[to].ContainsKey(pair.Key)
-                        select Translations[to][pair.Key]).FirstOrDefault();
+                            where pair.Value == displayName
+                            where Translations.ContainsKey(to)
+                            where Translations[to].ContainsKey(pair.Key)
+                            select Translations[to][pair.Key]).FirstOrDefault();
                 }
             }
             return null;

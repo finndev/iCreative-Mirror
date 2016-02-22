@@ -33,7 +33,7 @@ namespace MaddeningJinx
 
         public static void Initialize()
         {
-            W = new Spell.Skillshot(SpellSlot.W, 1500, SkillShotType.Linear, 600, 3300, 60 * 2)
+            W = new Spell.Skillshot(SpellSlot.W, 1500, SkillShotType.Linear, 600, 3300, 60)
             {
                 AllowedCollisionCount = 0
             };
@@ -41,7 +41,7 @@ namespace MaddeningJinx
             {
                 AllowedCollisionCount = int.MaxValue
             };
-            R = new Spell.Skillshot(SpellSlot.R, 20000, SkillShotType.Linear, 600, 1700, 140 * 2)
+            R = new Spell.Skillshot(SpellSlot.R, 20000, SkillShotType.Linear, 600, 1700, 140)
             {
                 AllowedCollisionCount = int.MaxValue
             };
