@@ -81,7 +81,7 @@ namespace KoreanAIO.Model
         public Vector3 LastEndPosition;
         public int LastSentTime;
         public Vector3 LastStartPosition;
-        public float MinHitChancePercent = 65f;
+        public float MinHitChancePercent = 60f;
 
         public int Range;
 
