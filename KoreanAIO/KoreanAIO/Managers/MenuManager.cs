@@ -37,7 +37,7 @@ namespace KoreanAIO.Managers
 
         public static void Initialize()
         {
-            Menu = MainMenu.AddMenu("Korean AIO", "KoreanAIO Build: 6.1.3, Champion: " + AIO.MyHero.ChampionName);
+            Menu = MainMenu.AddMenu("Korean AIO", "KoreanAIO Build: 6.4, Champion: " + AIO.MyHero.ChampionName);
             var displayNames = Enum.GetValues(typeof (Language)).Cast<Language>().ToArray();
             var slider = Menu.Add("Language",
                 new Slider("Language: English", (int) LanguageTranslator.CurrentCulture, 0, displayNames.Length - 1));

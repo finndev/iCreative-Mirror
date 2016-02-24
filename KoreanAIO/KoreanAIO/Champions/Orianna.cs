@@ -185,8 +185,8 @@ namespace KoreanAIO.Champions
                 };
 
                 Q.AddConfigurableHitChancePercent();
-                W.AddConfigurableHitChancePercent(65);
-                E.AddConfigurableHitChancePercent(65);
+                W.AddConfigurableHitChancePercent();
+                E.AddConfigurableHitChancePercent();
                 R.AddConfigurableHitChancePercent();
 
                 MenuManager.AddSubMenu("Combo");
