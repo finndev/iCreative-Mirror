@@ -120,7 +120,7 @@ namespace KoreanAIO.Champions
                     {
                         if (Target != null && AutomaticMenu.CheckBox("Gapcloser") &&
                             Ball.GetDistanceSqr(Target) > args.End.Distance(Target, true) &&
-                            args.End.Distance(Target, true) < args.Sender.GetDistanceSqr(Target) && (!Q.IsReady || !args.End.IsInRange(Ball.Position, Q.Range)))
+                            args.End.Distance(Target, true) < args.Sender.GetDistanceSqr(Target))
                         {
                             CastE(sender);
                         }
@@ -132,7 +132,7 @@ namespace KoreanAIO.Champions
                     {
                         if (Target != null && AutomaticMenu.CheckBox("Gapcloser") &&
                             Ball.GetDistanceSqr(Target) > args.EndPos.Distance(Target, true) &&
-                            args.EndPos.Distance(Target, true) < sender.GetDistanceSqr(Target) && (!Q.IsReady || !args.EndPos.IsInRange(Ball.Position, Q.Range)))
+                            args.EndPos.Distance(Target, true) < sender.GetDistanceSqr(Target))
                         {
                             CastE(sender);
                         }
@@ -305,7 +305,7 @@ namespace KoreanAIO.Champions
 
         protected override void PermaActive()
         {
-            _hitR = R.IsReady ? R.ObjectsInRange(R.EnemyHeroes).Count : 0;
+            _hitR = R.IsReady ? R.EnemyHeroes.Count : 0;
             _hitW = W.IsReady ? W.ObjectsInRange(W.EnemyHeroes).Count : 0;
             Range = Q.Range + R.Width;
             _canShield = AutomaticMenu.CheckBox("E.Shield") || (ModeManager.Combo && ComboMenu.CheckBox("E.Shield")) ||
@@ -679,7 +679,7 @@ namespace KoreanAIO.Champions
 
         private void ThrowBall(AIHeroClient target)
         {
-            if ((!Q.IsReady || !Q.InRange(target)) && E.IsReady)
+            if (E.IsReady)
             {
                 var bestAllyNear =
                     UnitManager.ValidAllyHeroesInRange.Where(
