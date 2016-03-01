@@ -45,7 +45,7 @@ namespace LeeSin
                     if (target.IsInAutoAttackRange(Util.MyHero) && !damageI.IsKillable)
                     {
                         var obj = Champion.GetBestObjectFarFrom(target.Position);
-                        if (obj != null && SpellManager.CanCastW1 && Extensions.Distance(Util.MyHero, target, true) < Extensions.Distance(obj, target, true))
+                        if (obj != null && SpellManager.CanCastW1 && Util.MyHero.Distance(target, true) < Extensions.Distance(obj, target, true))
                         {
                             SpellManager.CastW1(obj);
                         }

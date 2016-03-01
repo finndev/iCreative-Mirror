@@ -15,18 +15,18 @@ namespace LeeSin
     public static class MenuManager
     {
         public static Menu AddonMenu;
-        public static Dictionary<string, Menu> SubMenu = new Dictionary<string, Menu>() { };
+        public static Dictionary<string, Menu> SubMenu = new Dictionary<string, Menu>();
         public static void Init()
         {
             var AddonName = Champion.AddonName;
             var Author = Champion.Author;
-            AddonMenu = MainMenu.AddMenu(AddonName, AddonName + " by " + Author + " v1.1");
+            AddonMenu = MainMenu.AddMenu(AddonName, AddonName + " by " + Author + " v6.4.0");
             AddonMenu.AddLabel(AddonName + " made by " + Author);
 
             SubMenu["Prediction"] = AddonMenu.AddSubMenu("Prediction", "Prediction3");
             SubMenu["Prediction"].AddGroupLabel("Q Settings");
-            SubMenu["Prediction"].Add("QCombo", new Slider("Combo HitChancePercent", 78, 0, 100));
-            SubMenu["Prediction"].Add("QHarass", new Slider("Harass HitChancePercent", 83, 0, 100));
+            SubMenu["Prediction"].Add("QCombo", new Slider("Combo HitChancePercent", 65));
+            SubMenu["Prediction"].Add("QHarass", new Slider("Harass HitChancePercent", 70));
 
             //Combo
             SubMenu["Combo"] = AddonMenu.AddSubMenu("Combo", "Combo");
@@ -38,7 +38,7 @@ namespace LeeSin
             var switcher = SubMenu["Combo"].Add("Switcher", new KeyBind("Combo Switcher", false, KeyBind.BindTypes.HoldActive, (uint)'K'));
             switcher.OnValueChange += delegate (ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
             {
-                if (args.NewValue == true)
+                if (args.NewValue)
                 {
                     var cast = GetSubMenu("Combo")["Mode"].Cast<Slider>();
                     if (cast.CurrentValue == cast.MaxValue)
@@ -81,8 +81,8 @@ namespace LeeSin
             SubMenu["Insec"].Add("Object", new CheckBox("Use q on enemy hero/minion if can't hit target", true));
             SubMenu["Insec"].AddSeparator(0);
             SubMenu["Insec"].Add("Flash.Return", new CheckBox("Use flash to return", false));
-            SubMenu["Insec"].AddStringList("Priority", "Priority", new[] { "WardJump > Flash", "Flash > WardJump" }, 0);
-            SubMenu["Insec"].AddStringList("Flash.Priority", "Flash Priority", new[] { "Only R -> Flash", "Only Flash -> R", "R -> Flash and Flash -> R" }, 2);
+            SubMenu["Insec"].AddStringList("Priority", "Priority", new[] { "WardJump > Flash", "Flash > WardJump" }, 1);
+            SubMenu["Insec"].AddStringList("Flash.Priority", "Flash Priority", new[] { "Only R -> Flash", "Only Flash -> R", "R -> Flash and Flash -> R" }, 0);
             SubMenu["Insec"].AddStringList("Position", "Insec End Position", new[] { "Ally Selected > Position Selected > Turret > Ally Near > Current Position", "Mouse Position", "Current Position" }, 0);
             SubMenu["Insec"].Add("DistanceBetweenPercent", new Slider("% of distance between ward and target", 20, 0, 100));
             SubMenu["Insec"].AddGroupLabel("Tips");

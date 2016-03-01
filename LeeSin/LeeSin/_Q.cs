@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
@@ -193,7 +192,7 @@ namespace LeeSin
                     {
                         if (minion.IsInSmiteRange())
                         {
-                            int time = SpellManager.Q1.CastDelay + 1000 * (int)(Util.MyHero.Distance(minion) / SpellManager.Q1.Speed) + (int)SpellManager.SmiteCastDelay * 1000;
+                            int time = SpellManager.Q1.CastDelay +  (int)(1000 * Util.MyHero.Distance(minion) / SpellManager.Q1.Speed) + (int)SpellManager.SmiteCastDelay * 1000;
                             if (Prediction.Health.GetPrediction(minion, time) <= Util.MyHero.GetSummonerSpellDamage(minion, DamageLibrary.SummonerSpells.Smite))
                             {
                                 _smiteTarget = minion;
@@ -214,7 +213,7 @@ namespace LeeSin
             {
                 var pred = SpellManager.Q1.GetPrediction(target);
                 var info = pred.CastPosition.To2D().ProjectOn(_missile.StartPosition.To2D(), _missile.EndPosition.To2D());
-                float hitchancepercent = (target is AIHeroClient) ? SpellSlot.Q.HitChancePercent() : 0;
+                float hitchancepercent = target.Type == GameObjectType.AIHeroClient ? SpellSlot.Q.HitChancePercent() / 2f : 0;
                 if (info.IsOnSegment && pred.HitChancePercent >= hitchancepercent && info.SegmentPoint.Distance(pred.CastPosition.To2D(), true) <= Math.Pow(target.BoundingRadius + SpellManager.Q1.Width, 2))
                 {
                     return true;

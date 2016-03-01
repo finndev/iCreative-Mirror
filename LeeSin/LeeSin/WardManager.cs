@@ -54,7 +54,7 @@ namespace LeeSin
 
         public static void Init()
         {
-            Game.OnTick += Game_OnTick;
+            Game.OnUpdate += Game_OnTick;
 
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
 
@@ -109,7 +109,7 @@ namespace LeeSin
             {
                 JumpToVector(_lastWardJumpVector);
             }
-            _wardsAvailable.RemoveAll(w => w.IsDead || !w.IsValid);
+            _wardsAvailable.RemoveAll(w => !w.IsValid || w.IsDead);
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

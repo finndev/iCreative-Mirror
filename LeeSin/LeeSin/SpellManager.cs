@@ -31,11 +31,11 @@ namespace LeeSin
 
             W2 = new Spell.Active(SpellSlot.W, 700);
 
-            E1 = new Spell.Skillshot(SpellSlot.E, 350, SkillShotType.Linear, 250, 2500, 100)
+            E1 = new Spell.Skillshot(SpellSlot.E, 350, SkillShotType.Linear, 250, int.MaxValue, 100)
             {
                 AllowedCollisionCount = int.MaxValue
             };
-            E2 = new Spell.Skillshot(SpellSlot.E, 675, SkillShotType.Linear, 250, 2500, 100)
+            E2 = new Spell.Skillshot(SpellSlot.E, 675, SkillShotType.Linear, 250, int.MaxValue, 100)
             {
                 AllowedCollisionCount = int.MaxValue
             };

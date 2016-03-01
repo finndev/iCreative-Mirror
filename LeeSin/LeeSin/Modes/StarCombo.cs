@@ -63,7 +63,7 @@ namespace LeeSin
                                     if (target.HaveR())
                                     {
                                         var pred = SpellManager.Q1.GetPrediction(target);
-                                        if (pred.CollisionObjects.Count() == 0)
+                                        if (!pred.CollisionObjects.Any())
                                         {
                                             SpellManager.Q1.Cast(pred.CastPosition);
                                         }
