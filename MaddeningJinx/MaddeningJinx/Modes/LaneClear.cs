@@ -42,20 +42,20 @@ namespace MaddeningJinx
         {
             if (Menu.Slider("LaneClear.Q") > 0)
             {
-                if (!Combo.CanUseQ || (MyTargetSelector.Target.IsInEnemyTurret() && Util.MyHero.IsInEnemyTurret()))
+                if ((!Combo.CanUseQ || (MyTargetSelector.Target.IsInEnemyTurret() && Util.MyHero.IsInEnemyTurret())) && !Champion.ManualSwitch)
                 {
                     Champion.DisableFishBones();
                     return;
                 }
                 var t = LastHit.AttackableUnits.GetBestFishBonesTarget();
-                if (t.List.Count >= Menu.Slider("LastHit.Q"))
+                if (t.List.Count >= Menu.Slider("LastHit.Q") || (Champion.ManualSwitch && t.List.Count > 0))
                 {
                     Champion.EnableFishBones(t.Target);
                 }
                 else
                 {
                     t = AttackableUnits.GetBestFishBonesTarget();
-                    if (t.List.Count >= Menu.Slider("LaneClear.Q") && t.CanAutoAttack())
+                    if ((t.List.Count >= Menu.Slider("LaneClear.Q") && t.CanAutoAttack()) || (Champion.ManualSwitch && t.List.Count > 0))
                     {
                         Champion.EnableFishBones(t.Target);
                     }

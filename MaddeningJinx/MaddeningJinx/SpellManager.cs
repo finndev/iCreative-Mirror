@@ -80,7 +80,7 @@ namespace MaddeningJinx
 
         internal static void CastQ()
         {
-            if (SpellSlot.Q.IsReady() && Orbwalker.CanMove && Core.GameTickCount - QCastSpellTime > 5000)
+            if (SpellSlot.Q.IsReady() && Orbwalker.CanMove && !Champion.ManualSwitch)
             {
                 Util.MyHero.Spellbook.CastSpell(SpellSlot.Q, true);
             }
@@ -90,7 +90,7 @@ namespace MaddeningJinx
         {
             if (W.IsReady() && Orbwalker.CanMove && Util.MyHero.IsInRange(target, W.Range + W.Width))
             {
-                if (Core.GameTickCount - RLastCastTime <= R.CastDelay || Core.GameTickCount - RCastSpellTime < 100 || (RMissile != null && Util.MyHero.Distance(RMissile, true) <= Util.MyHero.Distance(target, true)))
+                if (Core.GameTickCount - RLastCastTime <= R.CastDelay || Core.GameTickCount - RCastSpellTime < 200 || (RMissile != null && Util.MyHero.Distance(RMissile, true) <= Util.MyHero.Distance(target, true)))
                 {
                     return;
                 }
@@ -123,12 +123,15 @@ namespace MaddeningJinx
             if (E.IsReady() && Util.MyHero.IsInRange(target, E.Range + E.Width + target.BoundingRadius / 2f))
             {
                 var debuffTime = target.GetMovementReducedDebuffDuration();
+                E.CastDelay = 1200;
                 if (debuffTime >= E.CastDelay / 1000f)
                 {
                     var pred = E.GetPrediction(target);
                     if (pred.HitChance >= HitChance.High)
                     {
-                        if (target.MoveSpeed * E.CastDelay / 1000f <= E.Width + target.BoundingRadius / 2f)
+                        E.CastDelay = 600;
+                        var pred2 = E.GetPrediction(target);
+                        if (pred.CastPosition.Distance(pred2.CastPosition, true) <= (E.Width + target.BoundingRadius / 2f))
                         {
                             E.Cast(pred.CastPosition);
                         }
@@ -153,21 +156,18 @@ namespace MaddeningJinx
             {
                 return;
             }
-            var bestTuple = new Tuple<Vector2, float>(Vector2.Zero, -1f);
-            foreach (var t in points)
+            Tuple<Vector2, float>[] bestTuple = { new Tuple<Vector2, float>(Vector2.Zero, -1f) };
+            foreach (var t in points.Where(t => points.Count(p => t.Item1.IsInRange(p.Item1, 3f * E.Width + p.Item2 + t.Item2)) >= bestTuple[0].Item2))
             {
-                if (points.Count(p => t.Item1.IsInRange(p.Item1, 3f * E.Width + p.Item2 + t.Item2)) >= bestTuple.Item2)
+                bestTuple[0] = t;
+                if (Math.Abs(bestTuple[0].Item2 - points.Count) < float.Epsilon)
                 {
-                    bestTuple = t;
-                    if (Math.Abs(bestTuple.Item2 - points.Count) < float.Epsilon)
-                    {
-                        break;
-                    }
+                    break;
                 }
             }
-            if (bestTuple.Item2 >= minHit)
+            if (bestTuple[0].Item2 >= minHit)
             {
-                E.Cast(bestTuple.Item1.To3DWorld());
+                E.Cast(bestTuple[0].Item1.To3DWorld());
             }
         }
         internal static float GetUltimateTravelTime(this Obj_AI_Base target)
@@ -175,23 +175,10 @@ namespace MaddeningJinx
             var distance = Vector3.Distance(Util.MyHero.ServerPosition, target.ServerPosition);
             if (distance >= ChangerSpeedDistance)
             {
-                /*
-                //BASEULT ++
-                var missilespeed = InitialSpeed;
-                var acceldifference = distance - InitialDistance;
-                if (acceldifference > 150f)
-                {
-                    acceldifference = 150f;
-                }
-
-                var difference = distance - 1500f;
-                missilespeed = (1350f * InitialSpeed + acceldifference * (InitialSpeed + Accelerationrate * acceldifference) +
-                                difference * FinalSpeed) / distance;
-                */
                 return ChangerSpeedDistance / InitialSpeed + (distance - ChangerSpeedDistance) / FinalSpeed +
                        R.CastDelay / 1000f;
             }
-            return InitialSpeed * distance + R.CastDelay / 1000f;
+            return distance / InitialSpeed + R.CastDelay / 1000f;
         }
 
         internal static void CheckRKillable(Obj_AI_Base target)
@@ -203,7 +190,7 @@ namespace MaddeningJinx
                 R.Speed = (int)InitialSpeed;
                 if (distance >= ChangerSpeedDistance)
                 {
-                    var travelTime = ChangerSpeedDistance / InitialSpeed +  (distance - ChangerSpeedDistance) / FinalSpeed;
+                    var travelTime = ChangerSpeedDistance / InitialSpeed + (distance - ChangerSpeedDistance) / FinalSpeed;
                     R.Speed = (int)(distance / travelTime);
                 }
                 var pred = R.GetPrediction(target);
@@ -219,7 +206,7 @@ namespace MaddeningJinx
                     if (pred.HitChance >= HitChance.High &&
                         firstHit.Distance(target, true) <= (225 + target.BoundingRadius).Pow())
                     {
-                        if ((KillSteal.Menu.CheckBox("R") && target.WillBeHittedByR() &&
+                        if ((KillSteal.Menu.CheckBox("R") /*&& target.WillBeHittedByR()*/ &&
                              !MyTargetSelector.PowPowTarget.IdEquals(target) && target.CountAlliesInRange(500) == 0) || MenuManager.TapKeyPressed)
                         {
                             KillSteal.RHittableBases.Add(pred.CastPosition);
@@ -280,7 +267,7 @@ namespace MaddeningJinx
                 {
                     WMissile = null;
                 }
-                if (missile.IdEquals(RMissile))
+                else if (missile.IdEquals(RMissile))
                 {
                     RMissile = null;
                 }

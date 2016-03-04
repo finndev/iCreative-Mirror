@@ -15,7 +15,7 @@ namespace MaddeningJinx
 
         public static bool HasFishBonesActive
         {
-            get { return Util.MyHero.Spellbook.GetSpell(SpellSlot.Q).ToggleState == 2; }
+            get { return Player.Instance.HasBuff("JinxQ"); }
         }
 
         public static int PowPowBuffCount
@@ -40,13 +40,17 @@ namespace MaddeningJinx
 
         public static float GetPowPowRange(AttackableUnit target = null)
         {
-            return Player.Instance.AttackRange - (HasFishBonesActive ? FishBonesExtraRange : 0) + Util.MyHero.BoundingRadius + (target != null ? (target.BoundingRadius - 20) : 45);
+            return Player.Instance.GetAutoAttackRange(target) - (HasFishBonesActive ? FishBonesExtraRange : 0);
         }
 
         public static float GetFishBonesRange(AttackableUnit target = null)
         {
-            return Player.Instance.AttackRange + (HasFishBonesActive ? 0 : FishBonesExtraRange) + +Util.MyHero.BoundingRadius +
-                   (target != null ? (target.BoundingRadius - 20) : 45);
+            return Player.Instance.GetAutoAttackRange(target) + (HasFishBonesActive ? 0 : FishBonesExtraRange);
+        }
+
+        public static bool ManualSwitch
+        {
+            get { return Core.GameTickCount - SpellManager.QCastSpellTime <= 5000 && HasFishBonesActive; }
         }
 
         private static void Main()

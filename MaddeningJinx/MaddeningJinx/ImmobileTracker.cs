@@ -144,11 +144,7 @@ namespace MaddeningJinx
         {
             return SpellManager.W.CastDelay / 1000f + Util.MyHero.Distance(target) / SpellManager.W.Speed;
         }
-
-        private static float GetRTime(Obj_AI_Base target)
-        {
-            return target.GetUltimateTravelTime();
-        }
+        
 
         private static void Game_OnTick(EventArgs args)
         {
@@ -341,7 +337,7 @@ namespace MaddeningJinx
 
         public static bool WillBeHittedByR(this Obj_AI_Base target)
         {
-            var time = GetRTime(target);
+            var time = target.GetUltimateTravelTime();
             return target.WillBeImmobile(time) || target.WillBeSlowed(time);
         }
 

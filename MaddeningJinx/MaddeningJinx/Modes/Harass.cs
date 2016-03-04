@@ -33,7 +33,7 @@ namespace MaddeningJinx
                 return;
             }
             var t = AttackableUnits.GetBestFishBonesTarget();
-            if (t.List.Count > 1 && t.CanAutoAttack())
+            if ((t.List.Count > 1 && t.CanAutoAttack()) || (Champion.ManualSwitch && t.List.Count > 0))
             {
                 Champion.EnableFishBones(t.Target);
             }

@@ -37,13 +37,13 @@ namespace MaddeningJinx
         {
             if (Menu.Slider("LastHit.Q") > 0)
             {
-                if (!Combo.CanUseQ || (MyTargetSelector.Target.IsInEnemyTurret() && Util.MyHero.IsInEnemyTurret()))
+                if ((!Combo.CanUseQ || (MyTargetSelector.Target.IsInEnemyTurret() && Util.MyHero.IsInEnemyTurret())) && !Champion.ManualSwitch)
                 {
                     Champion.DisableFishBones();
                     return;
                 }
                 var t = AttackableUnits.GetBestFishBonesTarget();
-                if (t.List.Count >= Menu.Slider("LastHit.Q") && t.CanAutoAttack())
+                if ((t.List.Count >= Menu.Slider("LastHit.Q") && t.CanAutoAttack()) || (Champion.ManualSwitch && t.List.Count > 0))
                 {
                     Champion.EnableFishBones(t.Target);
                 }

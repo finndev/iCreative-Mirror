@@ -32,13 +32,13 @@ namespace MaddeningJinx
         {
             if (Menu.Slider("JungleClear.Q") > 0)
             {
-                if (!Combo.CanUseQ)
+                if (!Combo.CanUseQ && !Champion.ManualSwitch)
                 {
                     Champion.DisableFishBones();
                     return;
                 }
                 var t = Minions.GetBestFishBonesTarget();
-                if (t.List.Count >= Menu.Slider("JungleClear.Q"))
+                if (t.List.Count >= Menu.Slider("JungleClear.Q") || (Champion.ManualSwitch && t.List.Count > 0))
                 {
                     Champion.EnableFishBones(t.Target);
                 }

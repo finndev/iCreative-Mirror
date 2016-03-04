@@ -93,7 +93,7 @@ namespace MaddeningJinx
         {
             get
             {
-                return EntityManager.MinionsAndMonsters.Monsters.Where(m => m.IsGettingAttacked() && m.MaxHealth >= 3500);
+                return EntityManager.MinionsAndMonsters.Monsters.Where(m => m.MaxHealth >= 3500 && m.IsGettingAttacked());
             }
         }
 

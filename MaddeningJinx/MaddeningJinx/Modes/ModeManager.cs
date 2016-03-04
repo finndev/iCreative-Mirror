@@ -18,7 +18,7 @@ namespace MaddeningJinx
             {
                 if (Orbwalker.ForcedTarget != null)
                 {
-                    args.Process = Orbwalker.ForcedTarget.IdEquals(target) && Champion.HasFishBonesActive;
+                    args.Process = Orbwalker.ForcedTarget.IdEquals(args.Target) && Champion.HasFishBonesActive;
                 }
             }
         }
@@ -26,6 +26,10 @@ namespace MaddeningJinx
         {
             if (Util.MyHero.IsDead) { return; }
             KillSteal.Execute();
+            if (Orbwalker.ForcedTarget != null && !Orbwalker.ForcedTarget.IsInFishBonesRange())
+            {
+                Orbwalker.ForcedTarget = null;
+            }
             if (IsCombo)
             {
                 Combo.Execute();

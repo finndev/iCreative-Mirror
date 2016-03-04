@@ -58,13 +58,13 @@ namespace MaddeningJinx
                 }
                 ItemManager.UseOffensiveItems(MyTargetSelector.FishBonesTarget);
             }
-            if (!isValidTarget)
+            if (!isValidTarget && !Champion.ManualSwitch)
             {
                 Champion.DisableFishBones();
                 return;
             }
             var t = HeroesInFishBonesRange.GetBestFishBonesTarget();
-            if (t.List.Count >= Menu.Slider("Q.Aoe") && t.CanAutoAttack())
+            if ((t.List.Count >= Menu.Slider("Q.Aoe") && t.CanAutoAttack()) || (Champion.ManualSwitch && t.List.Count > 0))
             {
                 Champion.EnableFishBones(t.Target);
             }
