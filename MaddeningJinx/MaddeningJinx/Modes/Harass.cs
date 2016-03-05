@@ -39,7 +39,7 @@ namespace MaddeningJinx
             }
             else
             {
-                if (Orbwalker.LastHitMinion == null && !Orbwalker.ShouldWait && MyTargetSelector.Target != null && Util.MyHero.Distance(Util.MousePos, true) >= Util.MousePos.Distance(MyTargetSelector.Target, true) && Util.MyHero.IsInRange(MyTargetSelector.Target, MyTargetSelector.AaRange) && Combo.CanUseQ)
+                if (Orbwalker.LastHitMinion == null && !Orbwalker.ShouldWait && MyTargetSelector.Target != null && Util.MyHero.Distance(Util.MousePos, true) >= Util.MousePos.Distance(MyTargetSelector.Target, true) && Util.MyHero.IsInRange(MyTargetSelector.Target, MyTargetSelector.AaRange) && ModeManager.CanUseQ)
                 {
                     Champion.EnableFishBones(MyTargetSelector.FishBonesTarget);
                 }

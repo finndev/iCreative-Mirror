@@ -32,7 +32,7 @@ namespace MaddeningJinx
         {
             if (Menu.Slider("JungleClear.Q") > 0)
             {
-                if (!Combo.CanUseQ && !Champion.ManualSwitch)
+                if (!ModeManager.CanUseQ && !Champion.ManualSwitch)
                 {
                     Champion.DisableFishBones();
                     return;

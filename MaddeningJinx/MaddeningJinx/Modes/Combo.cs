@@ -29,23 +29,16 @@ namespace MaddeningJinx
         {
             return result.List.Contains(MyTargetSelector.FishBonesTarget);
         }
-
-        public static bool CanUseQ;
-        public static bool CanUseW;
-        public static bool CanUseE;
         public static void Execute()
         {
             var isValidTarget = MyTargetSelector.Target != null;
             if (isValidTarget)
             {
-                CanUseQ = Util.MyHero.Mana >= SpellSlot.W.Mana() + (SpellSlot.E.IsLearned() ? SpellSlot.E.Mana() : 0f) + (SpellSlot.R.IsLearned() ? SpellSlot.R.Mana() : 0f);
-                CanUseW = Util.MyHero.Mana >= (SpellSlot.W.Mana() + (SpellSlot.R.IsLearned() ? SpellSlot.R.Mana() : 0f) + 20);
-                CanUseE = Util.MyHero.Mana >= SpellSlot.E.Mana() + (SpellSlot.R.IsLearned() ? SpellSlot.R.Mana() : 0f);
-                if (MyTargetSelector.PowPowTarget == null && CanUseW && Menu.CheckBox("W"))
+                if (MyTargetSelector.PowPowTarget == null && ModeManager.CanUseW && Menu.CheckBox("W"))
                 {
                     SpellManager.CastW(MyTargetSelector.Target);
                 }
-                if (CanUseE)
+                if (ModeManager.CanUseE)
                 {
                     if (Menu.CheckBox("E"))
                     {
@@ -71,7 +64,7 @@ namespace MaddeningJinx
             else
             {
                 //if (!MyTargetSelector.Target.IdEquals(MyTargetSelector.PowPowTarget) || Champion.PowPowBuffCount == 3)
-                if (!MyTargetSelector.Target.IdEquals(MyTargetSelector.PowPowTarget) && Menu.CheckBox("Q") && CanUseQ)
+                if (!MyTargetSelector.Target.IdEquals(MyTargetSelector.PowPowTarget) && Menu.CheckBox("Q") && ModeManager.CanUseQ)
                 {
                     Champion.EnableFishBones(MyTargetSelector.FishBonesTarget);
                 }

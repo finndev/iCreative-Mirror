@@ -80,7 +80,7 @@ namespace MaddeningJinx
 
         internal static void CastQ()
         {
-            if (SpellSlot.Q.IsReady() && Orbwalker.CanMove && !Champion.ManualSwitch)
+            if (SpellSlot.Q.IsReady() && Orbwalker.CanMove && Core.GameTickCount - QCastSpellTime > 5000)
             {
                 Util.MyHero.Spellbook.CastSpell(SpellSlot.Q, true);
             }

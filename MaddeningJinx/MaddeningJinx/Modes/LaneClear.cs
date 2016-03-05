@@ -42,7 +42,7 @@ namespace MaddeningJinx
         {
             if (Menu.Slider("LaneClear.Q") > 0)
             {
-                if ((!Combo.CanUseQ || (MyTargetSelector.Target.IsInEnemyTurret() && Util.MyHero.IsInEnemyTurret())) && !Champion.ManualSwitch)
+                if ((!ModeManager.CanUseQ || (MyTargetSelector.Target.IsInEnemyTurret() && Util.MyHero.IsInEnemyTurret())) && !Champion.ManualSwitch)
                 {
                     Champion.DisableFishBones();
                     return;

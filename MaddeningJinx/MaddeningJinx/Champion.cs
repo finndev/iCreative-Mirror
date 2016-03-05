@@ -50,7 +50,7 @@ namespace MaddeningJinx
 
         public static bool ManualSwitch
         {
-            get { return Core.GameTickCount - SpellManager.QCastSpellTime <= 5000 && HasFishBonesActive; }
+            get { return Core.GameTickCount - SpellManager.QCastSpellTime <= 5000 && SpellManager.QCastSpellTime > 0 && HasFishBonesActive; }
         }
 
         private static void Main()
