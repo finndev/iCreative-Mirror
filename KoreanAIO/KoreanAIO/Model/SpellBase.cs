@@ -103,10 +103,7 @@ namespace KoreanAIO.Model
                 if (FpsBooster.CanBeExecuted(CalculationType.Prediction))
                 {
                 }
-                foreach (var pair in CachedPredictions)
-                {
-                    pair.Value.Clear();
-                }
+                CachedPredictions.Clear();
                 if (FpsBooster.CanBeExecuted(CalculationType.Damage))
                 {
                     _cachedDamage.Clear();
@@ -118,14 +115,8 @@ namespace KoreanAIO.Model
                 if (FpsBooster.CanBeExecuted(CalculationType.IsValidTarget))
                 {
                 }
-                foreach (var pair in _cachedObjectsInRange)
-                {
-                    pair.Value.Clear();
-                }
-                foreach (var pair in _cachedIsOnSegment.SelectMany(pair => pair.Value))
-                {
-                    pair.Value.Clear();
-                }
+                _cachedObjectsInRange.Clear();
+                _cachedIsOnSegment.Clear();
                 _enemyHeroesCanBeCalculated = true;
                 _laneClearMinionsCanBeCalculated = true;
                 _enemyMinionsCanBeCalculated = true;

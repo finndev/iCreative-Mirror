@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
 using KoreanAIO.Utilities;
@@ -34,36 +33,18 @@ namespace KoreanAIO.Managers
                 if (FpsBooster.CanBeExecuted(CalculationType.Distance))
                 {
                 }
-                foreach (var pair in CachedDistanceSqr)
-                {
-                    pair.Value.Clear();
-                }
-                foreach (var pair in CachedDistance)
-                {
-                    pair.Value.Clear();
-                }
-                foreach (var pair in CachedInRange.SelectMany(pair => pair.Value))
-                {
-                    pair.Value.Clear();
-                }
-                foreach (var pair in CachedInAutoAttackRange)
-                {
-                    pair.Value.Clear();
-                }
+                CachedDistanceSqr.Clear();
+                CachedDistance.Clear();
+                CachedInRange.Clear();
+                CachedInAutoAttackRange.Clear();
                 if (FpsBooster.CanBeExecuted(CalculationType.IsValidTarget))
                 {
                 }
-                foreach (var pair in CachedHasBuff)
-                {
-                    pair.Value.Clear();
-                }
+                CachedHasBuff.Clear();
                 if (FpsBooster.CanBeExecuted(CalculationType.Damage))
                 {
                 }
-                foreach (var pair in CachedAutoAttackDamage)
-                {
-                    pair.Value.Clear();
-                }
+                CachedAutoAttackDamage.Clear();
             };
         }
 
