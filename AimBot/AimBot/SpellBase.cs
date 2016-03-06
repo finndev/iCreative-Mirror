@@ -112,26 +112,27 @@ namespace AimBot
             //Self
             return Player.Instance.IsInRange(position, Range + target.BoundingRadius / 2f);
         }
-        public PredictionResult GetPrediction(Obj_AI_Base target)
+        public PredictionResult GetPrediction(Obj_AI_Base target, Vector3? startPos = null)
         {
+            var startPosition = startPos ?? Program.MyHero.Position;
             PredictionResult result;
             switch (Type)
             {
                 case SpellType.Circular:
                     result = Prediction.Position.PredictCircularMissile(target, Range, (int)Width, (int)(1000 * Delay), Speed,
-                        Player.Instance.Position);
+                        startPosition);
                     break;
                 case SpellType.Cone:
                     result = Prediction.Position.PredictConeSpell(target, Range, (int)Width, (int)(1000 * Delay), Speed,
-                        Player.Instance.Position);
+                        startPosition);
                     break;
                 case SpellType.Self:
                     result = Prediction.Position.PredictCircularMissile(target, Range, (int)Width, (int)(1000 * Delay), Speed,
-                        Player.Instance.Position);
+                        startPosition);
                     break;
                 default:
                     result = Prediction.Position.PredictLinearMissile(target, Range, (int)Width, (int)(1000 * Delay), Speed,
-                        AllowedCollisionCount, Player.Instance.Position);
+                        AllowedCollisionCount, startPosition);
                     break;
             }
             return result;
@@ -147,9 +148,43 @@ namespace AimBot
             get { return TargetSelector.GetTarget(Range, DamageType.Physical, null, true); }
         }
 
-        public void Cast(Obj_AI_Base target)
+        public void Cast()
         {
-            if (Chat.IsOpen || !IsInRange(target))
+            if (Chat.IsOpen || !IsReady)
+            {
+                return;
+            }
+            AIHeroClient target;
+            if ((Program.MyHero.Hero == Champion.Viktor && Slot == SpellSlot.E) || (Program.MyHero.Hero == Champion.Rumble && Slot == SpellSlot.R))
+            {
+                const float realRange = 525f;
+                Range += realRange;
+                target = Target;
+                if (target != null)
+                {
+                    var startPos = target.IsInRange(Program.MyHero, realRange) ? target.Position : (Program.MyHero.Position + (target.Position - Program.MyHero.Position).Normalized() * realRange);
+                    var pred = GetPrediction(target, startPos);
+                    var endPos = startPos + (pred.CastPosition - startPos).Normalized() * (Range - realRange);
+                    if (pred.HitChancePercent >= HitChancePercent)
+                    {
+                        if (WillHitYasuoWall(pred.CastPosition) || !PredictedPosInRange(target, pred.CastPosition))
+                        {
+                            return;
+                        }
+                        if (Player.Instance.Spellbook.CastSpell(Slot, endPos, startPos))
+                        {
+                            LastCastSpellAttempt = Core.GameTickCount;
+                        }
+                    }
+                }
+                return;
+            }
+            target = Target;
+            if (target == null)
+            {
+                return;
+            }
+            if (!IsInRange(target))
             {
                 return;
             }
@@ -201,7 +236,7 @@ namespace AimBot
             var target = Target;
             if (target != null)
             {
-                if (Chat.IsOpen || !IsInRange(target))
+                if (Chat.IsOpen || !IsReady || !IsInRange(target))
                 {
                     return;
                 }
@@ -216,7 +251,7 @@ namespace AimBot
             var target = Target;
             if (target != null)
             {
-                if (Chat.IsOpen || !IsInRange(target))
+                if (Chat.IsOpen || !IsReady || !IsInRange(target))
                 {
                     return;
                 }
@@ -239,7 +274,7 @@ namespace AimBot
         }
         public void Cast(Vector3 position)
         {
-            if (Chat.IsOpen)
+            if (Chat.IsOpen || !IsReady)
             {
                 return;
             }
@@ -248,14 +283,6 @@ namespace AimBot
                 LastCastSpellAttempt = Core.GameTickCount;
             }
         }
-
-        public void Cast()
-        {
-            var target = Target;
-            if (target != null)
-            {
-                Cast(target);
-            }
-        }
+        
     }
 }

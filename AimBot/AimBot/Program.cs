@@ -38,7 +38,6 @@ namespace AimBot
             _spells = SpellDatabase.GetSpellInfoList(MyHero.BaseSkinName);
             if (_spells.Count > 0)
             {
-                var hasChargeableSpell = _spells.Any(i => i.Chargeable);
                 YasuoWallManager.Initialize();
                 _menu = MainMenu.AddMenu("AimBot", "AimBot 6.4.0 " + MyHero.BaseSkinName);
                 _menu.Add("Enable", new KeyBind("Enable / Disable", true, KeyBind.BindTypes.PressToggle, 'K'));
@@ -54,19 +53,6 @@ namespace AimBot
                     SlotsSlider[slot] = _menu.Add(slot + "HitChancePercent", new Slider("HitChancePercent", 60));
                 }
                 Game.OnTick += Game_OnTick;
-                if (hasChargeableSpell)
-                {
-                    Spellbook.OnCastSpell += delegate (Spellbook sender, SpellbookCastSpellEventArgs args)
-                    {
-                        if (sender.Owner.IsMe)
-                        {
-                            if (_spells.Any(i => i.Slot == args.Slot && i.Chargeable))
-                            {
-                                _lastChargeTime = Core.GameTickCount;
-                            }
-                        }
-                    };
-                }
                 Drawing.OnDraw += delegate
                 {
                     Drawing.DrawText(MyHero.Position.WorldToScreen(), Color.White, "AimBot " + (Enabled ? "ON" : "OFF"), 10);
@@ -77,9 +63,17 @@ namespace AimBot
         private static int _lastChargeTime;
         private static void Game_OnTick(EventArgs args)
         {
-            if (MyHero.IsDead || !Enabled || !Orbwalker.CanMove)
+            if (MyHero.IsDead || !Enabled || (!IsCharging && !Orbwalker.CanMove))
             {
                 return;
+            }
+            if (_lastChargeTime == 0 && IsCharging)
+            {
+                _lastChargeTime = Core.GameTickCount;
+            }
+            else if (_lastChargeTime > 0 && !IsCharging)
+            {
+                _lastChargeTime = 0;
             }
             foreach (var slot in SlotsComboBox.Where(i => Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) ? i.Value.CurrentValue >= 1 : i.Value.CurrentValue == 2).Select(i => i.Key))
             {
@@ -89,12 +83,12 @@ namespace AimBot
 
         private static bool IsCharging
         {
-            get { return MyHero.Spellbook.IsCharging || Core.GameTickCount - _lastChargeTime < 300 + Game.Ping / 2; }
+            get { return MyHero.Spellbook.IsCharging; }
         }
 
         private static void Cast(SpellSlot slot)
         {
-            var first = _spells.FirstOrDefault(spell => spell.Slot == slot && (string.IsNullOrEmpty(spell.SpellName) || MyHero.Spellbook.GetSpell(slot).Name == spell.SpellName));
+            var first = _spells.FirstOrDefault(spell => spell.Slot == slot && (string.IsNullOrEmpty(spell.SpellName) || string.Equals(MyHero.Spellbook.GetSpell(slot).Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase)));
             if (first != null)
             {
                 var allowedCollisionCount = first.Collisions.Length > 0 ? 0 : int.MaxValue;
@@ -129,10 +123,7 @@ namespace AimBot
                     {
                         if (IsCharging)
                         {
-                            var percentageGrowth =
-                                Math.Min(
-                                    (Core.GameTickCount - _lastChargeTime - first.CastRangeGrowthStartTime) /
-                                    first.CastRangeGrowthDuration, 1);
+                            var percentageGrowth = Math.Min(1 / 1000f * (Core.GameTickCount - _lastChargeTime - first.CastRangeGrowthStartTime) / first.CastRangeGrowthDuration, 1);
                             spell.Range = (first.CastRangeGrowthMax - first.CastRangeGrowthMin) * percentageGrowth + first.CastRangeGrowthMin;
                             spell.ReleaseCast();
                         }
