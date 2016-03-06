@@ -150,7 +150,7 @@ namespace AimBot
 
         public void Cast()
         {
-            if (Chat.IsOpen || !IsReady)
+            if (Chat.IsOpen || !IsReady || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass) && Orbwalker.ShouldWait))
             {
                 return;
             }

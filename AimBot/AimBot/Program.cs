@@ -41,6 +41,7 @@ namespace AimBot
                 YasuoWallManager.Initialize();
                 _menu = MainMenu.AddMenu("AimBot", "AimBot 6.4.0 " + MyHero.BaseSkinName);
                 _menu.Add("Enable", new KeyBind("Enable / Disable", true, KeyBind.BindTypes.PressToggle, 'K'));
+                var drawings = _menu.Add("Draw", new CheckBox("Draw Text"));
                 var slots = new HashSet<SpellSlot>();
                 foreach (var info in _spells)
                 {
@@ -55,7 +56,10 @@ namespace AimBot
                 Game.OnTick += Game_OnTick;
                 Drawing.OnDraw += delegate
                 {
-                    Drawing.DrawText(MyHero.Position.WorldToScreen(), Color.White, "AimBot " + (Enabled ? "ON" : "OFF"), 10);
+                    if (drawings.CurrentValue)
+                    {
+                        Drawing.DrawText(MyHero.Position.WorldToScreen(), Color.White, "AIMbot " + (Enabled ? "ON" : "OFF"), 10);
+                    }
                 };
             }
         }
@@ -91,7 +95,15 @@ namespace AimBot
             var first = _spells.FirstOrDefault(spell => spell.Slot == slot && (string.IsNullOrEmpty(spell.SpellName) || string.Equals(MyHero.Spellbook.GetSpell(slot).Name, spell.SpellName, StringComparison.CurrentCultureIgnoreCase)));
             if (first != null)
             {
-                var allowedCollisionCount = first.Collisions.Length > 0 ? 0 : int.MaxValue;
+                var allowedCollisionCount = int.MaxValue;
+                if (first.Collisions.Contains(CollisionType.AiHeroClient))
+                {
+                    allowedCollisionCount = 0;
+                }
+                else if (first.Collisions.Contains(CollisionType.ObjAiMinion))
+                {
+                    allowedCollisionCount = -1;
+                }
                 var collidesWithWall = first.Collisions.Contains(CollisionType.YasuoWall);
                 SpellBase spell = null;
                 switch (first.Type)
