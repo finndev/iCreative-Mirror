@@ -28,10 +28,13 @@ namespace KoreanAIO.Champions
             {
                 AIO.Initializers.Add(delegate
                 {
-                    _ballObject =
-                        ObjectManager.Get<Obj_GeneralParticleEmitter>()
-                            .FirstOrDefault(
-                                o => o.IsValid && !o.IsDead && o.Name.Equals(BallName));
+                    _ballObject = (MyHero.HasBuff("orianaghostself") ? MyHero : null) ??
+                EntityManager.Heroes.AllHeroes.FirstOrDefault(h => h.IsValidTarget() && MyHero.Team == h.Team && h.HasBuff("orianaghost") && h.GetBuff("orianaghost").Caster.IdEquals(MyHero)) ??
+                ObjectManager.Get<Obj_AI_Minion>()
+                    .FirstOrDefault(
+                        o =>
+                            o.IsValid && !o.IsDead && o.IsVisible && o.Team == MyHero.Team && o.BaseSkinName == "OriannaBall" && o.HasBuff("orianaghost") &&
+                            o.GetBuff("orianaghost").Caster.IdEquals(MyHero)) as GameObject;
                 });
                 Q = new SpellBase(SpellSlot.Q, SpellType.Circular, 815)
                 {
@@ -89,7 +92,7 @@ namespace KoreanAIO.Champions
                         var missile = sender as MissileClient;
                         if (missile != null && missile.SpellCaster != null && missile.SpellCaster.IsMe)
                         {
-                            if (missile.SData.Name.Equals("orianaizuna") || missile.SData.Name.Equals("orianaredact"))
+                            if (missile.SData.Name.ToLower().Equals("orianaizuna") || missile.SData.Name.ToLower().Equals("orianaredact"))
                             {
                                 _ballObject = missile;
                             }
@@ -101,7 +104,7 @@ namespace KoreanAIO.Champions
                     var missile = sender as MissileClient;
                     if (missile != null && missile.SpellCaster != null && missile.SpellCaster.IsMe)
                     {
-                        if (missile.SData.Name.Equals("orianaredact"))
+                        if (missile.SData.Name.ToLower().Equals("orianaredact"))
                         {
                             _ballObject = eTarget;
                         }
@@ -111,7 +114,7 @@ namespace KoreanAIO.Champions
                 {
                     if (sender.IsMe && args.Animation.Equals("Prop"))
                     {
-                        _ballObject = sender;
+                        _ballObject = Player.Instance;
                     }
                 };
                 Gapcloser.OnGapcloser += delegate (AIHeroClient sender, Gapcloser.GapcloserEventArgs args)
