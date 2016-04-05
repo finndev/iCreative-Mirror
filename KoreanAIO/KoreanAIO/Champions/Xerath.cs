@@ -21,7 +21,7 @@ namespace KoreanAIO.Champions
             public static class Q
             {
                 public static int CastRangeGrowthMin = 750;
-                public static int CastRangeGrowthMax = 1500;
+                public static int CastRangeGrowthMax = 1400;
                 public static float CastRangeGrowthStartTime = 0f;
                 public static float CastRangeGrowthDuration = 1.5f;
                 public static float CastRangeGrowthEndTime = 3f;
