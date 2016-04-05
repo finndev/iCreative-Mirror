@@ -376,7 +376,7 @@ namespace KoreanAIO.Model
                 case SpellType.Circular:
                     return RangeCheckSourceObject.InRange(target, Range + Radius);
                 case SpellType.Linear:
-                    return RangeCheckSourceObject.InRange(target, Range + Width);
+                    return RangeCheckSourceObject.InRange(target, Range);
             }
             //Self
             return RangeCheckSourceObject.InRange(target, Range);

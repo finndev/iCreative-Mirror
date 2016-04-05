@@ -293,7 +293,7 @@ namespace KoreanAIO.Champions
             Orbwalker.DisableAttacking = IsCastingR || IsChargingQ;
             if (IsChargingQ)
             {
-                var percentGrowth = Math.Min(1, ((Core.GameTickCount - Q.LastCastTime) / 1000f - Spells.Q.CastRangeGrowthStartTime) / Spells.Q.CastRangeGrowthDuration);
+                var percentGrowth = Math.Max(0, Math.Min(1, ((Core.GameTickCount - Q.LastCastTime) / 1000f - Spells.Q.CastRangeGrowthStartTime) / Spells.Q.CastRangeGrowthDuration)) ;
                 Q.Range = (int)((Spells.Q.CastRangeGrowthMax - Spells.Q.CastRangeGrowthMin) * percentGrowth + Spells.Q.CastRangeGrowthMin);
             }
             else
@@ -440,6 +440,10 @@ namespace KoreanAIO.Champions
                     {
                         return;
                     }
+                    if (Orbwalker.CanAutoAttack && HasPassive && MyHero.IsInAutoAttackRange(Target))
+                    {
+                        return;
+                    }
                     if (HarassMenu.CheckBox("E"))
                     {
                         CastE(Target);
@@ -506,7 +510,7 @@ namespace KoreanAIO.Champions
                     {
                         MyHero.Spellbook.UpdateChargeableSpell(Q.Slot, pred.CastPosition, true);
                     }
-                    else if (Core.GameTickCount - Q.LastCastTime >= Spells.Q.CastRangeGrowthEndTime * 1000)
+                    else if (Core.GameTickCount - Q.LastCastTime >= Spells.Q.CastRangeGrowthEndTime * 1000 * 0.85f)
                     {
                         MyHero.Spellbook.UpdateChargeableSpell(Q.Slot, pred.CastPosition, true);
                     }
