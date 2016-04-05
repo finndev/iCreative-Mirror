@@ -81,7 +81,7 @@ namespace KoreanAIO.Model
         public Vector3 LastEndPosition;
         public int LastSentTime;
         public Vector3 LastStartPosition;
-        public float MinHitChancePercent = 60f;
+        public float MinHitChancePercent = 50f;
 
         public int Range;
 
@@ -374,12 +374,12 @@ namespace KoreanAIO.Model
                     return RangeCheckSourceObject.InRange(target,
                         Range + AIO.MyHero.BoundingRadius + target.BoundingRadius - 65);
                 case SpellType.Circular:
-                    return RangeCheckSourceObject.InRange(target, Range + Radius + target.BoundingRadius / 2f);
+                    return RangeCheckSourceObject.InRange(target, Range + Radius);
                 case SpellType.Linear:
                     return RangeCheckSourceObject.InRange(target, Range + Width);
             }
             //Self
-            return RangeCheckSourceObject.InRange(target, Range + target.BoundingRadius / 2f);
+            return RangeCheckSourceObject.InRange(target, Range);
         }
 
         public bool PredictedPosInRange(Obj_AI_Base target, GameObject sourceObj = null)
@@ -392,12 +392,12 @@ namespace KoreanAIO.Model
                     return RangeCheckSource.IsInRange(pred.CastPosition,
                         Range + AIO.MyHero.BoundingRadius + target.BoundingRadius - 65);
                 case SpellType.Circular:
-                    return source.IsInRange(pred.CastPosition, Range + Radius + target.BoundingRadius / 2f);
+                    return source.IsInRange(pred.CastPosition, Range + Radius);
                 case SpellType.Linear:
                     return source.IsInRange(pred.CastPosition, Range);
             }
             //Self
-            return source.IsInRange(pred.CastPosition, Range + target.BoundingRadius / 2f);
+            return source.IsInRange(pred.CastPosition, Range);
         }
 
         public PredictionResult GetPrediction(Obj_AI_Base target, CustomSettings custom = null)
@@ -449,7 +449,7 @@ namespace KoreanAIO.Model
 
         public void Cast(Obj_AI_Base target, CustomSettings custom = null)
         {
-            if (!IsReady || Chat.IsOpen || AIO.MyHero.Spellbook.IsCastingSpell || !InRange(target))
+            if (!IsReady || Chat.IsOpen || !InRange(target))
             {
                 return;
             }
@@ -480,6 +480,7 @@ namespace KoreanAIO.Model
                     if (AIO.MyHero.Spellbook.CastSpell(Slot, pred.CastPosition))
                     {
                         LastSentTime = Core.GameTickCount;
+                        LastEndPosition = pred.CastPosition;
                     }
                 }
             }
@@ -513,7 +514,7 @@ namespace KoreanAIO.Model
 
         public void Cast(Vector3 position)
         {
-            if (!IsReady || Chat.IsOpen || AIO.MyHero.Spellbook.IsCastingSpell)
+            if (!IsReady || Chat.IsOpen)
             {
                 return;
             }
@@ -528,12 +529,13 @@ namespace KoreanAIO.Model
             if (AIO.MyHero.Spellbook.CastSpell(Slot, position))
             {
                 LastSentTime = Core.GameTickCount;
+                LastEndPosition = position;
             }
         }
 
         public void Cast()
         {
-            if (!IsReady || Chat.IsOpen || AIO.MyHero.Spellbook.IsCastingSpell)
+            if (!IsReady || Chat.IsOpen)
             {
                 return;
             }
@@ -806,7 +808,7 @@ namespace KoreanAIO.Model
                 _cachedObjectsInRange[target1.NetworkId].Add(target2.NetworkId,
                     GetPrediction(target2).HitChancePercent >= HitChancePercent / 2 &&
                     GetPrediction(target1)
-                        .CastPosition.IsInRange(GetPrediction(target2).CastPosition, Radius + target1.BoundingRadius));
+                        .CastPosition.IsInRange(GetPrediction(target2).CastPosition, Radius));
             }
             if (!_cachedObjectsInRange.ContainsKey(target2.NetworkId))
             {

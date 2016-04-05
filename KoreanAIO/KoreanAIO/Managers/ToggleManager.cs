@@ -47,7 +47,7 @@ namespace KoreanAIO.Managers
                                            (value ? "Enabled".GetTranslationFromId() : "Disabled".GetTranslationFromId());
                     pair.Value.Position = AIO.MyHero.Position.WorldToScreen() +
                                           new Vector2(-pair.Value.Bounding.Width/2f,
-                                              45f + (pair.Value.Bounding.Height + 5f)*count);
+                                              70f + (pair.Value.Bounding.Height + 5f)*count);
                     pair.Value.Draw();
                     count++;
                 }

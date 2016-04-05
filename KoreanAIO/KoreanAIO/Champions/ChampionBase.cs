@@ -144,6 +144,10 @@ namespace KoreanAIO.Champions
             get { return MenuManager.GetSubMenu("Evader"); }
         }
 
+        public Menu UltimateMenu
+        {
+            get { return MenuManager.GetSubMenu("Ultimate"); }
+        }
         public SpellBase Ignite
         {
             get { return SpellManager.Ignite; }
