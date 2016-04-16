@@ -4,7 +4,6 @@ using System.Linq;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Menu.Values;
-using Jhin;
 using Jhin.Managers;
 using Jhin.Utilities;
 using SharpDX;
@@ -82,7 +81,7 @@ namespace Jhin.Model
         public Vector3 LastEndPosition;
         public int LastSentTime;
         public Vector3 LastStartPosition;
-        public float MinHitChancePercent = 65f;
+        public float MinHitChancePercent = 60f;
 
         public int Range;
 

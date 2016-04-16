@@ -37,7 +37,7 @@ namespace Jhin.Managers
 
         public static void Initialize()
         {
-            Menu = MainMenu.AddMenu("Jhin", "Jhin Build: 6.4.0, Champion: " + AIO.MyHero.ChampionName);
+            Menu = MainMenu.AddMenu("Jhin", "Jhin Build: 6.7.0, Champion: " + AIO.MyHero.ChampionName);
             var displayNames = Enum.GetValues(typeof (Language)).Cast<Language>().ToArray();
             var slider = Menu.Add("Language",
                 new Slider("Language: English", (int) LanguageTranslator.CurrentCulture, 0, displayNames.Length - 1));

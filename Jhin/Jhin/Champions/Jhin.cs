@@ -160,7 +160,8 @@ namespace Jhin.Champions
             }
 
             W.AddConfigurableHitChancePercent();
-            R.AddConfigurableHitChancePercent();
+            E.AddConfigurableHitChancePercent();
+            R.AddConfigurableHitChancePercent(50);
 
             MenuManager.AddSubMenu("Combo");
             {
