@@ -146,9 +146,9 @@ namespace Jhin.Champions
                         new KeyBind("Auto W Toggle", true, KeyBind.BindTypes.PressToggle, 'K')),
                     delegate
                     {
-                        foreach (var enemy in UnitManager.ValidEnemyHeroes.Where(TargetHaveEBuff))
+                        if (MyHero.ManaPercent >= MiscMenu.Slider("W.ManaPercent"))
                         {
-                            if (MyHero.ManaPercent >= MiscMenu.Slider("W.ManaPercent"))
+                            foreach (var enemy in UnitManager.ValidEnemyHeroes.Where(TargetHaveEBuff))
                             {
                                 if (MiscMenu.CheckBox("AutoW." + enemy.ChampionName))
                                 {
@@ -371,16 +371,17 @@ namespace Jhin.Champions
                 }
                 if (ComboMenu.Slider("W") > 0 && MyHero.Mana >= W.Mana + E.Mana + R.Mana)
                 {
-                    if (ComboMenu.Slider("W") == 2)
+                    switch (ComboMenu.Slider("W"))
                     {
-                        if (TargetHaveEBuff(Target))
-                        {
+                        case 1:
+                            foreach (var enemy in UnitManager.ValidEnemyHeroes.Where(TargetHaveEBuff))
+                            {
+                                CastW(enemy);
+                            }
+                            break;
+                        case 2:
                             CastW(Target);
-                        }
-                    }
-                    else if (ComboMenu.Slider("W") == 3)
-                    {
-                        CastW(Target);
+                            break;
                     }
                 }
                 if (ComboMenu.CheckBox("Q") && MyHero.Mana >= Q.Mana + R.Mana)
