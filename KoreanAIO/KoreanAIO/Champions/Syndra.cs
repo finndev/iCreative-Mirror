@@ -628,14 +628,15 @@ namespace KoreanAIO.Champions
                             if (qPred.HitChancePercent >= QE.HitChancePercent / 2f)
                             {
                                 QE.Speed = Spells.QE.Speed;
-                                var startPosition = (MyHero.Position + (qPred.CastPosition - MyHero.Position).Normalized() * Math.Min(E.Range, MyHero.Distance(qPred.CastPosition))).To2D();
+                                var startPosition3D = MyHero.Position + (qPred.CastPosition - MyHero.Position).Normalized() * Math.Min(E.Range - Spells.E.ExtraRange, MyHero.Distance(qPred.CastPosition));
+                                var startPosition = startPosition3D.To2D();
                                 var endPosition = (MyHero.Position + (qPred.CastPosition - MyHero.Position).Normalized() * QE.Range).To2D();
                                 QE.CastDelay = Q.CastDelay + E.CastDelay + (int)(1000 * startPosition.Distance(MyHero) / E.Speed);
-                                var pred = QE.GetPrediction(target);
+                                var pred = QE.GetPrediction(target, new CustomSettings {SourcePosition = startPosition3D});
                                 QE.CachedPredictions.Clear();
                                 if (pred.HitChancePercent >= QE.HitChancePercent && pred.CastPosition.To2D().Distance(startPosition, endPosition, true, true) <= Math.Pow(QE.Width + target.BoundingRadius, 2))
                                 {
-                                    var castPositionInRange = MyHero.Position + (pred.CastPosition - MyHero.Position).Normalized() * (E.Range - Spells.E.ExtraRange);
+                                    var castPositionInRange = startPosition3D;
                                     Q.Cast(castPositionInRange);
                                 }
                             }
