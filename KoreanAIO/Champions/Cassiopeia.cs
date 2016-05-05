@@ -20,11 +20,11 @@ namespace KoreanAIO.Champions
                 Width = 130,
                 CastDelay = 400
             };
-            W = new SpellBase(SpellSlot.W, SpellType.Circular, 850)
+            W = new SpellBase(SpellSlot.W, SpellType.Circular, 800)
             {
-                Width = 106,
+                Width = 180,
                 CastDelay = 250,
-                Speed = 2500
+                Speed = 3000
             };
             E = new SpellBase(SpellSlot.E, SpellType.Targeted, 700)
             {
