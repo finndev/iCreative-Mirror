@@ -34,11 +34,11 @@ namespace MaddeningJinx
                         float rawDamage;
                         if (typeOfDamage == 2)
                         {
-                            rawDamage = 0.8f * percentMod * (150f + 100f * level + Util.MyHero.TotalAttackDamage + (0.25f + 0.05f * level) * (target.MaxHealth - target.Health));
+                            rawDamage = 0.8f * percentMod * (150f + 100f * level + Util.MyHero.FlatPhysicalReduction + (0.25f + 0.05f * level) * (target.MaxHealth - target.Health));
                         }
                         else
                         {
-                            rawDamage = percentMod * (150f + 100f * level + Util.MyHero.TotalAttackDamage + (0.25f + 0.05f * level) * (target.MaxHealth - target.Health));
+                            rawDamage = percentMod * (150f + 100f * level + Util.MyHero.FlatPhysicalReduction + (0.25f + 0.05f * level) * (target.MaxHealth - target.Health));
                         }
                         return Util.MyHero.CalculateDamageOnUnit(target, DamageType.Physical, rawDamage);
                 }
