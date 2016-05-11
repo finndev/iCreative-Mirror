@@ -33,16 +33,16 @@ namespace LeeSin
                                     0.9f * Util.MyHero.TotalAttackDamage + 8f * (target.MaxHealth - target.Health) / 100);
                         }
                         return Util.MyHero.CalculateDamageOnUnit(target, DamageType.Physical,
-                            30f * slot.GetSpellDataInst().Level + 30 + 0.9f * Util.MyHero.FlatPhysicalReduction +
+                            30f * slot.GetSpellDataInst().Level + 30 + 0.9f * Util.MyHero.FlatPhysicalDamageMod +
                             8f * (target.MaxHealth - target.Health) / 100);
                     }
                     if (slot.IsFirstSpell())
                     {
                         return Util.MyHero.CalculateDamageOnUnit(target, DamageType.Physical,
-                            30f * slot.GetSpellDataInst().Level + 30 + 0.9f * Util.MyHero.FlatPhysicalReduction);
+                            30f * slot.GetSpellDataInst().Level + 30 + 0.9f * Util.MyHero.FlatPhysicalDamageMod);
                     }
                     return Util.MyHero.CalculateDamageOnUnit(target, DamageType.Physical,
-                        30f * slot.GetSpellDataInst().Level + 30 + 0.9f * Util.MyHero.FlatPhysicalReduction +
+                        30f * slot.GetSpellDataInst().Level + 30 + 0.9f * Util.MyHero.FlatPhysicalDamageMod +
                         8f * (target.MaxHealth - target.Health) / 100);
                 }
                 if (slot == SpellSlot.W)
@@ -57,7 +57,7 @@ namespace LeeSin
                         {
                             return
                                 Util.MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                                    35f * slot.GetSpellDataInst().Level + 25 + 1f * Util.MyHero.FlatPhysicalReduction) +
+                                    35f * slot.GetSpellDataInst().Level + 25 + 1f * Util.MyHero.FlatPhysicalDamageMod) +
                                 Util.MyHero.GetAutoAttackDamage(target, true);
                         }
                         return Util.MyHero.GetAutoAttackDamage(target, true);
@@ -65,14 +65,14 @@ namespace LeeSin
                     if (slot.IsFirstSpell())
                     {
                         return Util.MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
-                            35f * slot.GetSpellDataInst().Level + 25 + 1f * Util.MyHero.FlatPhysicalReduction);
+                            35f * slot.GetSpellDataInst().Level + 25 + 1f * Util.MyHero.FlatPhysicalDamageMod);
                     }
                     return Util.MyHero.GetAutoAttackDamage(target, true);
                 }
                 if (slot == SpellSlot.R)
                 {
                     return Util.MyHero.CalculateDamageOnUnit(target, DamageType.Physical,
-                       200f * slot.GetSpellDataInst().Level + 2.0f * Util.MyHero.FlatPhysicalReduction);
+                       200f * slot.GetSpellDataInst().Level + 2.0f * Util.MyHero.FlatPhysicalDamageMod);
                 }
             }
             return Util.MyHero.GetSpellDamage(target, slot);
