@@ -599,7 +599,7 @@ namespace Jhin.Champions
                 {
                     case SpellSlot.Q:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Physical,
-                            25f * level + 35f + (0.25f + 0.05f * level) * MyHero.TotalAttackDamage + 0.6f * MyHero.FlatMagicDamageMod);
+                            25f * level + 25f + (0.25f + 0.05f * level) * MyHero.TotalAttackDamage + 0.6f * MyHero.FlatMagicDamageMod);
                     case SpellSlot.W:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Physical,
                             (target is AIHeroClient ? 1f : 0.65f) * (35f * level + 15f + 0.7f * MyHero.TotalAttackDamage));
