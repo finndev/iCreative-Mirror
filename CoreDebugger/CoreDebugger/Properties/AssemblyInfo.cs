@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PacketAnalyzer")]
+[assembly: AssemblyTitle("CoreDebugger")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PacketAnalyzer")]
+[assembly: AssemblyProduct("CoreDebugger")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f5d6460b-a016-4d39-9c97-ccef2800d049")]
+[assembly: Guid("ce52c951-7562-4333-a960-f7ffcce66204")]
 
 // Version information for an assembly consists of the following four values:
 //
