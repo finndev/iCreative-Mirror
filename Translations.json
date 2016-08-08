@@ -34,10 +34,10 @@
     "31": "W",
     "32": "E",
     "33": "R",
-    "35": "Collision settings",
-    "36": "Hero collision",
-    "37": "Minion collision",
-    "38": "Yasuo windwall collision"
+    "34": "Collision settings",
+    "35": "Hero collision",
+    "36": "Minion collision",
+    "37": "Yasuo windwall collision"
   },
   "Spanish": {
     "0": "Habilidades del enemigo",
@@ -74,9 +74,9 @@
     "31": "W",
     "32": "E",
     "33": "R",
-    "35": "Ajustes de colision",
-    "36": "Colision con campeones",
-    "37": "Colision con subditos",
-    "38": "Colision con la pared de yasuo"
+    "34": "Ajustes de colision",
+    "35": "Colision con campeones",
+    "36": "Colision con subditos",
+    "37": "Colision con la pared de yasuo"
   }
 }
