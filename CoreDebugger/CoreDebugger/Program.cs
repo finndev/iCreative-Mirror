@@ -14,7 +14,7 @@ namespace CoreDebugger
 {
     internal static class CoreDebugger
     {
-        private static Menu MyMenu;
+        private static Menu _myMenu;
         private static void Main()
         {
             Loading.OnLoadingComplete += delegate
@@ -26,48 +26,48 @@ namespace CoreDebugger
 
         private static bool EntityManager
         {
-            get { return MyMenu["EntityManager"].Cast<CheckBox>().CurrentValue; }
-            set { MyMenu["EntityManager"].Cast<CheckBox>().CurrentValue = value; }
+            get { return _myMenu["EntityManager"].Cast<CheckBox>().CurrentValue; }
         }
         private static bool MyDamageStats
         {
-            get { return MyMenu["MyDamageStats"].Cast<CheckBox>().CurrentValue; }
-            set { MyMenu["MyDamageStats"].Cast<CheckBox>().CurrentValue = value; }
+            get { return _myMenu["MyDamageStats"].Cast<CheckBox>().CurrentValue; }
         }
         private static bool IsValidTarget
         {
-            get { return MyMenu["IsValidTarget"].Cast<CheckBox>().CurrentValue; }
-            set { MyMenu["IsValidTarget"].Cast<CheckBox>().CurrentValue = value; }
+            get { return _myMenu["IsValidTarget"].Cast<CheckBox>().CurrentValue; }
         }
         private static bool BuffInstance
         {
-            get { return MyMenu["BuffInstance"].Cast<CheckBox>().CurrentValue; }
-            set { MyMenu["BuffInstance"].Cast<CheckBox>().CurrentValue = value; }
+            get { return _myMenu["BuffInstance"].Cast<CheckBox>().CurrentValue; }
         }
         private static bool TargetDamageStats
         {
-            get { return MyMenu["TargetDamageStats"].Cast<CheckBox>().CurrentValue; }
-            set { MyMenu["TargetDamageStats"].Cast<CheckBox>().CurrentValue = value; }
+            get { return _myMenu["TargetDamageStats"].Cast<CheckBox>().CurrentValue; }
         }
         private static bool StreamingMode
         {
-            get { return MyMenu["StreamingMode"].Cast<CheckBox>().CurrentValue; }
-            set { MyMenu["StreamingMode"].Cast<CheckBox>().CurrentValue = value; }
+            get { return _myMenu["StreamingMode"].Cast<CheckBox>().CurrentValue; }
+        }
+
+        private static bool HealthPrediction
+        {
+            get { return _myMenu["HealthPrediction"].Cast<CheckBox>().CurrentValue; }
         }
 
         private static void Initialize()
         {
-            MyMenu = MainMenu.AddMenu("CoreDebugger", "CoreDebugger");
-            MyMenu.AddGroupLabel("General");
-            MyMenu.Add("MyDamageStats", new CheckBox("My damage stats", false));
-            MyMenu.Add("EntityManager", new CheckBox("EntityManager properties", false));
-            MyMenu.Add("IsValidTarget", new CheckBox("IsValidTarget properties", false));
-            MyMenu.Add("BuffInstance", new CheckBox("BuffInstance properties", false));
-            MyMenu.Add("TargetDamageStats", new CheckBox("Target damage stats", false));
-            MyMenu.Add("StreamingMode", new CheckBox("Streaming Mode", false));
-            MyMenu.AddGroupLabel("AutoAttack");
-            MyMenu.Add("autoAttack", new CheckBox("Debug autoattack", false));
-            MyMenu.Add("autoAttackDamage", new CheckBox("Print autoattack damage"));
+            _myMenu = MainMenu.AddMenu("CoreDebugger", "CoreDebugger");
+            _myMenu.AddGroupLabel("General");
+            _myMenu.Add("MyDamageStats", new CheckBox("My damage stats", false));
+            _myMenu.Add("TargetDamageStats", new CheckBox("Target damage stats", false));
+            _myMenu.Add("EntityManager", new CheckBox("EntityManager properties", false));
+            _myMenu.Add("HealthPrediction", new CheckBox("HealthPrediction properties", false));
+            _myMenu.Add("IsValidTarget", new CheckBox("IsValidTarget properties", false));
+            _myMenu.Add("BuffInstance", new CheckBox("BuffInstance properties", false));
+            _myMenu.Add("StreamingMode", new CheckBox("Streaming Mode", false));
+            _myMenu["StreamingMode"].Cast<CheckBox>().CurrentValue = false;
+            _myMenu.AddGroupLabel("AutoAttack");
+            _myMenu.Add("autoAttackDamage", new CheckBox("Print autoattack damage"));
             var autoAttacking = false;
             AttackableUnit.OnDamage += delegate (AttackableUnit sender, AttackableUnitDamageEventArgs args)
             {
@@ -78,13 +78,9 @@ namespace CoreDebugger
                     {
                         if (autoAttacking)
                         {
-                            if (MyMenu["autoAttack"].Cast<CheckBox>().CurrentValue)
+                            if (_myMenu["autoAttackDamage"].Cast<CheckBox>().CurrentValue)
                             {
-                                Chat.Print("- AutoAttack -");
-                                if (MyMenu["autoAttackDamage"].Cast<CheckBox>().CurrentValue)
-                                {
-                                    Chat.Print("Real Damage: " + args.Damage + ", SDK Damage: " + Player.Instance.GetAutoAttackDamage(baseTarget, true));
-                                }
+                                Chat.Print("Real Damage: " + args.Damage + ", SDK Damage: " + Player.Instance.GetAutoAttackDamage(baseTarget, true));
                             }
                             autoAttacking = false;
                         }
@@ -111,6 +107,12 @@ namespace CoreDebugger
             Drawing.OnEndScene += delegate
             {
                 Counters.Clear();
+                if (MyDamageStats)
+                {
+                    DrawText(Player.Instance, "TotalAttackDamage: " + Player.Instance.TotalAttackDamage + ", PercentArmorPenetrationMod: " + Player.Instance.PercentArmorPenetrationMod + ", FlatArmorPenetrationMod: " + Player.Instance.FlatArmorPenetrationMod + ", PercentBonusArmorPenetrationMod: " + Player.Instance.PercentBonusArmorPenetrationMod);
+                    DrawText(Player.Instance, "TotalMagicalDamage: " + Player.Instance.TotalMagicalDamage + ", PercentMagicPenetrationMod: " + Player.Instance.PercentMagicPenetrationMod + ", FlatMagicPenetrationMod: " + Player.Instance.FlatMagicPenetrationMod);
+                    DrawText(Player.Instance, "Crit: " + Player.Instance.Crit + ", FlatCritChanceMod: " + Player.Instance.FlatCritChanceMod);
+                }
                 if (IsValidTarget)
                 {
                     var targets = ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValid && i.VisibleOnScreen);
@@ -138,17 +140,21 @@ namespace CoreDebugger
                         DrawText(minion, "IsMonster: " + minion.IsMonster);
                     }
                 }
-                if (MyDamageStats)
+                if (HealthPrediction)
                 {
-                    DrawText(Player.Instance, "TotalAttackDamage: " + Player.Instance.TotalAttackDamage + ", PercentArmorPenetrationMod: " + Player.Instance.PercentArmorPenetrationMod + ", FlatArmorPenetrationMod: " + Player.Instance.FlatArmorPenetrationMod + ", PercentBonusArmorPenetrationMod: " + Player.Instance.PercentBonusArmorPenetrationMod);
-                    DrawText(Player.Instance, "TotalMagicalDamage: " + Player.Instance.TotalMagicalDamage + ", PercentMagicPenetrationMod: " + Player.Instance.PercentMagicPenetrationMod + ", FlatMagicPenetrationMod: " + Player.Instance.FlatMagicPenetrationMod);
+                    var minions = ObjectManager.Get<Obj_AI_Minion>().Where(i => i.IsValidTarget() && i.VisibleOnScreen);
+                    foreach (var minion in minions)
+                    {
+                        DrawText(minion, "IsRanged: " + minion.IsRanged);
+                        DrawText(minion, "AttackCastDelay: " + minion.AttackCastDelay);
+                        DrawText(minion, "MissileSpeed: " + minion.BasicAttack.MissileSpeed);
+                    }
                 }
                 if (TargetDamageStats)
                 {
-                    var targets = ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValid && i.VisibleOnScreen);
-                    foreach (var target in targets)
+                    foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValid && i.VisibleOnScreen))
                     {
-                        var str = "Armor: " + target.Armor + ", BaseArmor: " + target.CharData.Armor + ", SpellBlock: " + target.SpellBlock;
+                        var str = "Armor: " + target.Armor + ", SpellBlock: " + target.SpellBlock + ", BaseArmor: " + target.CharData.Armor;
                         if (target is Obj_AI_Minion)
                         {
                             str += ", PercentDamageToBarracksMinionMod: " + target.PercentDamageToBarracksMinionMod + ", FlatDamageReductionFromBarracksMinionMod: " +
@@ -159,8 +165,7 @@ namespace CoreDebugger
                 }
                 if (BuffInstance)
                 {
-                    var targets = ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValidTarget() && i.VisibleOnScreen);
-                    foreach (var target in targets)
+                    foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValidTarget() && i.VisibleOnScreen))
                     {
                         foreach (var buff in target.Buffs)
                         {
