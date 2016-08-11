@@ -58,16 +58,16 @@ namespace CoreDebugger
         {
             _myMenu = MainMenu.AddMenu("CoreDebugger", "CoreDebugger");
             _myMenu.AddGroupLabel("General");
-            _myMenu.Add("MyDamageStats", new CheckBox("My damage stats", false));
-            _myMenu.Add("TargetDamageStats", new CheckBox("Target damage stats", false));
-            _myMenu.Add("EntityManager", new CheckBox("EntityManager properties", false));
-            _myMenu.Add("HealthPrediction", new CheckBox("HealthPrediction properties", false));
-            _myMenu.Add("IsValidTarget", new CheckBox("IsValidTarget properties", false));
-            _myMenu.Add("BuffInstance", new CheckBox("BuffInstance properties", false));
-            _myMenu.Add("StreamingMode", new CheckBox("Streaming Mode", false));
+            _myMenu.Add("MyDamageStats", new CheckBox("My damage stats", false)).OnValueChange += OnOnValueChange;
+            _myMenu.Add("TargetDamageStats", new CheckBox("Target damage stats", false)).OnValueChange += OnOnValueChange;
+            _myMenu.Add("EntityManager", new CheckBox("EntityManager properties", false)).OnValueChange += OnOnValueChange;
+            _myMenu.Add("HealthPrediction", new CheckBox("HealthPrediction properties", false)).OnValueChange += OnOnValueChange;
+            _myMenu.Add("IsValidTarget", new CheckBox("IsValidTarget properties", false)).OnValueChange += OnOnValueChange;
+            _myMenu.Add("BuffInstance", new CheckBox("BuffInstance properties", false)).OnValueChange += OnOnValueChange;
+            _myMenu.Add("StreamingMode", new CheckBox("Streaming Mode", false)).OnValueChange += OnOnValueChange;
             _myMenu["StreamingMode"].Cast<CheckBox>().CurrentValue = false;
             _myMenu.AddGroupLabel("AutoAttack");
-            _myMenu.Add("autoAttackDamage", new CheckBox("Print autoattack damage"));
+            _myMenu.Add("autoAttackDamage", new CheckBox("Print autoattack damage")).OnValueChange += OnOnValueChange;
             var autoAttacking = false;
             AttackableUnit.OnDamage += delegate (AttackableUnit sender, AttackableUnitDamageEventArgs args)
             {
@@ -128,16 +128,21 @@ namespace CoreDebugger
                 }
                 if (EntityManager)
                 {
-                    var minions = ObjectManager.Get<Obj_AI_Minion>().Where(i => i.IsValidTarget() && i.VisibleOnScreen);
-                    foreach (var minion in minions)
+                    var targets = ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValidTarget() && i.VisibleOnScreen);
+                    foreach (var target in targets)
                     {
-                        DrawText(minion, "BaseSkinName: " + minion.BaseSkinName);
-                        DrawText(minion, "Team: " + minion.Team);
-                        DrawText(minion, "IsEnemy: " + minion.IsEnemy);
-                        DrawText(minion, "TotalShieldHealth: " + minion.TotalShieldHealth());
-                        DrawText(minion, "MaxHealth: " + minion.MaxHealth);
-                        DrawText(minion, "IsMinion: " + minion.IsMinion);
-                        DrawText(minion, "IsMonster: " + minion.IsMonster);
+                        DrawText(target, "Type: " + target.Type);
+                        DrawText(target, "BaseSkinName: " + target.BaseSkinName);
+                        DrawText(target, "Team: " + target.Team);
+                        DrawText(target, "IsEnemy: " + target.IsEnemy);
+                        DrawText(target, "TotalShieldHealth: " + target.TotalShieldHealth());
+                        DrawText(target, "MaxHealth: " + target.MaxHealth);
+                        if (target is Obj_AI_Minion)
+                        {
+
+                            DrawText(target, "IsMinion: " + target.IsMinion);
+                            DrawText(target, "IsMonster: " + target.IsMonster);
+                        }
                     }
                 }
                 if (HealthPrediction)
@@ -147,20 +152,21 @@ namespace CoreDebugger
                     {
                         DrawText(minion, "IsRanged: " + minion.IsRanged);
                         DrawText(minion, "AttackCastDelay: " + minion.AttackCastDelay);
+                        DrawText(minion, "AttackDelay: " + minion.AttackDelay);
                         DrawText(minion, "MissileSpeed: " + minion.BasicAttack.MissileSpeed);
+                        DrawText(minion, "Ping: " + Game.Ping);
                     }
                 }
                 if (TargetDamageStats)
                 {
                     foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValid && i.VisibleOnScreen))
                     {
-                        var str = "Armor: " + target.Armor + ", SpellBlock: " + target.SpellBlock + ", BaseArmor: " + target.CharData.Armor;
+                        DrawText(target, "Armor: " + target.Armor + ", SpellBlock: " + target.SpellBlock + ", BaseArmor: " + target.CharData.Armor);
                         if (target is Obj_AI_Minion)
                         {
-                            str += ", PercentDamageToBarracksMinionMod: " + target.PercentDamageToBarracksMinionMod + ", FlatDamageReductionFromBarracksMinionMod: " +
-                                   target.FlatDamageReductionFromBarracksMinionMod;
+                            DrawText(target, "PercentDamageToBarracksMinionMod: " + target.PercentDamageToBarracksMinionMod + ", FlatDamageReductionFromBarracksMinionMod: " +
+                                       target.FlatDamageReductionFromBarracksMinionMod);
                         }
-                        DrawText(target, str);
                     }
                 }
                 if (BuffInstance)
@@ -177,6 +183,20 @@ namespace CoreDebugger
                     }
                 }
             };
+        }
+
+        private static void OnOnValueChange(ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
+        {
+            if (args.NewValue)
+            {
+                foreach (var value in _myMenu.LinkedValues.Values.Select(i => i as CheckBox).Where(i => i != null))
+                {
+                    if (sender.SerializationId != value.SerializationId)
+                    {
+                        value.CurrentValue = false;
+                    }
+                }
+            }
         }
 
         private static void DrawText(Obj_AI_Base minion, string text)
