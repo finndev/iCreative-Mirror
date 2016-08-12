@@ -147,26 +147,28 @@ namespace CoreDebugger
                 }
                 if (HealthPrediction)
                 {
-                    var minions = ObjectManager.Get<Obj_AI_Minion>().Where(i => i.IsValidTarget() && i.VisibleOnScreen);
-                    foreach (var minion in minions)
+                    var targets = ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValidTarget() && i.IsAlly && i.VisibleOnScreen && (i is Obj_AI_Minion || i is Obj_AI_Turret));
+                    foreach (var target in targets)
                     {
-                        DrawText(minion, "IsRanged: " + minion.IsRanged);
-                        DrawText(minion, "AttackCastDelay: " + minion.AttackCastDelay);
-                        DrawText(minion, "AttackDelay: " + minion.AttackDelay);
-                        DrawText(minion, "MissileSpeed: " + minion.BasicAttack.MissileSpeed);
-                        DrawText(minion, "Ping: " + Game.Ping);
+                        DrawText(target, "IsRanged: " + target.IsRanged);
+                        DrawText(target, "Health: " + target.Health);
+                        DrawText(target, "TotalAttackDamage: " + target.TotalAttackDamage);
+                        DrawText(target, "AttackCastDelay: " + target.AttackCastDelay);
+                        DrawText(target, "AttackDelay: " + target.AttackDelay);
+                        DrawText(target, "MissileSpeed: " + target.BasicAttack.MissileSpeed);
+                        if (target is Obj_AI_Minion)
+                        {
+                            DrawText(target, "PercentDamageToBarracksMinionMod: " + target.PercentDamageToBarracksMinionMod);
+                            DrawText(target, "FlatDamageReductionFromBarracksMinionMod: " + target.FlatDamageReductionFromBarracksMinionMod);
+                        }
                     }
+                    DrawText(Player.Instance, "Ping: " + Game.Ping);
                 }
                 if (TargetDamageStats)
                 {
                     foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValid && i.VisibleOnScreen))
                     {
                         DrawText(target, "Armor: " + target.Armor + ", SpellBlock: " + target.SpellBlock + ", BaseArmor: " + target.CharData.Armor);
-                        if (target is Obj_AI_Minion)
-                        {
-                            DrawText(target, "PercentDamageToBarracksMinionMod: " + target.PercentDamageToBarracksMinionMod + ", FlatDamageReductionFromBarracksMinionMod: " +
-                                       target.FlatDamageReductionFromBarracksMinionMod);
-                        }
                     }
                 }
                 if (BuffInstance)
@@ -199,17 +201,17 @@ namespace CoreDebugger
             }
         }
 
-        private static void DrawText(Obj_AI_Base minion, string text)
+        private static void DrawText(Obj_AI_Base target, string text)
         {
-            if (!Counters.ContainsKey(minion.NetworkId))
+            if (!Counters.ContainsKey(target.NetworkId))
             {
-                Counters.Add(minion.NetworkId, 0);
+                Counters.Add(target.NetworkId, 0);
             }
             else
             {
-                Counters[minion.NetworkId]++;
+                Counters[target.NetworkId]++;
             }
-            var minionBarPosition = new Vector2(minion.HPBarXOffset, 50 + minion.HPBarYOffset + Counters[minion.NetworkId] * 18) + minion.Position.WorldToScreen();
+            var minionBarPosition = new Vector2(target.HPBarXOffset, 50 + target.HPBarYOffset + Counters[target.NetworkId] * 18) + target.Position.WorldToScreen();
             Drawing.DrawText(minionBarPosition, Color.AliceBlue, text, 10);
         }
     }
