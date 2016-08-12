@@ -17,7 +17,7 @@ namespace Simple_Vayne.Modes
         {
             if (Q.IsReady() && Player.Instance.ManaPercent >= 20)
             {
-                Orbwalker.OnUnkillableMinion += Orbwalker_OnUnkillableMinion;
+                //Orbwalker.OnUnkillableMinion += Orbwalker_OnUnkillableMinion;
             }
         }
 
