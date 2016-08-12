@@ -150,6 +150,7 @@ namespace CoreDebugger
                     var targets = ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValidTarget() && i.IsAlly && i.VisibleOnScreen && (i is Obj_AI_Minion || i is Obj_AI_Turret));
                     foreach (var target in targets)
                     {
+                        DrawText(target, "MemoryAddress: " + target.MemoryAddress.ToString("x8"));
                         DrawText(target, "IsRanged: " + target.IsRanged);
                         DrawText(target, "Health: " + target.Health);
                         DrawText(target, "TotalAttackDamage: " + target.TotalAttackDamage);
