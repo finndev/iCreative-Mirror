@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -150,7 +150,6 @@ namespace CoreDebugger
                     var targets = ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValidTarget() && i.IsAlly && i.VisibleOnScreen && (i is Obj_AI_Minion || i is Obj_AI_Turret));
                     foreach (var target in targets)
                     {
-                        DrawText(target, "MemoryAddress: " + target.MemoryAddress.ToString("x8"));
                         DrawText(target, "IsRanged: " + target.IsRanged);
                         DrawText(target, "Health: " + target.Health);
                         DrawText(target, "TotalAttackDamage: " + target.TotalAttackDamage);
@@ -180,7 +179,7 @@ namespace CoreDebugger
                         {
                             var endTime = Math.Max(0, buff.EndTime - Game.Time);
                             DrawText(target,
-                                "Name: " + buff.Name + ", DisplayName: " + buff.DisplayName + ", Count: " + buff.Count + ", SourceName: " + buff.SourceName + ", RemainingTime: " +
+                                "Type: " + buff.Type + ", Name: " + buff.Name + ", DisplayName: " + buff.DisplayName + ", Count: " + buff.Count + ", SourceName: " + buff.SourceName + ", RemainingTime: " +
                                 (endTime > 1000 ? "Infinite" : Convert.ToString(endTime, CultureInfo.InvariantCulture)));
                         }
                     }
