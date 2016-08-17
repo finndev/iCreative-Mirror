@@ -140,6 +140,7 @@ namespace Jhin.Utilities
 
         public static void Initialize()
         {
+            return;
             if (EntityManager.Heroes.Enemies.Count > 0)
             {
                 if (Menu == null)

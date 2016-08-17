@@ -68,14 +68,6 @@ namespace Jhin.Champions
                 Speed = 5000,
                 AllowedCollisionCount = -1,
             };
-            Evader.OnEvader += delegate
-            {
-                if (EvaderMenu.CheckBox("BlockW"))
-                {
-                    LastBlockTick = Core.GameTickCount;
-                }
-            };
-
             Spellbook.OnCastSpell += delegate (Spellbook sender, SpellbookCastSpellEventArgs args)
             {
                 if (sender.Owner.IsMe)
@@ -228,9 +220,17 @@ namespace Jhin.Champions
             {
                 EvaderMenu.AddValue("BlockW", new CheckBox("Block W to Evade"));
             }
-            Evader.Initialize();
-            Evader.AddCrowdControlSpells();
-            Evader.AddDangerousSpells();
+            //Evader.Initialize();
+            //Evader.AddCrowdControlSpells();
+            //Evader.AddDangerousSpells();
+            //Evader.OnEvader += delegate
+            //{
+            //    if (EvaderMenu.CheckBox("BlockW"))
+            //    {
+            //        LastBlockTick = Core.GameTickCount;
+            //    }
+            //};
+
             MenuManager.AddSubMenu("Misc");
             {
                 MiscMenu.AddValue("W.ManaPercent", new Slider("Auto W Minimum Mana Percent", 10));
@@ -307,9 +307,15 @@ namespace Jhin.Champions
             {
                 Stacks = 4;
             }
-            foreach (var enemy in UnitManager.ValidEnemyHeroes)
+            if (R.IsReady && !IsCastingR)
             {
-                LastPredictedPosition[enemy.NetworkId] = new Tuple<Vector3, bool>(R.GetPrediction(enemy).CastPosition, R.IsKillable(enemy));
+                foreach (var enemy in UnitManager.ValidEnemyHeroes)
+                {
+                    var isKillable = R.IsKillable(enemy);
+                    var predResult = R.GetPrediction(enemy);
+                    var predPos = predResult.CastPosition;
+                    LastPredictedPosition[enemy.NetworkId] = new Tuple<Vector3, bool>(predPos, isKillable);
+                }
             }
             Range = 1300;
             Target = TargetSelector.GetTarget(UnitManager.ValidEnemyHeroesInRange, DamageType.Physical);
