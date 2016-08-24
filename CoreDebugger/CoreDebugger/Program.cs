@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,20 +8,11 @@ using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 using SharpDX;
-using Color = System.Drawing.Color;
-
 namespace CoreDebugger
 {
     internal static class CoreDebugger
     {
         private static Menu _myMenu;
-        private static void Main()
-        {
-            Loading.OnLoadingComplete += delegate
-            {
-                Initialize();
-            };
-        }
         private static readonly Dictionary<int, int> Counters = new Dictionary<int, int>();
 
         private static bool EntityManager
@@ -54,6 +45,21 @@ namespace CoreDebugger
             get { return _myMenu["HealthPrediction"].Cast<CheckBox>().CurrentValue; }
         }
 
+        private static bool CheckPrediction
+        {
+            get { return _myMenu["Prediction"].Cast<CheckBox>().CurrentValue; }
+        }
+
+        private static bool CheckSpellbook
+        {
+            get { return _myMenu["Spellbook"].Cast<CheckBox>().CurrentValue; }
+        }
+
+        private static void Main()
+        {
+            Loading.OnLoadingComplete += delegate { Initialize(); };
+        }
+
         private static void Initialize()
         {
             _myMenu = MainMenu.AddMenu("CoreDebugger", "CoreDebugger");
@@ -64,12 +70,18 @@ namespace CoreDebugger
             _myMenu.Add("HealthPrediction", new CheckBox("HealthPrediction properties", false)).OnValueChange += OnOnValueChange;
             _myMenu.Add("IsValidTarget", new CheckBox("IsValidTarget properties", false)).OnValueChange += OnOnValueChange;
             _myMenu.Add("BuffInstance", new CheckBox("BuffInstance properties", false)).OnValueChange += OnOnValueChange;
+            _myMenu.Add("Prediction", new CheckBox("Prediction", false)).OnValueChange += OnOnValueChange;
             _myMenu.Add("StreamingMode", new CheckBox("Streaming Mode", false)).OnValueChange += OnOnValueChange;
+            _myMenu.Add("Spellbook", new CheckBox("Spellbook", false)).OnValueChange += OnOnValueChange;
             _myMenu["StreamingMode"].Cast<CheckBox>().CurrentValue = false;
             _myMenu.AddGroupLabel("AutoAttack");
             _myMenu.Add("autoAttackDamage", new CheckBox("Print autoattack damage")).OnValueChange += OnOnValueChange;
+            foreach (var value in _myMenu.LinkedValues.Values.Select(i => i as CheckBox).Where(i => i != null))
+            {
+                value.CurrentValue = false;
+            }
             var autoAttacking = false;
-            AttackableUnit.OnDamage += delegate (AttackableUnit sender, AttackableUnitDamageEventArgs args)
+            AttackableUnit.OnDamage += delegate(AttackableUnit sender, AttackableUnitDamageEventArgs args)
             {
                 if (args.Source.IsMe)
                 {
@@ -87,14 +99,14 @@ namespace CoreDebugger
                     }
                 }
             };
-            Obj_AI_Base.OnBasicAttack += delegate (Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+            Obj_AI_Base.OnBasicAttack += delegate(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
             {
                 if (sender.IsMe)
                 {
                     autoAttacking = true;
                 }
             };
-            Player.OnPostIssueOrder += delegate (Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
+            Player.OnPostIssueOrder += delegate(Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
             {
                 if (sender.IsMe)
                 {
@@ -109,8 +121,12 @@ namespace CoreDebugger
                 Counters.Clear();
                 if (MyDamageStats)
                 {
-                    DrawText(Player.Instance, "TotalAttackDamage: " + Player.Instance.TotalAttackDamage + ", PercentArmorPenetrationMod: " + Player.Instance.PercentArmorPenetrationMod + ", FlatArmorPenetrationMod: " + Player.Instance.FlatArmorPenetrationMod + ", PercentBonusArmorPenetrationMod: " + Player.Instance.PercentBonusArmorPenetrationMod);
-                    DrawText(Player.Instance, "TotalMagicalDamage: " + Player.Instance.TotalMagicalDamage + ", PercentMagicPenetrationMod: " + Player.Instance.PercentMagicPenetrationMod + ", FlatMagicPenetrationMod: " + Player.Instance.FlatMagicPenetrationMod);
+                    DrawText(Player.Instance,
+                        "TotalAttackDamage: " + Player.Instance.TotalAttackDamage + ", PercentArmorPenetrationMod: " + Player.Instance.PercentArmorPenetrationMod + ", FlatArmorPenetrationMod: " +
+                        Player.Instance.FlatArmorPenetrationMod + ", PercentBonusArmorPenetrationMod: " + Player.Instance.PercentBonusArmorPenetrationMod);
+                    DrawText(Player.Instance,
+                        "TotalMagicalDamage: " + Player.Instance.TotalMagicalDamage + ", PercentMagicPenetrationMod: " + Player.Instance.PercentMagicPenetrationMod + ", FlatMagicPenetrationMod: " +
+                        Player.Instance.FlatMagicPenetrationMod);
                     DrawText(Player.Instance, "Crit: " + Player.Instance.Crit + ", FlatCritChanceMod: " + Player.Instance.FlatCritChanceMod);
                 }
                 if (IsValidTarget)
@@ -136,10 +152,10 @@ namespace CoreDebugger
                         DrawText(target, "Team: " + target.Team);
                         DrawText(target, "IsEnemy: " + target.IsEnemy);
                         DrawText(target, "TotalShieldHealth: " + target.TotalShieldHealth());
+                        DrawText(target, "HPRegenRate: " + target.HPRegenRate);
                         DrawText(target, "MaxHealth: " + target.MaxHealth);
                         if (target is Obj_AI_Minion)
                         {
-
                             DrawText(target, "IsMinion: " + target.IsMinion);
                             DrawText(target, "IsMonster: " + target.IsMonster);
                         }
@@ -173,14 +189,46 @@ namespace CoreDebugger
                 }
                 if (BuffInstance)
                 {
-                    foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValidTarget() && i.VisibleOnScreen))
+                    foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValid))
                     {
                         foreach (var buff in target.Buffs)
                         {
                             var endTime = Math.Max(0, buff.EndTime - Game.Time);
+                            var stringEndTime = endTime > 1000 ? "Infinite" : Convert.ToString(endTime, CultureInfo.InvariantCulture);
                             DrawText(target,
-                                "Type: " + buff.Type + ", Name: " + buff.Name + ", DisplayName: " + buff.DisplayName + ", Count: " + buff.Count + ", SourceName: " + buff.SourceName + ", RemainingTime: " +
-                                (endTime > 1000 ? "Infinite" : Convert.ToString(endTime, CultureInfo.InvariantCulture)));
+                                "IsActive : " + buff.IsActive + ", IsValid: " + buff.IsValid + ", HasBuff: " + target.HasBuff(buff.DisplayName) + ", Type: " + buff.Type + ", Name: " + buff.Name +
+                                ", DisplayName: " + buff.DisplayName + ", Count: " +
+                                buff.Count + (!string.IsNullOrEmpty(buff.SourceName) ? ", SourceName: " + buff.SourceName : "") + ", Caster: " + buff.Caster.Name +
+                                (buff.Caster is Obj_AI_Base ? ", CasterBaseSkinName: " + ((Obj_AI_Base) buff.Caster).BaseSkinName : "") + ", RemainingTime: " +
+                                stringEndTime);
+                        }
+                    }
+                }
+                if (CheckPrediction)
+                {
+                    var targets = ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValidTarget() && i.VisibleOnScreen);
+                    foreach (var target in targets)
+                    {
+                        DrawText(target, "IsMoving: " + target.IsMoving);
+                        DrawText(target, "PathLength: " + target.Path.Length);
+                        DrawText(target, "BoundingRadius: " + target.BoundingRadius);
+                        DrawText(target, "MovementBlockedDebuffDuration: " + Math.Max(0f, target.GetMovementBlockedDebuffDuration()));
+                        DrawText(target, "CastEndTimeLeft: " + Math.Max(0f, target.Spellbook.CastEndTime - Game.Time));
+                        DrawText(target, "CastTimeLeft: " + Math.Max(0f, target.Spellbook.CastTime - Game.Time));
+                        DrawText(target, "IsChanneling: " + target.Spellbook.IsChanneling);
+                    }
+                }
+                if (CheckSpellbook)
+                {
+                    var targets = ObjectManager.Get<Obj_AI_Base>().Where(i => i.IsValidTarget() && i.VisibleOnScreen);
+                    foreach (var target in targets)
+                    {
+                        foreach (var spell in target.Spellbook.Spells)
+                        {
+                            if (spell != null)
+                            {
+                                DrawText(target, "Name: " + spell.Name + ", Slot: " + spell.Slot + ", State: " + spell.State + ", CastRange: " + spell.SData.CastRange + ", MissileSpeed: " + spell.SData.MissileSpeed);
+                            }
                         }
                     }
                 }
@@ -212,7 +260,7 @@ namespace CoreDebugger
                 Counters[target.NetworkId]++;
             }
             var minionBarPosition = new Vector2(target.HPBarXOffset, 50 + target.HPBarYOffset + Counters[target.NetworkId] * 18) + target.Position.WorldToScreen();
-            Drawing.DrawText(minionBarPosition, Color.AliceBlue, text, 10);
+            Drawing.DrawText(minionBarPosition, System.Drawing.Color.AliceBlue, text, 10);
         }
     }
 }
