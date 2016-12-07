@@ -16,12 +16,49 @@ namespace KoreanAIO.Champions
     public class Orianna : ChampionBase
     {
         private const int QAoeWidth = 145;
-        public static string BallName = "Orianna_Base_Q_yomu_ring_green.troy";
         private bool _ballIsMissile;
-        private GameObject _ballObject;
         private bool _canShield;
         private int _hitR;
         private int _hitW;
+        private GameObject _cachedBallObject;
+
+        public static GameObject OriannaBall(Obj_AI_Base sender)
+        {
+            var missile = ObjectManager.Get<MissileClient>()
+                .FirstOrDefault(
+                    m =>
+                        m.IsValid && m.IsVisible && !m.IsDead && m.SpellCaster != null && m.SpellCaster.IdEquals(sender) &&
+                        (m.SData.Name.ToLower().Contains("orianaizuna") || m.SData.Name.ToLower().Contains("orianaredact"))
+                );
+            if (missile != null)
+            {
+                return missile;
+            }
+
+            if (sender.HasBuff("orianaghostself"))
+            {
+                return sender;
+            }
+
+            var hero = EntityManager.Heroes.AllHeroes.FirstOrDefault(h => h.IsValid && h.IsVisible && !h.IsDead && sender.Team == h.Team && h.HasBuff("orianaghost") && h.GetBuff("orianaghost").Caster.IdEquals(sender));
+            if (hero != null)
+            {
+                return hero;
+            }
+
+            var minion = ObjectManager.Get<Obj_AI_Minion>()
+                .FirstOrDefault(
+                    o =>
+                        o.IsValid && o.IsVisible && !o.IsDead && o.Team == sender.Team && o.BaseSkinName == "OriannaBall" && o.HasBuff("orianaghost") &&
+                        o.GetBuff("orianaghost").Caster.IdEquals(sender));
+
+            if (minion != null)
+            {
+                return minion;
+            }
+            return sender;
+        }
+
 
         public Orianna()
         {
@@ -29,13 +66,7 @@ namespace KoreanAIO.Champions
             {
                 AIO.Initializers.Add(delegate
                 {
-                    _ballObject = (MyHero.HasBuff("orianaghostself") ? MyHero : null) ??
-                EntityManager.Heroes.AllHeroes.FirstOrDefault(h => h.IsValidTarget() && MyHero.Team == h.Team && h.HasBuff("orianaghost") && h.GetBuff("orianaghost").Caster.IdEquals(MyHero)) ??
-                ObjectManager.Get<Obj_AI_Minion>()
-                    .FirstOrDefault(
-                        o =>
-                            o.IsValid && !o.IsDead && o.IsVisible && o.Team == MyHero.Team && o.BaseSkinName == "OriannaBall" && o.HasBuff("orianaghost") &&
-                            o.GetBuff("orianaghost").Caster.IdEquals(MyHero)) as GameObject;
+                    _cachedBallObject = OriannaBall(MyHero);
                 });
                 Q = new SpellBase(SpellSlot.Q, SpellType.Circular, 815)
                 {
@@ -43,10 +74,10 @@ namespace KoreanAIO.Champions
                     Width = 80,
                     CollidesWithYasuoWall = false
                 };
-                Q.SetSourceFunction(() => Ball);
+                Q.SetSourceFunction(() => _cachedBallObject);
                 W = new SpellBase(SpellSlot.W, SpellType.Self, 255);
-                W.SetSourceFunction(() => Ball);
-                W.SetRangeCheckSourceFunction(() => Ball);
+                W.SetSourceFunction(() => _cachedBallObject);
+                W.SetRangeCheckSourceFunction(() => _cachedBallObject);
                 E = new SpellBase(SpellSlot.E, SpellType.Linear, 1095)
                 {
                     Speed = 1800,
@@ -54,13 +85,13 @@ namespace KoreanAIO.Champions
                     MinHitChancePercent = 45,
                     CollidesWithYasuoWall = false
                 };
-                E.SetSourceFunction(() => Ball);
+                E.SetSourceFunction(() => _cachedBallObject);
                 R = new SpellBase(SpellSlot.R, SpellType.Self, 400)
                 {
                     CastDelay = 500
                 };
-                R.SetSourceFunction(() => Ball);
-                R.SetRangeCheckSourceFunction(() => Ball);
+                R.SetSourceFunction(() => _cachedBallObject);
+                R.SetRangeCheckSourceFunction(() => _cachedBallObject);
                 Spellbook.OnCastSpell += delegate (Spellbook sender, SpellbookCastSpellEventArgs args)
                 {
                     if (sender.Owner.IsMe)
@@ -82,48 +113,12 @@ namespace KoreanAIO.Champions
                         }
                     }
                 };
-                GameObject.OnCreate += delegate (GameObject sender, EventArgs args)
-                {
-                    if (sender.Name.Equals(BallName))
-                    {
-                        _ballObject = sender;
-                    }
-                    else
-                    {
-                        var missile = sender as MissileClient;
-                        if (missile != null && missile.SpellCaster != null && missile.SpellCaster.IsMe)
-                        {
-                            if (missile.SData.Name.ToLower().Equals("orianaizuna") || missile.SData.Name.ToLower().Equals("orianaredact"))
-                            {
-                                _ballObject = missile;
-                            }
-                        }
-                    }
-                };
-                GameObject.OnDelete += delegate (GameObject sender, EventArgs args)
-                {
-                    var missile = sender as MissileClient;
-                    if (missile != null && missile.SpellCaster != null && missile.SpellCaster.IsMe)
-                    {
-                        if (missile.SData.Name.ToLower().Equals("orianaredact"))
-                        {
-                            _ballObject = eTarget;
-                        }
-                    }
-                };
-                Obj_AI_Base.OnPlayAnimation += delegate (Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
-                {
-                    if (sender.IsMe && args.Animation.Equals("Prop"))
-                    {
-                        _ballObject = Player.Instance;
-                    }
-                };
                 Gapcloser.OnGapcloser += delegate (AIHeroClient sender, Gapcloser.GapcloserEventArgs args)
                 {
                     if (sender.IsAlly)
                     {
                         if (Target != null && AutomaticMenu.CheckBox("Gapcloser") &&
-                            Ball.GetDistanceSqr(Target) > args.End.Distance(Target, true) &&
+                            _cachedBallObject.GetDistanceSqr(Target) > args.End.Distance(Target, true) &&
                             args.End.Distance(Target, true) < args.Sender.GetDistanceSqr(Target))
                         {
                             CastE(sender);
@@ -135,7 +130,7 @@ namespace KoreanAIO.Champions
                     if (sender.IsAlly)
                     {
                         if (Target != null && AutomaticMenu.CheckBox("Gapcloser") &&
-                            Ball.GetDistanceSqr(Target) > args.EndPos.Distance(Target, true) &&
+                            _cachedBallObject.GetDistanceSqr(Target) > args.EndPos.Distance(Target, true) &&
                             args.EndPos.Distance(Target, true) < sender.GetDistanceSqr(Target))
                         {
                             CastE(sender);
@@ -149,7 +144,7 @@ namespace KoreanAIO.Champions
                         {
                             if (AutomaticMenu.CheckBox("Interrupter"))
                             {
-                                if (!Ball.InRange(args.Sender, R.Range))
+                                if (!_cachedBallObject.InRange(args.Sender, R.Range))
                                 {
                                     ThrowBall(args.Sender);
                                 }
@@ -186,6 +181,11 @@ namespace KoreanAIO.Champions
                             CastE(MyHero);
                         }
                     }
+                };
+
+                Game.OnUpdate += delegate
+                {
+                    _cachedBallObject = OriannaBall(MyHero);
                 };
 
                 Q.AddConfigurableHitChancePercent();
@@ -261,9 +261,9 @@ namespace KoreanAIO.Champions
 
                 MenuManager.AddDrawingsMenu();
                 {
-                    var c = DrawingsMenu.AddValue("Ball", new CheckBox("Draw ball position"));
+                    var c = DrawingsMenu.AddValue("_cachedBallObject", new CheckBox("Draw ball position"));
                     CircleManager.Circles.Add(new Circle(c, new ColorBGRA(0, 0, 255, 100), () => 120, () => true,
-                        () => Ball)
+                        () => _cachedBallObject)
                     { Width = 3 });
                     Q.AddDrawings();
                     W.AddDrawings();
@@ -290,18 +290,7 @@ namespace KoreanAIO.Champions
                 AIO.WriteInConsole(e.ToString());
             }
         }
-
-        private GameObject Ball
-        {
-            get
-            {
-                if (_ballObject != null && _ballObject.IsValid && !_ballObject.IsDead)
-                {
-                    return _ballObject;
-                }
-                return MyHero;
-            }
-        }
+        
 
         protected override void PermaActive()
         {
@@ -310,8 +299,8 @@ namespace KoreanAIO.Champions
             Range = Q.Range + R.Width;
             _canShield = AutomaticMenu.CheckBox("E.Shield") || (ModeManager.Combo && ComboMenu.CheckBox("E.Shield")) ||
                          (ModeManager.Harass && HarassMenu.CheckBox("E.Shield"));
-            _ballIsMissile = _ballObject != null && _ballObject.IsValid &&
-                             _ballObject.Type == GameObjectType.MissileClient;
+            _ballIsMissile = _cachedBallObject != null && _cachedBallObject.IsValid &&
+                             _cachedBallObject.Type == GameObjectType.MissileClient;
             Target = TargetSelector.GetTarget(UnitManager.ValidEnemyHeroesInRange, DamageType.Magical);
             if (_hitR >= AutomaticMenu.Slider("R.Hit"))
             {
@@ -548,7 +537,7 @@ namespace KoreanAIO.Champions
 
         protected override void Flee()
         {
-            if (Ball.InRange(MyHero, W.Range))
+            if (_cachedBallObject.InRange(MyHero, W.Range))
             {
                 if (W.IsReady)
                 {
@@ -561,7 +550,7 @@ namespace KoreanAIO.Champions
                 {
                     CastE(MyHero);
                 }
-                else if (Q.IsReady && !(_ballObject is MissileClient))
+                else if (Q.IsReady && !(_cachedBallObject is MissileClient))
                 {
                     Q.Cast(MyHero);
                 }
@@ -683,7 +672,7 @@ namespace KoreanAIO.Champions
             {
                 var bestAllyNear =
                     UnitManager.ValidAllyHeroesInRange.Where(
-                        h => h.InRange(target, R.Range * 1.5f) && Ball.GetDistanceSqr(target) > h.GetDistanceSqr(target))
+                        h => h.InRange(target, R.Range * 1.5f) && _cachedBallObject.GetDistanceSqr(target) > h.GetDistanceSqr(target))
                         .OrderBy(h => h.GetDistanceSqr(target))
                         .FirstOrDefault();
                 if (bestAllyNear != null)
@@ -830,7 +819,7 @@ namespace KoreanAIO.Champions
                 foreach (
                     var ally in
                         UnitManager.ValidAllyHeroes.Where(
-                            h => E.IsInRange(h) && h.GetDistanceSqr(Ball) > 0))
+                            h => E.IsInRange(h) && h.GetDistanceSqr(_cachedBallObject) > 0))
                 {
                     var pred = E.GetPrediction(ally);
                     if (pred.HitChancePercent >= E.HitChancePercent / 3)

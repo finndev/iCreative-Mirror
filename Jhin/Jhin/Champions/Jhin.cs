@@ -608,13 +608,13 @@ namespace Jhin.Champions
                             25f * level + 25f + (0.25f + 0.05f * level) * MyHero.TotalAttackDamage + 0.6f * MyHero.FlatMagicDamageMod);
                     case SpellSlot.W:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Physical,
-                            (target is AIHeroClient ? 1f : 0.65f) * (35f * level + 15f + 0.7f * MyHero.TotalAttackDamage));
+                            (target is AIHeroClient ? 1f : 0.65f) * (35f * level + 15f + 0.5f * MyHero.TotalAttackDamage));
                     case SpellSlot.E:
                         return MyHero.CalculateDamageOnUnit(target, DamageType.Magical,
                             (target is AIHeroClient ? 1f : 0.65f) * (60f * level - 40f + 1.2f * MyHero.TotalAttackDamage + 1f * MyHero.FlatMagicDamageMod));
                     case SpellSlot.R:
                         var shotDamage =
-                            MyHero.CalculateDamageOnUnit(target, DamageType.Physical, 75f * level - 25f + 0.25f * MyHero.TotalAttackDamage) * (1f + 0.02f * (target.MaxHealth - target.Health) / target.MaxHealth * 100f);
+                            MyHero.CalculateDamageOnUnit(target, DamageType.Physical, 60f * level - 20f + 0.25f * MyHero.TotalAttackDamage) * (1f + 0.025f * (target.MaxHealth - target.Health) / target.MaxHealth * 100f);
                         var normalShotsDamage = (Stacks - 1) * shotDamage;
                         var lastShotDamage = (2f + (MyHero.HasItem(ItemId.Infinity_Edge) ? 0.5f : 0f)) * shotDamage;
                         return normalShotsDamage + lastShotDamage;
@@ -628,8 +628,8 @@ namespace Jhin.Champions
             var level = R.Slot.GetSpellDataInst().Level;
             return (Stacks == 1 ? (2f + (MyHero.HasItem(ItemId.Infinity_Edge) ? 0.5f : 0f)) : 1f) *
                    MyHero.CalculateDamageOnUnit(target, DamageType.Physical,
-                       75f * level - 25f + 0.25f * MyHero.TotalAttackDamage) *
-                   (1f + 0.02f * (target.MaxHealth - target.Health) / target.MaxHealth * 100f);
+                       60f * level - 20f + 0.25f * MyHero.TotalAttackDamage) *
+                   (1f + 0.025f * (target.MaxHealth - target.Health) / target.MaxHealth * 100f);
         }
     }
 }

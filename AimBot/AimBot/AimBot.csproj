@@ -61,7 +61,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpellBase.cs" />
     <Compile Include="YasuoWallManager.cs" />
   </ItemGroup>
   <ItemGroup>

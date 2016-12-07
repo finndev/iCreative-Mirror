@@ -387,11 +387,7 @@ namespace KoreanAIO.Utilities
                     case SpellType.Self:
                         if (args.Sender.Hero == Champion.Orianna)
                         {
-                            var ballObject =
-                                ObjectManager.Get<Obj_GeneralParticleEmitter>()
-                                    .FirstOrDefault(o => o.IsValid && !o.IsDead && o.Name == Orianna.BallName) ??
-                                (args.Sender.HasBuff("orianaghostself") ? args.Sender : null) ??
-                                UnitManager.ValidHeroes.FirstOrDefault(h => h.HasBuff("orianaghost")) as GameObject;
+                            var ballObject = Orianna.OriannaBall(args.Sender);
                             if (ballObject != null)
                             {
                                 if (currentPosition.IsInRange(ballObject, range + width))

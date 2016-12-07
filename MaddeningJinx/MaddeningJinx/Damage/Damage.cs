@@ -30,7 +30,7 @@ namespace MaddeningJinx
                     case SpellSlot.E:
                         return Util.MyHero.CalculateDamageOnUnit(target, DamageType.Magical, 25f + 55f * level + 1f * Util.MyHero.TotalMagicalDamage);
                     case SpellSlot.R:
-                        var percentMod = Math.Min(((int)(Vector3.Distance(target.ServerPosition, Util.MyHero.ServerPosition) / 100f) * 6f + 10f) / 100f, 1f);
+                        var percentMod = Math.Min(((int)(Vector3.Distance(target.ServerPosition, Util.MyHero.ServerPosition) / 100f) * 9f + 15f) / 100f, 1.5f);
                         float rawDamage;
                         if (typeOfDamage == 2)
                         {
